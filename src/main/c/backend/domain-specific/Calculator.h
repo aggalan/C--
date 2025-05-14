@@ -43,7 +43,7 @@ ComputationResult computeConstant(Constant * constant);
 /**
  * Computes the final value of a mathematical expression.
  */
-ComputationResult computeExpression(Expression * expression);
+ComputationResult computeExpression(MathExpression * expression);
 
 /**
  * Computes the final value of a mathematical factor.

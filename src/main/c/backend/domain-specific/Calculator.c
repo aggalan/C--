@@ -16,7 +16,7 @@ void shutdownCalculatorModule() {
 
 /** PRIVATE FUNCTIONS */
 
-static BinaryOperator _expressionTypeToBinaryOperator(const ExpressionType type);
+static BinaryOperator _expressionTypeToBinaryOperator(const MathExpressionType type);
 static ComputationResult _invalidBinaryOperator(const int x, const int y);
 static ComputationResult _invalidComputation();
 
@@ -25,7 +25,7 @@ static ComputationResult _invalidComputation();
  * possible, returns a binary operator that always returns an invalid
  * computation result.
  */
-static BinaryOperator _expressionTypeToBinaryOperator(const ExpressionType type) {
+static BinaryOperator _expressionTypeToBinaryOperator(const MathExpressionType type) {
 	switch (type) {
 		case ADDITION: return add;
 		case DIVISION: return divide;
@@ -102,7 +102,7 @@ ComputationResult computeConstant(Constant * constant) {
 	return computationResult;
 }
 
-ComputationResult computeExpression(Expression * expression) {
+ComputationResult computeExpression(MathExpression * expression) {
 	switch (expression->type) {
 		case ADDITION:
 		case DIVISION:
@@ -129,7 +129,7 @@ ComputationResult computeFactor(Factor * factor) {
 		case CONSTANT:
 			return computeConstant(factor->constant);
 		case EXPRESSION:
-			return computeExpression(factor->expression);
+			return computeExpression(factor->math_expression);
 		default:
 			return _invalidComputation();
 	}
