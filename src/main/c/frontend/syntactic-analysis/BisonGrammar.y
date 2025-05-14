@@ -74,6 +74,7 @@
 %token <token> ASSIGNMENT
 %token <token> FOR
 %token <token> WHILE
+%token <token> TO
 %token <token> IF
 %token <token> ELSE
 
@@ -106,8 +107,36 @@
 
 // IMPORTANT: To use λ in the following grammar, use the %empty symbol.
 
-program: expression													{ $$ = ExpressionProgramSemanticAction(currentCompilerState(), $1); }
+program: statement_list                                             { $$ = StatementListProgramSemanticAction(currentCompilerState(), $1); }
+    ;
+
+statement_list: statement                                           { $$ = SingleStatementListSemanticAction($1); }
+	| statement_list statement                                      { $$ = AppendStatementListSemanticAction($1, $2); }
 	;
+
+statement: expression                                               { $$ = ExpressionStatementSemanticAction($1); }
+  | for_loop                                                        { $$ = ForLoopStatementSemanticAction($1); }
+  | match_statement                                                 { $$ = MatchStatementSemanticAction($1); }
+  ;
+
+match_statement:
+    MATCH IDENTIFIER INDENT match_case_list DEDENT                  { $$ = MatchStatementSemanticAction($2, $4); }
+   ;
+
+match_case_list: match_case                                         { $$ = SingleCaseListSemanticAction($1); }
+  | match_case_list match_case                                      { $$ = AppendCaseListSemanticAction($1, $2); }
+  ;
+
+match_case:
+    INTEGER ARROW INDENT statement_list DEDENT                      { $$ = MatchCaseSemanticAction($1, $4); }
+    ;
+
+for_loop:
+    FOR IDENTIFIER ASSIGNMENT expression TO expression INDENT statement_list DEDENT
+                                                                    { $$ = ForLoopSemanticAction($2, $4, $6, $8); }
+	;
+
+
 
 expression: expression[left] ADD expression[right]					{ $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
 	| expression[left] DIV expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, DIVISION); }
