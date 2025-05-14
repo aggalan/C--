@@ -76,6 +76,12 @@
 %token <token> WHILE
 %token <token> IF
 %token <token> ELSE
+%token <token> TO
+%token <token> DEFAULT
+
+%token <token> PRINT
+%token <token> MACRO
+%token <token> SORT
 
 %token <token> UNKNOWN
 %token <token>  ARROW  RETURN

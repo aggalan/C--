@@ -190,3 +190,29 @@ Token ElseLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	lexicalAnalyzerContext->semanticValue->token = ELSE;
 	return ELSE;
 }
+
+Token PrintLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext){
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = PRINT;
+	return PRINT;
+}
+Token MacroLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext){
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = MACRO;
+	return MACRO;
+}
+Token SortLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext){
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = SORT;
+	return SORT;
+}
+Token defaultLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext){
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = DEFAULT;
+	return DEFAULT;
+}
+Token ToLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext){
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = TO;
+	return TO;
+}
