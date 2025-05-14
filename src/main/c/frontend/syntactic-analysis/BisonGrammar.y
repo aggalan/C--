@@ -50,6 +50,11 @@
 %token <token> IDENTIFIER
 %token <token> OPEN_BRACKETS
 %token <token> CLOSE_BRACKETS
+%token <token> ASSIGNMENT
+%token <token> FOR
+%token <token> WHILE
+%token <token> IF
+%token <token> ELSE
 
 %token <token> UNKNOWN
 
