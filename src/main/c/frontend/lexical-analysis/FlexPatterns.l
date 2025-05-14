@@ -57,6 +57,8 @@
 "/"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), DIV); }
 "+"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), ADD); }
 
+"->"								{ return MatchLexemeAction(createLexicalAnalyzerContext(),ARROW); }
+
 "="                                 { return AssignmentLexemeAction(createLexicalAnalyzerContext()); }
 
 "("									{ return ParenthesisLexemeAction(createLexicalAnalyzerContext(), OPEN_PARENTHESIS); }
@@ -86,7 +88,6 @@
 [[:space:]]+						{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 .									{ return UnknownLexemeAction(createLexicalAnalyzerContext()); }
 
-"->"								{ return MatchLexemeAction(createLexicalAnalyzerContext(),ARROW); }
 %%
 
 #include "FlexExport.h"
