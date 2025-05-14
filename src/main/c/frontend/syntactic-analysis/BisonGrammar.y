@@ -48,7 +48,8 @@
 %token <token> INT
 %token <token> STRING_TYPE
 %token <token> BOOL
-%token <token> IDENTIFIER
+%token <token> VOID
+%token <String> IDENTIFIER
 %token <token> OPEN_BRACKETS
 %token <token> CLOSE_BRACKETS
 %token <token> ADD_ONE
@@ -59,7 +60,7 @@
 %token <token> DIFFERENT
 %token <token> SMALLER
 %token <token> GREATER
-%token <token> STRING
+%token <String> STRING
 
 %token <token> MATCH
 %token <token> ASSIGNMENT

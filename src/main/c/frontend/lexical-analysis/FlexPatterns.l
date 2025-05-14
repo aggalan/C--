@@ -61,6 +61,7 @@
 "INT"                               { return TypeLexemeAction(createLexicalAnalyzerContext(), INT);}
 "STRING"                            { return TypeLexemeAction(createLexicalAnalyzerContext(), STRING_TYPE);}
 "BOOL"                              { return TypeLexemeAction(createLexicalAnalyzerContext(), BOOL);}
+"VOID"                              { return TypeLexemeAction(createLexicalAnalyzerContext(), VOID);}
 
 "FOR"                               { return ForLexemeAction(createLexicalAnalyzerContext()); }
 "WHILE"                             { return WhileLexemeAction(createLexicalAnalyzerContext()); }
