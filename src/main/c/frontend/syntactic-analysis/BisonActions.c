@@ -74,7 +74,7 @@ Factor * ExpressionFactorSemanticAction(Expression * expression) {
 Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Expression * expression) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Program * program = calloc(1, sizeof(Program));
-	program->expression = expression;
+	// program->expression = expression;
 	compilerState->abstractSyntaxtTree = program;
 	if (0 < flexCurrentContext()) {
 		logError(_logger, "The final context is not the default (0): %d", flexCurrentContext());
