@@ -34,7 +34,7 @@
 
 "\""                                { BEGIN(STRING); BeginStringLexemeAction(createLexicalAnalyzerContext()); }
 <STRING>"\""                        { EndStringLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL);}
-<STRING>"[^\"\n]+"                  { StringLexemeAction(createLexicalAnalyzerContext());}
+<STRING>"[^\"]+"                  { StringLexemeAction(createLexicalAnalyzerContext());}
 
 "++"                                { AddOneLexemeAction(createLexicalAnalyzerContext()); }
 "--"                                { MinusOneLexemeAction(createLexicalAnalyzerContext()); }
