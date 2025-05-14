@@ -52,6 +52,8 @@ Token MinusOneLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 Token AssignmentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
+Token IndentationLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
 Token ConditionalLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 
 #endif
