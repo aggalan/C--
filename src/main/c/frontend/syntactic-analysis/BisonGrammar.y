@@ -30,6 +30,7 @@
     WhileLoop * whileLoop;
     IfStatement * ifStatement;
 
+
 }
 
 /**
@@ -137,7 +138,7 @@ statementList: statement                                           { $$ = Single
 
 statement: mathExpression                                               { $$ = ExpressionStatementSemanticAction($1); }
   | for_loop                                                        { $$ = ForLoopStatementSemanticAction($1); }
-  | matchStatement                                                 { $$ = MatchStatementSemanticAction($1); }                                                { $$ = MatchStatementSemanticAction($1); }
+  | matchStatement                                                 { $$ = MatchStatementSemanticAction($1); }
   | while_loop                                                      { $$ = WhileLoopStatementSemanticAction($1); }
   | if_statement                                                    { $$ = IfStatementSemanticAction($1); }
   ;
