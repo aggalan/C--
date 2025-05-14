@@ -142,7 +142,7 @@ statement: expression                                               { $$ = Expre
   ;
 
 match_statement:
-    MATCH IDENTIFIER INDENT match_case_list DEDENT                  { $$ = MatchStatementSemanticAction($2, $4); }
+    MATCH IDENTIFIER INDENT match_case_list DEDENT                  { $$ = MatchSemanticAction($2, $4); }
    ;
 
 match_case_list: match_case                                         { $$ = SingleCaseListSemanticAction($1); }

@@ -30,7 +30,7 @@ StatementList *SingleStatementListSemanticAction(Statement *stmt);
 StatementList *AppendStatementListSemanticAction(StatementList *list, Statement *stmt);
 ForLoop *ForLoopSemanticAction(String id, Expression *start, Expression *end, StatementList *body);
 Statement *MatchStatementSemanticAction(MatchStatement *stmt);
-MatchStatement *MatchStatementSemanticAction(String id, CaseList *cases);
+MatchStatement *MatchSemanticAction(String id, CaseList *cases);
 CaseList *SingleCaseListSemanticAction(Case *c);
 CaseList *AppendCaseListSemanticAction(CaseList *list, Case *c);
 Case *MatchCaseSemanticAction(int value, StatementList *body);
