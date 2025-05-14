@@ -19,6 +19,8 @@
 	Expression * expression;
 	Factor * factor;
 	Program * program;
+	Case * matchCase;
+    CaseList * caseList;
 }
 
 /**
@@ -52,12 +54,17 @@
 %token <token> CLOSE_BRACKETS
 %token <token> MATCH
 %token <token> UNKNOWN
+%token <token>  ARROW  RETURN
+
 
 /** Non-terminals. */
+
 %type <constant> constant
 %type <expression> expression
 %type <factor> factor
 %type <program> program
+%type <matchCase> match_case
+%type <caseList> match_case_list
 
 /**
  * Precedence and associativity.

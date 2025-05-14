@@ -53,7 +53,9 @@
 "IF"                                { return IfLexemeAction(createLexicalAnalyzerContext()); }
 "ELSE"                              { return ElseLexemeAction(createLexicalAnalyzerContext()); }
 
-"MATCH"							    { return MatchLexemeAction(createLexicalAnalyzerContext()); }
+"MATCH"							    { return MatchLexemeAction(createLexicalAnalyzerContext(),MATCH); }
+
+"RETURN"						    { return ReturnLexemeAction(createLexicalAnalyzerContext()); }
 
 [[:alpha:]]+                        { return IdentifierLexemeAction(createLexicalAnalyzerContext()); }
 
@@ -62,7 +64,7 @@
 [[:space:]]+						{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 .									{ return UnknownLexemeAction(createLexicalAnalyzerContext()); }
 
-
+"->"								{ return MatchLexemeAction(createLexicalAnalyzerContext(),ARROW); }
 %%
 
 #include "FlexExport.h"

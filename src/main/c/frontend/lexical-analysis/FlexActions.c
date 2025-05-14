@@ -97,9 +97,9 @@ Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	return UNKNOWN;
 
 }
-Token MatchLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+Token MatchLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->token = MATCH;
+	lexicalAnalyzerContext->semanticValue->token = token;
 	return MATCH;
 }
 
@@ -108,7 +108,11 @@ Token AssignmentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	lexicalAnalyzerContext->semanticValue->token = ASSIGNMENT;
 	return ASSIGNMENT;
 }
-
+Token ReturnLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = RETURN;
+	return RETURN;
+}
 
 Token ForLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
