@@ -20,9 +20,12 @@
 	Expression * expression;
 	Factor * factor;
 	Program * program;
-	Case * matchCase;
+	MatchStatement * matchStatement;
+    Case * matchCase;
     CaseList * caseList;
-    Match_statement * matchStatement;
+    Statement * statement;
+    StatementList * statementList;
+    ForLoop * forLoop;
 }
 
 /**
@@ -82,9 +85,13 @@
 %type <expression> expression
 %type <factor> factor
 %type <program> program
+%type <matchStatement> match_statement
 %type <matchCase> match_case
 %type <caseList> match_case_list
-%type <matchStatement> match_statement
+%type <statement> statement
+%type <statementList> statement_list
+%type <forLoop> for_loop
+
 /**
  * Precedence and associativity.
  *

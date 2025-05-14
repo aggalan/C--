@@ -21,13 +21,62 @@ typedef struct Constant Constant;
 typedef struct Expression Expression;
 typedef struct Factor Factor;
 typedef struct Program Program;
-typedef struct Case Case;
-typedef struct CaseList CaseList;
 typedef struct match_statement Match_statement;
 typedef char * String;
+typedef struct Statement Statement;
+typedef struct StatementList StatementList;
+typedef struct ForLoop ForLoop;
+typedef struct MatchStatement MatchStatement;
+typedef struct Case Case;
+typedef struct CaseList CaseList;
+
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
+
+struct Case {
+	int matchValue;
+	StatementList *body;
+};
+
+struct CaseList {
+	Case **cases;
+	int count;
+};
+
+struct MatchStatement {
+	String identifier;
+	CaseList *caseList;
+};
+
+struct Statement {
+	enum {
+		STATEMENT_EXPRESSION,
+		STATEMENT_FOR,
+		STATEMENT_MATCH
+	} type;
+	union {
+		Expression *expression;
+		ForLoop *forLoop;
+		MatchStatement *matchStatement;
+	};
+};
+
+struct StatementList {
+	Statement **statements;
+	int count;
+};
+
+struct ForLoop {
+	String identifier;
+	Expression *startExpression;
+	Expression *endExpression;
+	StatementList *body;
+};
+
+struct Program {
+	StatementList *statements;
+};
 
 enum ExpressionType {
 	ADDITION,
@@ -65,24 +114,6 @@ struct Expression {
 	ExpressionType type;
 };
 
-struct Program {
-	Expression * expression;
-};
-typedef struct Case {
-	int matchValue;
-	Match_statement * match_statement;
-} Case;
-
-typedef struct CaseList {
-	Case **cases;
-	int count;
-} CaseList;
-
-typedef struct match_statement {
-	char * identifier;
-	CaseList * caseList;
-} Match_statement;
-
 /**
  * Node recursive destructors.
  */
@@ -90,5 +121,11 @@ void releaseConstant(Constant * constant);
 void releaseExpression(Expression * expression);
 void releaseFactor(Factor * factor);
 void releaseProgram(Program * program);
+void releaseStatement(Statement *stmt);
+void releaseStatementList(StatementList *list);
+void releaseForLoop(ForLoop *loop);
+void releaseMatchStatement(MatchStatement *match);
+void releaseCase(Case *caseNode);
+void releaseCaseList(CaseList *caseList);
 
 #endif
