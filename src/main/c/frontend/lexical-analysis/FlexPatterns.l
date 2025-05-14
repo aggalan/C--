@@ -59,7 +59,7 @@
 "]"                                 { return BracketLexemeAction(createLexicalAnalyzerContext(), CLOSE_BRACKETS); }
 
 "INT"                               { return TypeLexemeAction(createLexicalAnalyzerContext(), INT);}
-"STRING"                            { return TypeLexemeAction(createLexicalAnalyzerContext(), STRING);}
+"STRING"                            { return TypeLexemeAction(createLexicalAnalyzerContext(), STRING_TYPE);}
 "BOOL"                              { return TypeLexemeAction(createLexicalAnalyzerContext(), BOOL);}
 
 "FOR"                               { return ForLexemeAction(createLexicalAnalyzerContext()); }
@@ -70,7 +70,7 @@
 
 "MATCH"							    { return MatchLexemeAction(createLexicalAnalyzerContext()); }
 
-[[:alpha:]][[:alnum:]]+                        { return IdentifierLexemeAction(createLexicalAnalyzerContext()); }
+[[:alpha:]][[:alnum:]]+             { return IdentifierLexemeAction(createLexicalAnalyzerContext()); }
 
 [[:digit:]]+						{ return IntegerLexemeAction(createLexicalAnalyzerContext()); }
 

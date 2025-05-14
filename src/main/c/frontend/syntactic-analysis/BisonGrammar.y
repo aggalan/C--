@@ -45,7 +45,7 @@
 %token <token> OPEN_PARENTHESIS
 %token <token> SUB
 %token <token> INT
-%token <token> STRING
+%token <token> STRING_TYPE
 %token <token> BOOL
 %token <token> IDENTIFIER
 %token <token> OPEN_BRACKETS
