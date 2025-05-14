@@ -37,4 +37,10 @@ Token TypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token to
 
 Token MatchLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
+Token ForLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token WhileLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+Token IfLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token ElseLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
 #endif
