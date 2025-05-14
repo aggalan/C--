@@ -60,6 +60,7 @@
 %token <token> GREATER
 %token <token> STRING
 
+%token <token> MATCH
 %token <token> UNKNOWN
 
 /** Non-terminals. */

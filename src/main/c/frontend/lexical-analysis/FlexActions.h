@@ -38,6 +38,14 @@ Token IdentifierLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 Token TypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 
+Token MatchLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+Token ForLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token WhileLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+Token IfLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token ElseLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
 Token AddOneLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token MinusOneLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 

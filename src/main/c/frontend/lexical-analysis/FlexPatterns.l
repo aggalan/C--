@@ -51,14 +51,24 @@
 "/"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), DIV); }
 "+"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), ADD); }
 
+"="                                 { return AssignmentOperatorLexemeAction(createLexicalAnalyzerContext()); }
+
 "("									{ return ParenthesisLexemeAction(createLexicalAnalyzerContext(), OPEN_PARENTHESIS); }
 ")"									{ return ParenthesisLexemeAction(createLexicalAnalyzerContext(), CLOSE_PARENTHESIS); }
 "["                                 { return BracketLexemeAction(createLexicalAnalyzerContext(), OPEN_BRACKETS); }
 "]"                                 { return BracketLexemeAction(createLexicalAnalyzerContext(), CLOSE_BRACKETS); }
 
-"INT"                               { return TypeLexemeAction( createLexicalAnalyzerContext(), INT);}
-"STRING"                            { return TypeLexemeAction( createLexicalAnalyzerContext(), STRING);}
-"BOOL"                              { return TypeLexemeAction( createLexicalAnalyzerContext(), BOOL);}
+"INT"                               { return TypeLexemeAction(createLexicalAnalyzerContext(), INT);}
+"STRING"                            { return TypeLexemeAction(createLexicalAnalyzerContext(), STRING);}
+"BOOL"                              { return TypeLexemeAction(createLexicalAnalyzerContext(), BOOL);}
+
+"FOR"                               { return ForLexemeAction(createLexicalAnalyzerContext()); }
+"WHILE"                             { return WhileLexemeAction(createLexicalAnalyzerContext()); }
+
+"IF"                                { return IfLexemeAction(createLexicalAnalyzerContext()); }
+"ELSE"                              { return ElseLexemeAction(createLexicalAnalyzerContext()); }
+
+"MATCH"							    { return MatchLexemeAction(createLexicalAnalyzerContext()); }
 
 [[:alpha:]][[:alnum:]]+                        { return IdentifierLexemeAction(createLexicalAnalyzerContext()); }
 
@@ -66,6 +76,7 @@
 
 [[:space:]]+						{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 .									{ return UnknownLexemeAction(createLexicalAnalyzerContext()); }
+
 
 %%
 
