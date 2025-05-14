@@ -34,17 +34,17 @@
 
 "\""                                { BEGIN(STRING); BeginStringLexemeAction(createLexicalAnalyzerContext()); }
 <STRING>"\""                        { EndStringLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL);}
-<STRING>"[^\"]+"                    { StringLexemeAction(createLexicalAnalyzerContext());}
+<STRING>"[^\"]+"                    { return StringLexemeAction(createLexicalAnalyzerContext());}
 
-"++"                                { AddOneLexemeAction(createLexicalAnalyzerContext()); }
-"--"                                { MinusOneLexemeAction(createLexicalAnalyzerContext()); }
+"++"                                { return AddOneLexemeAction(createLexicalAnalyzerContext()); }
+"--"                                { return MinusOneLexemeAction(createLexicalAnalyzerContext()); }
 
-">="                                { ConditionalLexemeAction(createLexicalAnalyzerContext(), GREATER_OR_EQUAL);}
-"<="                                { ConditionalLexemeAction(createLexicalAnalyzerContext(), SMALLER_OR_EQUAL);}
-"=="                                { ConditionalLexemeAction(createLexicalAnalyzerContext(), CONDITIONAL_EQUAL);}
-"!="                                { ConditionalLexemeAction(createLexicalAnalyzerContext(), DIFFERENT);}
-"<"                                 { ConditionalLexemeAction(createLexicalAnalyzerContext(), SMALLER);}
-">"                                 { ConditionalLexemeAction(createLexicalAnalyzerContext(), GREATER);}
+">="                                { return ConditionalLexemeAction(createLexicalAnalyzerContext(), GREATER_OR_EQUAL);}
+"<="                                { return ConditionalLexemeAction(createLexicalAnalyzerContext(), SMALLER_OR_EQUAL);}
+"=="                                { return ConditionalLexemeAction(createLexicalAnalyzerContext(), CONDITIONAL_EQUAL);}
+"!="                                { return ConditionalLexemeAction(createLexicalAnalyzerContext(), DIFFERENT);}
+"<"                                 { return ConditionalLexemeAction(createLexicalAnalyzerContext(), SMALLER);}
+">"                                 { return ConditionalLexemeAction(createLexicalAnalyzerContext(), GREATER);}
 
 "-"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), SUB); }
 "*"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), MUL); }

@@ -66,6 +66,8 @@
 %token <token> DIFFERENT
 %token <token> SMALLER
 %token <token> GREATER
+%token <token> INDENT
+%token <token> DEDENT
 %token <String> STRING
 
 %token <token> MATCH

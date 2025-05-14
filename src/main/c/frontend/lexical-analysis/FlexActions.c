@@ -35,6 +35,25 @@ static void _logLexicalAnalyzerContext(const char * functionName, LexicalAnalyze
 }
 
 /* PUBLIC FUNCTIONS */
+struct {
+	unsigned int stack[255] = {0};
+	int last;
+} indentStack;
+
+Token IndentationLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	if (lexicalAnalyzerContext->length > indentStack.stack[indentStack.last]) {
+		indentStack.stack[++indentStack.last] = lexicalAnalyzerContext->length;
+		lexicalAnalyzerContext->semanticValue->token = INDENT;
+		return INDENT;
+	}
+	if ( lexicalAnalyzerContext->length < indentStack.stack[indentStack.last]) {
+		indentStack.last--;
+		lexicalAnalyzerContext->semanticValue->token = DEDENT;
+		return DEDENT;
+	}
+	return lexicalAnalyzerContext->semanticValue->token;
+}
 
 void BeginMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	if (_logIgnoredLexemes) {
