@@ -129,7 +129,7 @@ ComputationResult computeFactor(Factor * factor) {
 		case CONSTANT:
 			return computeConstant(factor->constant);
 		case EXPRESSION:
-			return computeExpression(factor->math_expression);
+			return computeExpression(factor->mathExpression);
 		default:
 			return _invalidComputation();
 	}

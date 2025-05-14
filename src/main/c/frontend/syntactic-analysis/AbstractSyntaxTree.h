@@ -72,7 +72,7 @@ struct Statement {
 		STATEMENT_IF
 	} type;
 	union {
-		MathExpression *MathExpression;
+		MathExpression *mathExpression;
 		ForLoop *forLoop;
 		MatchStatement *matchStatement;
 		WhileLoop *whileLoop;
@@ -105,7 +105,7 @@ enum MathExpressionType {
 
 struct AssignmentMathExpression {
 	String identifier;
-	MathExpression *MathExpression;
+	MathExpression *mathExpression;
 };
 
 
@@ -122,7 +122,7 @@ struct Constant {
 struct Factor {
 	union {
 		Constant * constant;
-		MathExpression * math_expression;
+		MathExpression * mathExpression;
 	};
 	FactorType type;
 };

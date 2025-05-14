@@ -66,7 +66,7 @@ Factor * ConstantFactorSemanticAction(Constant * constant) {
 Factor * ExpressionFactorSemanticAction(MathExpression * expression) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Factor * factor = calloc(1, sizeof(Factor));
-	factor->math_expression = expression;
+	factor->mathExpression = expression;
 	factor->type = EXPRESSION;
 	return factor;
 }
@@ -123,7 +123,7 @@ Statement* ExpressionStatementSemanticAction(MathExpression* expr) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Statement* stmt = calloc(1, sizeof(Statement));
 	stmt->type = STATEMENT_MathExpression;
-	stmt->MathExpression = expr;
+	stmt->mathExpression = expr;
 	return stmt;
 }
 
@@ -143,13 +143,6 @@ Statement* MatchStatementSemanticAction(MatchStatement* stmt) {
 	return statement;
 }
 
-MatchStatement* MatchStatementSemanticAction(String id, CaseList* cases) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	MatchStatement* match = calloc(1, sizeof(MatchStatement));
-	match->identifier = id;
-	match->caseList = cases;
-	return match;
-}
 
 CaseList* SingleCaseListSemanticAction(Case* c) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
@@ -228,7 +221,7 @@ AssignmentMathExpression *assignmentMathExpressionSemanticAction(String id, Math
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	AssignmentMathExpression *assignment = calloc(1, sizeof(AssignmentMathExpression));
 	assignment->identifier = id;
-	assignment->MathExpression = expr;
+	assignment->mathExpression = expr;
 	return assignment;
 }
 MatchStatement *MatchSemanticAction(String id, CaseList *cases) {

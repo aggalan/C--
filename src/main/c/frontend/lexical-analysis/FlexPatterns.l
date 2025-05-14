@@ -16,6 +16,7 @@
  */
 %x MULTILINE_COMMENT
 %x STRING
+%x SINGLE_LINE_COMMENT
 /**
  * Reusable patterns.
  *
@@ -40,7 +41,7 @@
 <SINGLE_LINE_COMMENT>"[^\n]*"       { IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 <SINGLE_LINE_COMMENT>"\n"           { EndSingleLineCommentLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL);}
 
-"^[\t]*"                            { return IndentationLexemeAction(createLexemeAction()); }
+"^[\t]*"                            { return IndentationLexemeAction(createLexicalAnalyzerContext()); }
 
 "++"                                { return AddOneLexemeAction(createLexicalAnalyzerContext()); }
 "--"                                { return MinusOneLexemeAction(createLexicalAnalyzerContext()); }

@@ -29,6 +29,8 @@
     ForLoop * forLoop;
     WhileLoop * whileLoop;
     IfStatement * ifStatement;
+    ConditionalExpression * conditionalExpression;
+    PrintStatement * printStatement;
 
 
 }
@@ -60,7 +62,7 @@
 %token <token> STRING_TYPE
 %token <token> BOOL
 %token <token> VOID
-%token <String> IDENTIFIER
+%token <string> IDENTIFIER
 %token <token> OPEN_BRACKETS
 %token <token> CLOSE_BRACKETS
 
@@ -115,6 +117,8 @@
 %type <forLoop> for_loop
 %type <whileLoop> while_loop
 %type <ifStatement> if_statement
+%type <conditionalExpression> conditional_expression
+%type <printStatement> print_statement
 
 
 /**
@@ -141,6 +145,7 @@ statement: mathExpression                                               { $$ = E
   | matchStatement                                                 { $$ = MatchStatementSemanticAction($1); }
   | while_loop                                                      { $$ = WhileLoopStatementSemanticAction($1); }
   | if_statement                                                    { $$ = IfStatementSemanticAction($1); }
+  | print_statement                                                 { $$ = PrintStatementSemanticAction($1);}
   ;
 
 matchStatement:
@@ -185,5 +190,11 @@ constant: INTEGER													{ $$ = IntegerConstantSemanticAction($1); }
 
 assignmentMathExpression: IDENTIFIER ASSIGNMENT mathExpression			{ $$ = assignmentMathExpressionSemanticAction($1, $3); }
     ;
+conditionalExpression: IDENTIFIER /* FIXME */                        {}
+    ;
+print_statement: PRINT IDENTIFIER                                    { $$ = PrintIdenifierSemanticAction($1, $2);}
+       |    PRINT STRING                                            { $$ = PrintStringSemanticAction($1, $2); }
+       ;
+
 
 %%

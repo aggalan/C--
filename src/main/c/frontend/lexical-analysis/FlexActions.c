@@ -35,10 +35,12 @@ static void _logLexicalAnalyzerContext(const char * functionName, LexicalAnalyze
 }
 
 /* PUBLIC FUNCTIONS */
-struct {
-	unsigned int stack[255] = {0};
+typedef struct {
+	unsigned int stack[255];
 	int last;
-} indentStack;
+} IndentStack;
+
+IndentStack indentStack = {{0}, 0};
 
 Token IndentationLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
@@ -62,6 +64,17 @@ void BeginMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerC
 }
 
 void EndMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	if (_logIgnoredLexemes) {
+		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	}
+}
+void BeginSingleLineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	if (_logIgnoredLexemes) {
+		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	}
+}
+
+void EndSingleLineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	if (_logIgnoredLexemes) {
 		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	}
@@ -98,7 +111,7 @@ Token IntegerLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 }
 Token StringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->token = lexicalAnalyzerContext->lexeme;
+	lexicalAnalyzerContext->semanticValue->string = lexicalAnalyzerContext->lexeme;
 	return STRING;
 }
 Token ParenthesisLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
@@ -116,7 +129,7 @@ Token BracketLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token
 
 Token IdentifierLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->token = lexicalAnalyzerContext->lexeme;
+	lexicalAnalyzerContext->semanticValue->string = lexicalAnalyzerContext->lexeme;
 	return IDENTIFIER;
 }
 
@@ -212,7 +225,7 @@ Token SortLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext){
 	lexicalAnalyzerContext->semanticValue->token = SORT;
 	return SORT;
 }
-Token defaultLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext){
+Token DefaultLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext){
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	lexicalAnalyzerContext->semanticValue->token = DEFAULT;
 	return DEFAULT;

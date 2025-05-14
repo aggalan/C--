@@ -19,7 +19,7 @@ void shutdownBisonActionsModule();
  */
 
 Constant * IntegerConstantSemanticAction(const int value);
-MathExpression * ArithmeticExpressionSemanticAction( * leftExpression, MathExpression * rightExpression, MathExpressionType type);
+MathExpression * ArithmeticExpressionSemanticAction( MathExpression * leftExpression, MathExpression * rightExpression, MathExpressionType type);
 MathExpression * FactorExpressionSemanticAction(Factor * factor);
 Factor * ConstantFactorSemanticAction(Constant * constant);
 Factor * ExpressionFactorSemanticAction(MathExpression * expression);
@@ -34,7 +34,7 @@ MatchStatement *MatchSemanticAction(String id, CaseList *cases);
 CaseList *SingleCaseListSemanticAction(Case *c);
 CaseList *AppendCaseListSemanticAction(CaseList *list, Case *c);
 Case *MatchCaseSemanticAction(int value, StatementList *body);
-ForLoop *ForLoopSemanticAction(String id, AssignmentMathExpression *start, Constant * end, StatementList *body);
+ForLoop *ForLoopSemanticAction(AssignmentMathExpression * assignment, Constant * end, StatementList* body);
 Statement *WhileLoopStatementSemanticAction(WhileLoop *loop);
 WhileLoop *WhileLoopSemanticAction(MathExpression *condition, StatementList *body);
 Statement *IfStatementSemanticAction(IfStatement *stmt);

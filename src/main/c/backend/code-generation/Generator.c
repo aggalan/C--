@@ -101,7 +101,7 @@ static void _generateFactor(const unsigned int indentationLevel, Factor * factor
 			break;
 		case EXPRESSION:
 			_output(1 + indentationLevel, "%s", "[ $($, circle, draw, purple ]\n");
-			_generateExpression(1 + indentationLevel, factor->math_expression);
+			_generateExpression(1 + indentationLevel, factor->mathExpression);
 			_output(1 + indentationLevel, "%s", "[ $)$, circle, draw, purple ]\n");
 			break;
 		default:
