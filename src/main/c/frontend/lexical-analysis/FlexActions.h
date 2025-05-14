@@ -23,6 +23,8 @@ void shutdownFlexActionsModule();
 
 void BeginMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void EndMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+void BeginSingleLineLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+void EndSingleLineLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void BeginStringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void EndStringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);

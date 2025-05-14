@@ -31,10 +31,14 @@
 <MULTILINE_COMMENT>[^*]+			{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 <MULTILINE_COMMENT>.				{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 
-
 "\""                                { BEGIN(STRING); BeginStringLexemeAction(createLexicalAnalyzerContext()); }
 <STRING>"\""                        { EndStringLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL);}
-<STRING>"[^\"]+"                    { return StringLexemeAction(createLexicalAnalyzerContext());}
+<STRING>"[^\"]*"                    { return StringLexemeAction(createLexicalAnalyzerContext());}
+
+"//"                                { BEGIN(SINGLE_LINE_COMMENT); EndSingleLineCommentLexemeAction(createLexicalAnalyzerContext()); }
+"#"                                 { BEGIN(SINGLE_LINE_COMMENT); EndSingleLineCommentLexemeAction(createLexicalAnalyzerContext());}
+<SINGLE_LINE_COMMENT>"[^\n]*"       { IgnoredLexemeAction(createLexicalAnalyzerContext()); }
+<SINGLE_LINE_COMMENT>"\n"           { EndSingleLineCommentLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL);}
 
 "^[\t]*"                            { return IndentationLexemeAction(createLexemeAction()); }
 
