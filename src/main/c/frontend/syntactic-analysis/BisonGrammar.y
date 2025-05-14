@@ -50,6 +50,16 @@
 %token <token> IDENTIFIER
 %token <token> OPEN_BRACKETS
 %token <token> CLOSE_BRACKETS
+%token <token> ADD_ONE
+%token <token> MINUS_ONE
+%token <token> GREATER_OR_EQUAL
+%token <token> SMALLER_OR_EQUAL
+%token <token> CONDITIONAL_EQUAL
+%token <token> DIFFERENT
+%token <token> SMALLER
+%token <token> GREATER
+%token <token> STRING
+
 %token <token> MATCH
 %token <token> ASSIGNMENT
 %token <token> FOR
