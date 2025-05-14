@@ -103,7 +103,7 @@
 
 %type <constant> constant
 %type <mathExpression> mathExpression
-%type <assignmentExpression> assignment_expression
+%type <assignmentExpression> assignmentExpression
 %type <factor> factor
 %type <program> program
 %type <matchStatement> matchStatement
@@ -155,7 +155,7 @@ matchCase:
     ;
 
 for_loop:
-    FOR assignment_expression TO constant INDENT statementList DEDENT
+    FOR assignmentExpression TO constant INDENT statementList DEDENT
                                                                         {$$ = ForLoopSemanticAction($2, $4, $6); }
 	;
 
