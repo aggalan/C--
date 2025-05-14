@@ -24,5 +24,15 @@ Expression * FactorExpressionSemanticAction(Factor * factor);
 Factor * ConstantFactorSemanticAction(Constant * constant);
 Factor * ExpressionFactorSemanticAction(Expression * expression);
 Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Expression * expression);
+Statement *ExpressionStatementSemanticAction(Expression *expr);
+Statement *ForLoopStatementSemanticAction(ForLoop *loop);
+StatementList *SingleStatementListSemanticAction(Statement *stmt);
+StatementList *AppendStatementListSemanticAction(StatementList *list, Statement *stmt);
+ForLoop *ForLoopSemanticAction(String id, Expression *start, Expression *end, StatementList *body);
+Statement *MatchStatementSemanticAction(MatchStatement *stmt);
+MatchStatement *MatchStatementSemanticAction(String id, CaseList *cases);
+CaseList *SingleCaseListSemanticAction(Case *c);
+CaseList *AppendCaseListSemanticAction(CaseList *list, Case *c);
+Case *MatchCaseSemanticAction(int value, StatementList *body);
 
 #endif
