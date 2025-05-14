@@ -40,7 +40,11 @@ Token TypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token to
 
 Token MatchLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext,Token token);
 Token ReturnLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
-
+Token PrintLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token MacroLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token SortLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token defaultLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token ToLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token ForLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token WhileLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
@@ -55,5 +59,7 @@ Token AssignmentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token IndentationLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 Token ConditionalLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
+
+Token LogicalOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 
 #endif
