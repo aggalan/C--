@@ -143,7 +143,7 @@ statement: mathExpression                                               { $$ = E
   ;
 
 matchStatement:
-    MATCH IDENTIFIER INDENT matchCaseList DEDENT                  { $$ = MatchStatementSemanticAction($2, $4); }
+    MATCH IDENTIFIER INDENT matchCaseList DEDENT                  { $$ = MatchSemanticAction($2, $4); }
    ;
 
 matchCaseList: matchCase                                         { $$ = SingleCaseListSemanticAction($1); }

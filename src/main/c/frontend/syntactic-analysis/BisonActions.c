@@ -231,3 +231,10 @@ AssignmentMathExpression *assignmentMathExpressionSemanticAction(String id, Math
 	assignment->MathExpression = expr;
 	return assignment;
 }
+MatchStatement *MatchSemanticAction(String id, CaseList *cases) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	MatchStatement *match = calloc(1, sizeof(MatchStatement));
+	match->identifier = id;
+	match->caseList = cases;
+	return match;
+}
