@@ -19,20 +19,20 @@ void shutdownBisonActionsModule();
  */
 
 Constant * IntegerConstantSemanticAction(const int value);
-Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Expression * rightExpression, ExpressionType type);
-Expression * FactorExpressionSemanticAction(Factor * factor);
+MathExpression * ArithmeticExpressionSemanticAction( * leftExpression, MathExpression * rightExpression, MathExpressionType type);
+MathExpression * FactorExpressionSemanticAction(Factor * factor);
 Factor * ConstantFactorSemanticAction(Constant * constant);
-Factor * ExpressionFactorSemanticAction(Expression * expression);
-Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Expression * expression);
-Statement *ExpressionStatementSemanticAction(Expression *expr);
-Statement *ForLoopStatementSemanticAction(ForLoop *loop);
+Factor * ExpressionFactorSemanticAction(MathExpression * expression);
+Program * ExpressionProgramSemanticAction(CompilerState * compilerState, MathExpression * expression);
+Program * StatementListProgramSemanticAction(CompilerState * compilerState, StatementList *statementList);
 StatementList *SingleStatementListSemanticAction(Statement *stmt);
-StatementList *AppendStatementListSemanticAction(StatementList *list, Statement *stmt);
-ForLoop *ForLoopSemanticAction(String id, Expression *start, Expression *end, StatementList *body);
+StatementList * AppendStatementListSemanticAction(StatementList *list, Statement *stmt);
+Statement *ExpressionStatementSemanticAction(MathExpression *expr);
+Statement *ForLoopStatementSemanticAction(ForLoop *loop);
 Statement *MatchStatementSemanticAction(MatchStatement *stmt);
 MatchStatement *MatchStatementSemanticAction(String id, CaseList *cases);
 CaseList *SingleCaseListSemanticAction(Case *c);
 CaseList *AppendCaseListSemanticAction(CaseList *list, Case *c);
 Case *MatchCaseSemanticAction(int value, StatementList *body);
-
+ForLoop *ForLoopSemanticAction(String id, AssignmentMathExpression *start, Constant * end, StatementList *body);
 #endif

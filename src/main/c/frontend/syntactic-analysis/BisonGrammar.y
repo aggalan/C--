@@ -17,7 +17,7 @@
 	/** Non-terminals. */
 
 	Constant * constant;
-	Expression * expression;
+	MathExpression * mathExpression;
 	Factor * factor;
 	Program * program;
 	MatchStatement * matchStatement;
@@ -25,6 +25,7 @@
     CaseList * caseList;
     Statement * statement;
     StatementList * statementList;
+    AssignmentExpression * assignmentExpression;
     ForLoop * forLoop;
 }
 
@@ -87,7 +88,6 @@
 %token <token> ELSE
 %token <token> TO
 %token <token> DEFAULT
-
 %token <token> PRINT
 %token <token> MACRO
 %token <token> SORT
@@ -100,14 +100,15 @@
 /** Non-terminals. */
 
 %type <constant> constant
-%type <expression> expression
+%type <mathExpression> mathExpression
+%type <assignmentExpression> assignment_expression
 %type <factor> factor
 %type <program> program
-%type <matchStatement> match_statement
-%type <matchCase> match_case
-%type <caseList> match_case_list
+%type <matchStatement> matchStatement
+%type <matchCase> matchCase
+%type <caseList> matchCaseList
 %type <statement> statement
-%type <statementList> statement_list
+%type <statementList> statementList
 %type <forLoop> for_loop
 
 /**
@@ -122,45 +123,45 @@
 
 // IMPORTANT: To use λ in the following grammar, use the %empty symbol.
 
-program: statement_list                                             { $$ = StatementListProgramSemanticAction(currentCompilerState(), $1); }
+program: statementList                                             { $$ = StatementListProgramSemanticAction(currentCompilerState(), $1); }
     ;
 
-statement_list: statement                                           { $$ = SingleStatementListSemanticAction($1); }
-	| statement_list statement                                      { $$ = AppendStatementListSemanticAction($1, $2); }
+statementList: statement                                           { $$ = SingleStatementListSemanticAction($1); }
+	| statementList statement                                      { $$ = AppendStatementListSemanticAction($1, $2); }
 	;
 
-statement: expression                                               { $$ = ExpressionStatementSemanticAction($1); }
+statement: mathExpression                                               { $$ = ExpressionStatementSemanticAction($1); }
   | for_loop                                                        { $$ = ForLoopStatementSemanticAction($1); }
-  | match_statement                                                 { $$ = MatchStatementSemanticAction($1); }
+  | matchStatement                                                 { $$ = MatchStatementSemanticAction($1); }
   ;
 
-match_statement:
-    MATCH IDENTIFIER INDENT match_case_list DEDENT                  { $$ = MatchStatementSemanticAction($2, $4); }
+matchStatement:
+    MATCH IDENTIFIER INDENT matchCaseList DEDENT                  { $$ = MatchStatementSemanticAction($2, $4); }
    ;
 
-match_case_list: match_case                                         { $$ = SingleCaseListSemanticAction($1); }
-  | match_case_list match_case                                      { $$ = AppendCaseListSemanticAction($1, $2); }
+matchCaseList: matchCase                                         { $$ = SingleCaseListSemanticAction($1); }
+  | matchCaseList matchCase                                      { $$ = AppendCaseListSemanticAction($1, $2); }
   ;
 
-match_case:
-    INTEGER ARROW INDENT statement_list DEDENT                      { $$ = MatchCaseSemanticAction($1, $4); }
+matchCase:
+    INTEGER ARROW INDENT statementList DEDENT                      { $$ = MatchCaseSemanticAction($1, $4); }
     ;
 
 for_loop:
-    FOR IDENTIFIER ASSIGNMENT expression TO expression INDENT statement_list DEDENT
-                                                                    { $$ = ForLoopSemanticAction($2, $4, $6, $8); }
+    FOR assignment_expression TO constant INDENT statementList DEDENT
+                                                                        {$$ = ForLoopSemanticAction($2, $4, $6); }
 	;
 
 
 
-expression: expression[left] ADD expression[right]					{ $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
-	| expression[left] DIV expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, DIVISION); }
-	| expression[left] MUL expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, MULTIPLICATION); }
-	| expression[left] SUB expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, SUBTRACTION); }
+mathExpression: mathExpression[left] ADD mathExpression[right]					{ $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
+	| mathExpression[left] DIV mathExpression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, DIVISION); }
+	| mathExpression[left] MUL mathExpression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, MULTIPLICATION); }
+	| mathExpression[left] SUB mathExpression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, SUBTRACTION); }
 	| factor														{ $$ = FactorExpressionSemanticAction($1); }
 	;
 
-factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = ExpressionFactorSemanticAction($2); }
+factor: OPEN_PARENTHESIS mathExpression CLOSE_PARENTHESIS				{ $$ = ExpressionFactorSemanticAction($2); }
 	| constant														{ $$ = ConstantFactorSemanticAction($1); }
 	;
 

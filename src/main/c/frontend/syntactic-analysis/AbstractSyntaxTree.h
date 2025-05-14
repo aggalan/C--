@@ -14,14 +14,12 @@ void shutdownAbstractSyntaxTreeModule();
  * This typedefs allows self-referencing types.
  */
 
-typedef enum ExpressionType ExpressionType;
+typedef enum MathExpressionType MathExpressionType;
 typedef enum FactorType FactorType;
-
 typedef struct Constant Constant;
-typedef struct Expression Expression;
+typedef struct MathExpression MathExpression;
 typedef struct Factor Factor;
 typedef struct Program Program;
-typedef struct match_statement Match_statement;
 typedef char * String;
 typedef struct Statement Statement;
 typedef struct StatementList StatementList;
@@ -29,7 +27,8 @@ typedef struct ForLoop ForLoop;
 typedef struct MatchStatement MatchStatement;
 typedef struct Case Case;
 typedef struct CaseList CaseList;
-
+typedef struct AssignmentMathExpression AssignmentMathExpression;
+typedef struct ConditionalMathExpression ConditionalMathExpression;
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
@@ -51,12 +50,12 @@ struct MatchStatement {
 
 struct Statement {
 	enum {
-		STATEMENT_EXPRESSION,
+		STATEMENT_MathExpression,
 		STATEMENT_FOR,
 		STATEMENT_MATCH
 	} type;
 	union {
-		Expression *expression;
+		MathExpression *MathExpression;
 		ForLoop *forLoop;
 		MatchStatement *matchStatement;
 	};
@@ -68,9 +67,8 @@ struct StatementList {
 };
 
 struct ForLoop {
-	String identifier;
-	Expression *startExpression;
-	Expression *endExpression;
+	AssignmentMathExpression * assignment;
+	Constant * endValue;
 	StatementList *body;
 };
 
@@ -78,13 +76,21 @@ struct Program {
 	StatementList *statements;
 };
 
-enum ExpressionType {
+enum MathExpressionType {
 	ADDITION,
 	DIVISION,
 	FACTOR,
 	MULTIPLICATION,
 	SUBTRACTION
 };
+
+struct AssignmentExpression {
+	String identifier;
+	MathExpression *MathExpression;
+
+};
+
+
 
 enum FactorType {
 	CONSTANT,
@@ -98,27 +104,27 @@ struct Constant {
 struct Factor {
 	union {
 		Constant * constant;
-		Expression * expression;
+		MathExpression * math_expression;
 	};
 	FactorType type;
 };
 
-struct Expression {
+struct MathExpression {
 	union {
 		Factor * factor;
 		struct {
-			Expression * leftExpression;
-			Expression * rightExpression;
+			MathExpression * leftExpression;
+			MathExpression * rightExpression;
 		};
 	};
-	ExpressionType type;
+	MathExpressionType type;
 };
 
 /**
  * Node recursive destructors.
  */
 void releaseConstant(Constant * constant);
-void releaseExpression(Expression * expression);
+void releaseExpression(MathExpression * MathExpression);
 void releaseFactor(Factor * factor);
 void releaseProgram(Program * program);
 void releaseStatement(Statement *stmt);
