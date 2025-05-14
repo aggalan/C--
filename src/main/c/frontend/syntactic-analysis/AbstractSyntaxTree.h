@@ -22,6 +22,8 @@ typedef struct Expression Expression;
 typedef struct Factor Factor;
 typedef struct Program Program;
 
+typedef char * String;
+
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */

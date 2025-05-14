@@ -15,7 +15,7 @@
  * @see https://westes.github.io/flex/manual/Start-Conditions.html
  */
 %x MULTILINE_COMMENT
-
+%x STRING
 /**
  * Reusable patterns.
  *
@@ -31,12 +31,27 @@
 <MULTILINE_COMMENT>[^*]+			{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 <MULTILINE_COMMENT>.				{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 
+
+"\""                                { BEGIN(STRING); BeginStringLexemeAction(createLexicalAnalyzerContext()); }
+<STRING>"\""                        { EndStringLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL);}
+<STRING>"[^\"]+"                    { StringLexemeAction(createLexicalAnalyzerContext());}
+
+"++"                                { AddOneLexemeAction(createLexicalAnalyzerContext()); }
+"--"                                { MinusOneLexemeAction(createLexicalAnalyzerContext()); }
+
+">="                                { ConditionalLexemeAction(createLexicalAnalyzerContext(), GREATER_OR_EQUAL);}
+"<="                                { ConditionalLexemeAction(createLexicalAnalyzerContext(), SMALLER_OR_EQUAL);}
+"=="                                { ConditionalLexemeAction(createLexicalAnalyzerContext(), CONDITIONAL_EQUAL);}
+"!="                                { ConditionalLexemeAction(createLexicalAnalyzerContext(), DIFFERENT);}
+"<"                                 { ConditionalLexemeAction(createLexicalAnalyzerContext(), SMALLER);}
+">"                                 { ConditionalLexemeAction(createLexicalAnalyzerContext(), GREATER);}
+
 "-"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), SUB); }
 "*"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), MUL); }
 "/"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), DIV); }
 "+"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), ADD); }
 
-"="                                 { return AssignmentOperatorLexemeAction(createLexicalAnalyzerContext()); }
+"="                                 { return AssignmentLexemeAction(createLexicalAnalyzerContext()); }
 
 "("									{ return ParenthesisLexemeAction(createLexicalAnalyzerContext(), OPEN_PARENTHESIS); }
 ")"									{ return ParenthesisLexemeAction(createLexicalAnalyzerContext(), CLOSE_PARENTHESIS); }
@@ -44,8 +59,9 @@
 "]"                                 { return BracketLexemeAction(createLexicalAnalyzerContext(), CLOSE_BRACKETS); }
 
 "INT"                               { return TypeLexemeAction(createLexicalAnalyzerContext(), INT);}
-"STRING"                            { return TypeLexemeAction(createLexicalAnalyzerContext(), STRING);}
+"STRING"                            { return TypeLexemeAction(createLexicalAnalyzerContext(), STRING_TYPE);}
 "BOOL"                              { return TypeLexemeAction(createLexicalAnalyzerContext(), BOOL);}
+"VOID"                              { return TypeLexemeAction(createLexicalAnalyzerContext(), VOID);}
 
 "FOR"                               { return ForLexemeAction(createLexicalAnalyzerContext()); }
 "WHILE"                             { return WhileLexemeAction(createLexicalAnalyzerContext()); }
@@ -57,7 +73,7 @@
 
 "RETURN"						    { return ReturnLexemeAction(createLexicalAnalyzerContext()); }
 
-[[:alpha:]]+                        { return IdentifierLexemeAction(createLexicalAnalyzerContext()); }
+[[:alpha:]][[:alnum:]]+             { return IdentifierLexemeAction(createLexicalAnalyzerContext()); }
 
 [[:digit:]]+						{ return IntegerLexemeAction(createLexicalAnalyzerContext()); }
 

@@ -11,6 +11,7 @@
 	/** Terminals. */
 
 	int integer;
+	String string;
 	Token token;
 
 	/** Non-terminals. */
@@ -47,12 +48,29 @@
 %token <token> OPEN_PARENTHESIS
 %token <token> SUB
 %token <token> INT
-%token <token> STRING
+%token <token> STRING_TYPE
 %token <token> BOOL
-%token <token> IDENTIFIER
+%token <token> VOID
+%token <String> IDENTIFIER
 %token <token> OPEN_BRACKETS
 %token <token> CLOSE_BRACKETS
+%token <token> ADD_ONE
+%token <token> MINUS_ONE
+%token <token> GREATER_OR_EQUAL
+%token <token> SMALLER_OR_EQUAL
+%token <token> CONDITIONAL_EQUAL
+%token <token> DIFFERENT
+%token <token> SMALLER
+%token <token> GREATER
+%token <String> STRING
+
 %token <token> MATCH
+%token <token> ASSIGNMENT
+%token <token> FOR
+%token <token> WHILE
+%token <token> IF
+%token <token> ELSE
+
 %token <token> UNKNOWN
 %token <token>  ARROW  RETURN
 
