@@ -95,4 +95,10 @@ Token TypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token to
 Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	return UNKNOWN;
+
+}
+Token MatchLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = MATCH;
+	return MATCH;
 }

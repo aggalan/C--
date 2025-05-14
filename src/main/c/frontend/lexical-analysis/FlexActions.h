@@ -35,4 +35,6 @@ Token IdentifierLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 Token TypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 
+Token MatchLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
 #endif

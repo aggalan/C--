@@ -45,12 +45,15 @@
 "STRING"                            { return TypeLexemeAction( createLexicalAnalyzerContext(), STRING);}
 "BOOL"                              { return TypeLexemeAction( createLexicalAnalyzerContext(), BOOL);}
 
+"MATCH"							    { return MatchLexemeAction(createLexicalAnalyzerContext()); }
+
 [[:alpha:]]+                        { return IdentifierLexemeAction(createLexicalAnalyzerContext()); }
 
 [[:digit:]]+						{ return IntegerLexemeAction(createLexicalAnalyzerContext()); }
 
 [[:space:]]+						{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 .									{ return UnknownLexemeAction(createLexicalAnalyzerContext()); }
+
 
 %%
 
