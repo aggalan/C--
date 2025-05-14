@@ -21,9 +21,10 @@ typedef struct Constant Constant;
 typedef struct Expression Expression;
 typedef struct Factor Factor;
 typedef struct Program Program;
-
+typedef struct Case Case;
+typedef struct CaseList CaseList;
+typedef struct match_statement Match_statement;
 typedef char * String;
-
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
@@ -67,6 +68,20 @@ struct Expression {
 struct Program {
 	Expression * expression;
 };
+typedef struct Case {
+	int matchValue;
+	Match_statement * match_statement;
+} Case;
+
+typedef struct CaseList {
+	Case **cases;
+	int count;
+} CaseList;
+
+typedef struct match_statement {
+	char * identifier;
+	CaseList * caseList;
+} Match_statement;
 
 /**
  * Node recursive destructors.
