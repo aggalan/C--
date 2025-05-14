@@ -88,7 +88,6 @@
 %token <token> TO
 %token <token> IF
 %token <token> ELSE
-%token <token> TO
 %token <token> DEFAULT
 
 %token <token> PRINT
