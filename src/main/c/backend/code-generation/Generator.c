@@ -18,10 +18,10 @@ void shutdownGeneratorModule() {
 
 /** PRIVATE FUNCTIONS */
 
-static const char _expressionTypeToCharacter(const ExpressionType type);
+static const char _expressionTypeToCharacter(const MathExpressionType type);
 static void _generateConstant(const unsigned int indentationLevel, Constant * constant);
 static void _generateEpilogue(const int value);
-static void _generateExpression(const unsigned int indentationLevel, Expression * expression);
+static void _generateExpression(const unsigned int indentationLevel, MathExpression * expression);
 static void _generateFactor(const unsigned int indentationLevel, Factor * factor);
 static void _generateProgram(Program * program);
 static void _generatePrologue(void);
@@ -32,7 +32,7 @@ static void _output(const unsigned int indentationLevel, const char * const form
  * Converts and expression type to the proper character of the operation
  * involved, or returns '\0' if that's not possible.
  */
-static const char _expressionTypeToCharacter(const ExpressionType type) {
+static const char _expressionTypeToCharacter(const MathExpressionType type) {
 	switch (type) {
 		case ADDITION: return '+';
 		case DIVISION: return '/';
@@ -69,7 +69,7 @@ static void _generateEpilogue(const int value) {
 /**
  * Generates the output of an expression.
  */
-static void _generateExpression(const unsigned int indentationLevel, Expression * expression) {
+static void _generateExpression(const unsigned int indentationLevel, MathExpression * expression) {
 	_output(indentationLevel, "%s", "[ $E$, circle, draw, black!20\n");
 	switch (expression->type) {
 		case ADDITION:
@@ -101,7 +101,7 @@ static void _generateFactor(const unsigned int indentationLevel, Factor * factor
 			break;
 		case EXPRESSION:
 			_output(1 + indentationLevel, "%s", "[ $($, circle, draw, purple ]\n");
-			_generateExpression(1 + indentationLevel, factor->expression);
+			_generateExpression(1 + indentationLevel, factor->math_expression);
 			_output(1 + indentationLevel, "%s", "[ $)$, circle, draw, purple ]\n");
 			break;
 		default:
