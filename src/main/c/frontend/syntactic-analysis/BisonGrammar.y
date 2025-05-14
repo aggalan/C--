@@ -27,6 +27,9 @@
     StatementList * statementList;
     AssignmentExpression * assignmentExpression;
     ForLoop * forLoop;
+    WhileLoop * whileLoop;
+    IfStatement * ifStatement;
+
 }
 
 /**
@@ -86,7 +89,6 @@
 %token <token> TO
 %token <token> IF
 %token <token> ELSE
-%token <token> TO
 %token <token> DEFAULT
 %token <token> PRINT
 %token <token> MACRO
@@ -110,6 +112,9 @@
 %type <statement> statement
 %type <statementList> statementList
 %type <forLoop> for_loop
+%type <whileLoop> while_loop
+%type <ifStatement> if_statement
+
 
 /**
  * Precedence and associativity.
@@ -132,7 +137,9 @@ statementList: statement                                           { $$ = Single
 
 statement: mathExpression                                               { $$ = ExpressionStatementSemanticAction($1); }
   | for_loop                                                        { $$ = ForLoopStatementSemanticAction($1); }
-  | matchStatement                                                 { $$ = MatchStatementSemanticAction($1); }
+  | matchStatement                                                 { $$ = MatchStatementSemanticAction($1); }                                                { $$ = MatchStatementSemanticAction($1); }
+  | while_loop                                                      { $$ = WhileLoopStatementSemanticAction($1); }
+  | if_statement                                                    { $$ = IfStatementSemanticAction($1); }
   ;
 
 matchStatement:
@@ -152,7 +159,14 @@ for_loop:
                                                                         {$$ = ForLoopSemanticAction($2, $4, $6); }
 	;
 
+while_loop:
+    WHILE expression INDENT statement_list DEDENT                   { $$ = WhileLoopSemanticAction($2, $4); }
+    ;
 
+if_statement: IF expression INDENT statement_list DEDENT            { $$ = IfThenSemanticAction($2, $4); }
+  | IF expression INDENT statement_list DEDENT
+    ELSE INDENT statement_list DEDENT                               { $$ = IfElseSemanticAction($2, $4, $8); }
+  ;
 
 mathExpression: mathExpression[left] ADD mathExpression[right]					{ $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
 	| mathExpression[left] DIV mathExpression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, DIVISION); }

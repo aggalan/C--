@@ -29,9 +29,24 @@ typedef struct Case Case;
 typedef struct CaseList CaseList;
 typedef struct AssignmentMathExpression AssignmentMathExpression;
 typedef struct ConditionalMathExpression ConditionalMathExpression;
+typedef struct WhileLoop WhileLoop;
+typedef struct IfStatement IfStatement;
+
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
+
+struct IfStatement {
+	MathExpression *condition;
+	StatementList *thenBranch;
+	StatementList *elseBranch;
+};
+
+struct WhileLoop {
+	MathExpression *condition;
+	StatementList *body;
+};
+
 
 struct Case {
 	int matchValue;
@@ -52,12 +67,16 @@ struct Statement {
 	enum {
 		STATEMENT_MathExpression,
 		STATEMENT_FOR,
-		STATEMENT_MATCH
+		STATEMENT_MATCH,
+		STATEMENT_WHILE,
+		STATEMENT_IF
 	} type;
 	union {
 		MathExpression *MathExpression;
 		ForLoop *forLoop;
 		MatchStatement *matchStatement;
+		WhileLoop *whileLoop;
+		IfStatement *ifStatement;
 	};
 };
 

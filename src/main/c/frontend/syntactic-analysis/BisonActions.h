@@ -30,9 +30,16 @@ StatementList * AppendStatementListSemanticAction(StatementList *list, Statement
 Statement *ExpressionStatementSemanticAction(MathExpression *expr);
 Statement *ForLoopStatementSemanticAction(ForLoop *loop);
 Statement *MatchStatementSemanticAction(MatchStatement *stmt);
-MatchStatement *MatchStatementSemanticAction(String id, CaseList *cases);
+MatchStatement *MatchSemanticAction(String id, CaseList *cases);
 CaseList *SingleCaseListSemanticAction(Case *c);
 CaseList *AppendCaseListSemanticAction(CaseList *list, Case *c);
 Case *MatchCaseSemanticAction(int value, StatementList *body);
 ForLoop *ForLoopSemanticAction(String id, AssignmentMathExpression *start, Constant * end, StatementList *body);
+Statement *WhileLoopStatementSemanticAction(WhileLoop *loop);
+WhileLoop *WhileLoopSemanticAction(MathExpression *condition, StatementList *body);
+Statement *IfStatementSemanticAction(IfStatement *stmt);
+IfStatement *IfThenSemanticAction(MathExpression *condition, StatementList *thenBranch);
+IfStatement *IfElseSemanticAction(MathExpression *condition, StatementList *thenBranch, StatementList *elseBranch);
+
+
 #endif
