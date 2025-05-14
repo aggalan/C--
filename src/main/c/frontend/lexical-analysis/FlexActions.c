@@ -143,6 +143,12 @@ Token ConditionalLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, T
 	lexicalAnalyzerContext->semanticValue->token = token;
 	return token;
 }
+Token LogicalOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = token;
+	return token;
+}
+
 
 Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);

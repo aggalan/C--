@@ -49,6 +49,10 @@
 "<"                                 { return ConditionalLexemeAction(createLexicalAnalyzerContext(), SMALLER);}
 ">"                                 { return ConditionalLexemeAction(createLexicalAnalyzerContext(), GREATER);}
 
+"AND"                               { return LogicalOperatorLexemeAction(createLexicalAnalyzerContext(), AND); }
+"OR"                                { return LogicalOperatorLexemeAction(createLexicalAnalyzerContext(), OR); }
+"NOT"                               { return LogicalOperatorLexemeAction(createLexicalAnalyzerContext(), NOT); }
+
 "-"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), SUB); }
 "*"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), MUL); }
 "/"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), DIV); }
