@@ -61,6 +61,12 @@
 %token <token> STRING
 
 %token <token> MATCH
+%token <token> ASSIGNMENT
+%token <token> FOR
+%token <token> WHILE
+%token <token> IF
+%token <token> ELSE
+
 %token <token> UNKNOWN
 
 /** Non-terminals. */
