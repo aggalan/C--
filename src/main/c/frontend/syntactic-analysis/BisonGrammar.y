@@ -25,7 +25,7 @@
     CaseList * caseList;
     Statement * statement;
     StatementList * statementList;
-    AssignmentExpression * assignmentExpression;
+    AssignmentMathExpression * assignmentMathExpression;
     ForLoop * forLoop;
     WhileLoop * whileLoop;
     IfStatement * ifStatement;
@@ -103,7 +103,7 @@
 
 %type <constant> constant
 %type <mathExpression> mathExpression
-%type <assignmentExpression> assignmentExpression
+%type <assignmentMathExpression> assignmentMathExpression
 %type <factor> factor
 %type <program> program
 %type <matchStatement> matchStatement
@@ -155,7 +155,7 @@ matchCase:
     ;
 
 for_loop:
-    FOR assignmentExpression TO constant INDENT statementList DEDENT
+    FOR assignmentMathExpression TO constant INDENT statementList DEDENT
                                                                         {$$ = ForLoopSemanticAction($2, $4, $6); }
 	;
 
@@ -181,5 +181,8 @@ factor: OPEN_PARENTHESIS mathExpression CLOSE_PARENTHESIS				{ $$ = ExpressionFa
 
 constant: INTEGER													{ $$ = IntegerConstantSemanticAction($1); }
 	;
+
+assignmentMathExpression: IDENTIFIER ASSIGNMENT mathExpression			{ $$ = assignmentMathExpressionSemanticAction($1, $3); }
+    ;
 
 %%

@@ -223,3 +223,11 @@ IfStatement *IfElseSemanticAction(MathExpression *condition, StatementList *then
 	stmt->elseBranch = elseBranch;
 	return stmt;
 }
+AssignmentMathExpression *assignmentMathExpressionSemanticAction(String id, MathExpression *expr)
+{
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	AssignmentMathExpression *assignment = calloc(1, sizeof(AssignmentMathExpression));
+	assignment->identifier = id;
+	assignment->MathExpression = expr;
+	return assignment;
+}

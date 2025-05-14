@@ -103,10 +103,9 @@ enum MathExpressionType {
 	SUBTRACTION
 };
 
-struct AssignmentExpression {
+struct AssignmentMathExpression {
 	String identifier;
 	MathExpression *MathExpression;
-
 };
 
 

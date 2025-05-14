@@ -40,6 +40,7 @@ WhileLoop *WhileLoopSemanticAction(MathExpression *condition, StatementList *bod
 Statement *IfStatementSemanticAction(IfStatement *stmt);
 IfStatement *IfThenSemanticAction(MathExpression *condition, StatementList *thenBranch);
 IfStatement *IfElseSemanticAction(MathExpression *condition, StatementList *thenBranch, StatementList *elseBranch);
+AssignmentMathExpression *assignmentMathExpressionSemanticAction(String id, MathExpression *expr);
 
 
 #endif
