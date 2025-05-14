@@ -42,7 +42,7 @@
  */
 /*
 %destructor { releaseConstant($$); } <constant>
-%destructor { releaseExpression($$); } <expression>
+%destructor { releaseExpression($$); } <mathExpression>
 %destructor { releaseFactor($$); } <factor>
 %destructor { releaseProgram($$); } <program>
 */
@@ -160,11 +160,11 @@ for_loop:
 	;
 
 while_loop:
-    WHILE expression INDENT statementList DEDENT                   { $$ = WhileLoopSemanticAction($2, $4); }
+    WHILE mathExpression INDENT statementList DEDENT                   { $$ = WhileLoopSemanticAction($2, $4); }
     ;
 
-if_statement: IF expression INDENT statementList DEDENT            { $$ = IfThenSemanticAction($2, $4); }
-  | IF expression INDENT statementList DEDENT
+if_statement: IF mathExpression INDENT statementList DEDENT            { $$ = IfThenSemanticAction($2, $4); }
+  | IF mathExpression INDENT statementList DEDENT
     ELSE INDENT statementList DEDENT                               { $$ = IfElseSemanticAction($2, $4, $8); }
   ;
 
