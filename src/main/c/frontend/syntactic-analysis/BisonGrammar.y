@@ -26,6 +26,7 @@
     Statement * statement;
     StatementList * statementList;
     ForLoop * forLoop;
+    WhileLoop * whileLoop;
 }
 
 /**
@@ -108,6 +109,8 @@
 %type <statement> statement
 %type <statementList> statement_list
 %type <forLoop> for_loop
+%type <whileLoop> while_loop
+
 
 /**
  * Precedence and associativity.
@@ -131,6 +134,7 @@ statement_list: statement                                           { $$ = Singl
 statement: expression                                               { $$ = ExpressionStatementSemanticAction($1); }
   | for_loop                                                        { $$ = ForLoopStatementSemanticAction($1); }
   | match_statement                                                 { $$ = MatchStatementSemanticAction($1); }
+  | while_loop                                                      { $$ = WhileLoopStatementSemanticAction($1); }
   ;
 
 match_statement:
@@ -149,6 +153,11 @@ for_loop:
     FOR IDENTIFIER ASSIGNMENT expression TO expression INDENT statement_list DEDENT
                                                                     { $$ = ForLoopSemanticAction($2, $4, $6, $8); }
 	;
+
+while_loop:
+    WHILE expression INDENT statement_list DEDENT                   { $$ = WhileLoopSemanticAction($2, $4); }
+    ;
+
 
 
 
