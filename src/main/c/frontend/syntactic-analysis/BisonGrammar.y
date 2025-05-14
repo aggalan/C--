@@ -160,12 +160,12 @@ for_loop:
 	;
 
 while_loop:
-    WHILE expression INDENT statement_list DEDENT                   { $$ = WhileLoopSemanticAction($2, $4); }
+    WHILE expression INDENT statementList DEDENT                   { $$ = WhileLoopSemanticAction($2, $4); }
     ;
 
-if_statement: IF expression INDENT statement_list DEDENT            { $$ = IfThenSemanticAction($2, $4); }
-  | IF expression INDENT statement_list DEDENT
-    ELSE INDENT statement_list DEDENT                               { $$ = IfElseSemanticAction($2, $4, $8); }
+if_statement: IF expression INDENT statementList DEDENT            { $$ = IfThenSemanticAction($2, $4); }
+  | IF expression INDENT statementList DEDENT
+    ELSE INDENT statementList DEDENT                               { $$ = IfElseSemanticAction($2, $4, $8); }
   ;
 
 mathExpression: mathExpression[left] ADD mathExpression[right]					{ $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
