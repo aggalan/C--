@@ -11,6 +11,7 @@
 	/** Terminals. */
 
 	int integer;
+	String string;
 	Token token;
 
 	/** Non-terminals. */
