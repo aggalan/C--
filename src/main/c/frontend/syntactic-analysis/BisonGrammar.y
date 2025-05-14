@@ -62,6 +62,8 @@
 %token <token> DIFFERENT
 %token <token> SMALLER
 %token <token> GREATER
+%token <token> INDENT
+%token <token> DEDENT
 %token <String> STRING
 
 %token <token> MATCH
@@ -83,6 +85,7 @@
 %type <program> program
 %type <matchCase> match_case
 %type <caseList> match_case_list
+%type <block> block
 
 /**
  * Precedence and associativity.
