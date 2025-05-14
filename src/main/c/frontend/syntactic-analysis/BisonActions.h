@@ -34,5 +34,7 @@ MatchStatement *MatchStatementSemanticAction(String id, CaseList *cases);
 CaseList *SingleCaseListSemanticAction(Case *c);
 CaseList *AppendCaseListSemanticAction(CaseList *list, Case *c);
 Case *MatchCaseSemanticAction(int value, StatementList *body);
+Statement *WhileLoopStatementSemanticAction(WhileLoop *loop);
+WhileLoop *WhileLoopSemanticAction(Expression *condition, StatementList *body);
 
 #endif

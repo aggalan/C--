@@ -29,10 +29,17 @@ typedef struct ForLoop ForLoop;
 typedef struct MatchStatement MatchStatement;
 typedef struct Case Case;
 typedef struct CaseList CaseList;
+typedef struct WhileLoop WhileLoop;
 
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
+
+struct WhileLoop {
+	Expression *condition;
+	StatementList *body;
+};
+
 
 struct Case {
 	int matchValue;
@@ -53,12 +60,14 @@ struct Statement {
 	enum {
 		STATEMENT_EXPRESSION,
 		STATEMENT_FOR,
-		STATEMENT_MATCH
+		STATEMENT_MATCH,
+		STATEMENT_WHILE
 	} type;
 	union {
 		Expression *expression;
 		ForLoop *forLoop;
 		MatchStatement *matchStatement;
+		WhileLoop *whileLoop;
 	};
 };
 
