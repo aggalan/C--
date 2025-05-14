@@ -8,7 +8,6 @@
  * Enable start condition manipulation functions.
  */
 %option stack
-%option bol
 
 /**
  * Flex contexts (a.k.a. start conditions).
@@ -37,7 +36,7 @@
 <STRING>"\""                        { EndStringLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL);}
 <STRING>"[^\"]+"                    { return StringLexemeAction(createLexicalAnalyzerContext());}
 
-"^[ ]*"                            { return IndentationLexemeAction(createLexemeAction()); }
+"^[\t]*"                            { return IndentationLexemeAction(createLexemeAction()); }
 
 "++"                                { return AddOneLexemeAction(createLexicalAnalyzerContext()); }
 "--"                                { return MinusOneLexemeAction(createLexicalAnalyzerContext()); }
@@ -49,10 +48,16 @@
 "<"                                 { return ConditionalLexemeAction(createLexicalAnalyzerContext(), SMALLER);}
 ">"                                 { return ConditionalLexemeAction(createLexicalAnalyzerContext(), GREATER);}
 
+"AND"                               { return LogicalOperatorLexemeAction(createLexicalAnalyzerContext(), AND); }
+"OR"                                { return LogicalOperatorLexemeAction(createLexicalAnalyzerContext(), OR); }
+"NOT"                               { return LogicalOperatorLexemeAction(createLexicalAnalyzerContext(), NOT); }
+
 "-"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), SUB); }
 "*"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), MUL); }
 "/"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), DIV); }
 "+"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), ADD); }
+
+"->"								{ return MatchLexemeAction(createLexicalAnalyzerContext(),ARROW); }
 
 "="                                 { return AssignmentLexemeAction(createLexicalAnalyzerContext()); }
 
@@ -86,7 +91,6 @@
 [[:space:]]+						{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 .									{ return UnknownLexemeAction(createLexicalAnalyzerContext()); }
 
-"->"								{ return MatchLexemeAction(createLexicalAnalyzerContext(),ARROW); }
 %%
 
 #include "FlexExport.h"
