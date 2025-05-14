@@ -30,10 +30,17 @@ typedef struct MatchStatement MatchStatement;
 typedef struct Case Case;
 typedef struct CaseList CaseList;
 typedef struct WhileLoop WhileLoop;
+typedef struct IfStatement IfStatement;
 
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
+
+struct IfStatement {
+	Expression *condition;
+	StatementList *thenBranch;
+	StatementList *elseBranch; // puede ser NULL
+};
 
 struct WhileLoop {
 	Expression *condition;
@@ -61,13 +68,15 @@ struct Statement {
 		STATEMENT_EXPRESSION,
 		STATEMENT_FOR,
 		STATEMENT_MATCH,
-		STATEMENT_WHILE
+		STATEMENT_WHILE,
+		STATEMENT_IF
 	} type;
 	union {
 		Expression *expression;
 		ForLoop *forLoop;
 		MatchStatement *matchStatement;
 		WhileLoop *whileLoop;
+		IfStatement *ifStatement;
 	};
 };
 

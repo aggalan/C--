@@ -36,5 +36,9 @@ CaseList *AppendCaseListSemanticAction(CaseList *list, Case *c);
 Case *MatchCaseSemanticAction(int value, StatementList *body);
 Statement *WhileLoopStatementSemanticAction(WhileLoop *loop);
 WhileLoop *WhileLoopSemanticAction(Expression *condition, StatementList *body);
+Statement *IfStatementSemanticAction(IfStatement *stmt);
+IfStatement *IfThenSemanticAction(Expression *condition, StatementList *thenBranch);
+IfStatement *IfElseSemanticAction(Expression *condition, StatementList *thenBranch, StatementList *elseBranch);
+
 
 #endif

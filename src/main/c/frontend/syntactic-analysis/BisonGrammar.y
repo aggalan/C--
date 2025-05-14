@@ -27,6 +27,8 @@
     StatementList * statementList;
     ForLoop * forLoop;
     WhileLoop * whileLoop;
+    IfStatement * ifStatement;
+
 }
 
 /**
@@ -111,6 +113,7 @@
 %type <statementList> statement_list
 %type <forLoop> for_loop
 %type <whileLoop> while_loop
+%type <ifStatement> if_statement
 
 
 /**
@@ -136,6 +139,7 @@ statement: expression                                               { $$ = Expre
   | for_loop                                                        { $$ = ForLoopStatementSemanticAction($1); }
   | match_statement                                                 { $$ = MatchStatementSemanticAction($1); }
   | while_loop                                                      { $$ = WhileLoopStatementSemanticAction($1); }
+  | if_statement                                                    { $$ = IfStatementSemanticAction($1); }
   ;
 
 match_statement:
@@ -159,8 +163,10 @@ while_loop:
     WHILE expression INDENT statement_list DEDENT                   { $$ = WhileLoopSemanticAction($2, $4); }
     ;
 
-
-
+if_statement: IF expression INDENT statement_list DEDENT            { $$ = IfThenSemanticAction($2, $4); }
+  | IF expression INDENT statement_list DEDENT
+    ELSE INDENT statement_list DEDENT                               { $$ = IfElseSemanticAction($2, $4, $8); }
+  ;
 
 expression: expression[left] ADD expression[right]					{ $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
 	| expression[left] DIV expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, DIVISION); }
