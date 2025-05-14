@@ -8,6 +8,7 @@
  * Enable start condition manipulation functions.
  */
 %option stack
+%option bol
 
 /**
  * Flex contexts (a.k.a. start conditions).
@@ -35,6 +36,8 @@
 "\""                                { BEGIN(STRING); BeginStringLexemeAction(createLexicalAnalyzerContext()); }
 <STRING>"\""                        { EndStringLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL);}
 <STRING>"[^\"]+"                    { return StringLexemeAction(createLexicalAnalyzerContext());}
+
+"^[ ]*"                            { return IndentationLexemeAction(createLexemeAction()); }
 
 "++"                                { return AddOneLexemeAction(createLexicalAnalyzerContext()); }
 "--"                                { return MinusOneLexemeAction(createLexicalAnalyzerContext()); }
