@@ -49,6 +49,8 @@ Token ElseLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token AddOneLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token MinusOneLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
+Token AssignmentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
 Token ConditionalLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 
 #endif
