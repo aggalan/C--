@@ -4,6 +4,8 @@
 /.vs/
 /.vscode/
 /bin/
+/.idea/
+/cmake-build-debug/
 /build/
 /cache/
 /log/

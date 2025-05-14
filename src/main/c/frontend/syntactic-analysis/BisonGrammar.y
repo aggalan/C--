@@ -44,6 +44,12 @@
 %token <token> MUL
 %token <token> OPEN_PARENTHESIS
 %token <token> SUB
+%token <token> INT
+%token <token> STRING
+%token <token> BOOL
+%token <token> IDENTIFIER
+%token <token> OPEN_BRACKETS
+%token <token> CLOSE_BRACKETS
 
 %token <token> UNKNOWN
 

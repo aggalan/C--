@@ -38,6 +38,14 @@
 
 "("									{ return ParenthesisLexemeAction(createLexicalAnalyzerContext(), OPEN_PARENTHESIS); }
 ")"									{ return ParenthesisLexemeAction(createLexicalAnalyzerContext(), CLOSE_PARENTHESIS); }
+"["                                 { return BracketLexemeAction(createLexicalAnalyzerContext(), OPEN_BRACKET); }
+"]"                                 { return BracketLexemeAction(createLexicalAnalyzerContext(), CLOSE_BRACKET); }
+
+"INT"                               { return TypeLexemeAction( createLexicalAnalyzerContext(), INT);}
+"STRING"                            { return TypeLexemeAction( createLexicalAnalyzerContext(), STRING);}
+"BOOL"                              { return TypeLexemeAction( createLexicalAnalyzerContext(), BOOL);}
+
+[[:alpha:]]+                        { return IdentifierLexemeAction(createLexicalAnalyzerContext()); }
 
 [[:digit:]]+						{ return IntegerLexemeAction(createLexicalAnalyzerContext()); }
 
