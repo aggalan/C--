@@ -15,7 +15,7 @@
  * @see https://westes.github.io/flex/manual/Start-Conditions.html
  */
 %x MULTILINE_COMMENT
-
+%x STRING
 /**
  * Reusable patterns.
  *
@@ -31,6 +31,21 @@
 <MULTILINE_COMMENT>[^*]+			{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 <MULTILINE_COMMENT>.				{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 
+
+"\""                                { BEGIN(STRING); BeginStringLexemeAction(createLexicalAnalyzerContext()); }
+<STRING>"\""                        { EndStringLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL);}
+<STRING>"[^\"\n]+"                  { StringLexemeAction(createLexicalAnalyzerContext());}
+
+"++"                                { AddOneLexemeAction(createLexicalAnalyzerContext()); }
+"--"                                { MinusOneLexemeAction(createLexicalAnalyzerContext()); }
+
+">="                                { ConditionalLexemeAction(createLexicalAnalyzerContext(), GREATER_OR_EQUAL);}
+"<="                                { ConditionalLexemeAction(createLexicalAnalyzerContext(), SMALLER_OR_EQUAL);}
+"=="                                { ConditionalLexemeAction(createLexicalAnalyzerContext(), CONDITIONAL_EQUAL);}
+"!="                                { ConditionalLexemeAction(createLexicalAnalyzerContext(), DIFFERENT);}
+"<"                                 { ConditionalLexemeAction(createLexicalAnalyzerContext(), SMALLER);}
+">"                                 { ConditionalLexemeAction(createLexicalAnalyzerContext(), GREATER);}
+
 "-"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), SUB); }
 "*"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), MUL); }
 "/"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), DIV); }
@@ -45,7 +60,7 @@
 "STRING"                            { return TypeLexemeAction( createLexicalAnalyzerContext(), STRING);}
 "BOOL"                              { return TypeLexemeAction( createLexicalAnalyzerContext(), BOOL);}
 
-[[:alpha:]]+                        { return IdentifierLexemeAction(createLexicalAnalyzerContext()); }
+[[:alpha:]][[:alnum:]]+                        { return IdentifierLexemeAction(createLexicalAnalyzerContext()); }
 
 [[:digit:]]+						{ return IntegerLexemeAction(createLexicalAnalyzerContext()); }
 
