@@ -53,12 +53,15 @@
 "IF"                                { return IfLexemeAction(createLexicalAnalyzerContext()); }
 "ELSE"                              { return ElseLexemeAction(createLexicalAnalyzerContext()); }
 
+"MATCH"							    { return MatchLexemeAction(createLexicalAnalyzerContext()); }
+
 [[:alpha:]]+                        { return IdentifierLexemeAction(createLexicalAnalyzerContext()); }
 
 [[:digit:]]+						{ return IntegerLexemeAction(createLexicalAnalyzerContext()); }
 
 [[:space:]]+						{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 .									{ return UnknownLexemeAction(createLexicalAnalyzerContext()); }
+
 
 %%
 
