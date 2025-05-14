@@ -22,6 +22,7 @@
 	Program * program;
 	Case * matchCase;
     CaseList * caseList;
+    Match_statement * matchStatement;
 }
 
 /**
@@ -83,7 +84,7 @@
 %type <program> program
 %type <matchCase> match_case
 %type <caseList> match_case_list
-
+%type <matchStatement> match_statement
 /**
  * Precedence and associativity.
  *
