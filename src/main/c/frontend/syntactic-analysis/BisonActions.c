@@ -114,8 +114,22 @@ StatementList* SingleStatementListSemanticAction(Statement* stmt) {
 	return list;
 }
 
+// StatementList* AppendStatementListSemanticAction(StatementList* list, Statement* stmt) {
+// 	_logSyntacticAnalyzerAction(__FUNCTION__);
+// 	list->statements = realloc(list->statements, sizeof(Statement*) * (list->count + 1));
+// 	list->statements[list->count++] = stmt;
+// 	return list;
+// }
+
 StatementList* AppendStatementListSemanticAction(StatementList* list, Statement* stmt) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
+	if (list == NULL) {
+		StatementList* newList = calloc(1, sizeof(StatementList));
+		newList->statements = calloc(1, sizeof(Statement*));
+		newList->statements[0] = stmt;
+		newList->count = 1;
+		return newList;
+	}
 	list->statements = realloc(list->statements, sizeof(Statement*) * (list->count + 1));
 	list->statements[list->count++] = stmt;
 	return list;

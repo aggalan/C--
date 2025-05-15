@@ -143,8 +143,10 @@
 program: statementList                                             { $$ = StatementListProgramSemanticAction(currentCompilerState(), $1); }
     ;
 
-statementList: statement                                           { $$ = SingleStatementListSemanticAction($1); }
-	| statementList statement                                      { $$ = AppendStatementListSemanticAction($1, $2); }
+ //statement                                           { $$ = SingleStatementListSemanticAction($1); }
+
+statementList: statementList statement                              { $$ = AppendStatementListSemanticAction($1, $2); }
+    |                                                               { $$ = NULL; }
 	;
 
 statement: mathExpression                                               { $$ = ExpressionStatementSemanticAction($1); }
