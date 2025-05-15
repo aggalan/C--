@@ -32,16 +32,16 @@
 <MULTILINE_COMMENT>[^*]+			{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 <MULTILINE_COMMENT>.				{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 
-"\""                                { BEGIN(STRING); BeginStringLexemeAction(createLexicalAnalyzerContext()); }
-<STRING>"\""                        { EndStringLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL);}
-<STRING>"[^\"]*"                    { return StringLexemeAction(createLexicalAnalyzerContext());}
+\"                          { BEGIN(STRING); return BeginStringLexemeAction(createLexicalAnalyzerContext()); }
+<STRING>\"                  {  BEGIN(INITIAL); return EndStringLexemeAction(createLexicalAnalyzerContext()); }
+<STRING>[^\\"\n]+           { return StringLexemeAction(createLexicalAnalyzerContext()); }
 
 "//"                                { BEGIN(SINGLE_LINE_COMMENT); EndSingleLineCommentLexemeAction(createLexicalAnalyzerContext()); }
 "#"                                 { BEGIN(SINGLE_LINE_COMMENT); EndSingleLineCommentLexemeAction(createLexicalAnalyzerContext());}
-<SINGLE_LINE_COMMENT>"[^\n]*"       { IgnoredLexemeAction(createLexicalAnalyzerContext()); }
-<SINGLE_LINE_COMMENT>"\n"           { EndSingleLineCommentLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL);}
+<SINGLE_LINE_COMMENT>[^\n]*       { IgnoredLexemeAction(createLexicalAnalyzerContext()); }
+<SINGLE_LINE_COMMENT>\n           { EndSingleLineCommentLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL);}
 
-"^[\t]*"                            { return IndentationLexemeAction(createLexicalAnalyzerContext()); }
+\r\n[ ]*                            { return IndentationLexemeAction(createLexicalAnalyzerContext()); }
 
 "++"                                { return AddOneLexemeAction(createLexicalAnalyzerContext()); }
 "--"                                { return MinusOneLexemeAction(createLexicalAnalyzerContext()); }
@@ -89,7 +89,7 @@
 "SORT"                              { return SortLexemeAction(createLexicalAnalyzerContext()); }
 "DEFAULT"                           { return DefaultLexemeAction(createLexicalAnalyzerContext()); }
 
-[[:alpha:]][[:alnum:]]+             { return IdentifierLexemeAction(createLexicalAnalyzerContext()); }
+[[:alpha:]][[:alnum:]]*             { return IdentifierLexemeAction(createLexicalAnalyzerContext()); }
 
 [[:digit:]]+						{ return IntegerLexemeAction(createLexicalAnalyzerContext()); }
 

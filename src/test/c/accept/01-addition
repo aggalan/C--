@@ -1,1 +1,2 @@
-1 + 2
+FOR I = 2 TO 5
+    PRINT I

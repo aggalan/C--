@@ -65,6 +65,8 @@
 %token <string> IDENTIFIER
 %token <token> OPEN_BRACKETS
 %token <token> CLOSE_BRACKETS
+%token <token> STRING_START
+%token <token> STRING_END
 
 %token <token> ADD_ONE
 %token <token> MINUS_ONE
@@ -193,7 +195,7 @@ assignmentMathExpression: IDENTIFIER ASSIGNMENT mathExpression			{ $$ = assignme
 conditionalExpression: IDENTIFIER                      { $$ =   conditionalExpressionSemanticAction($1); } /* FIXME */
     ;
 print_statement: PRINT IDENTIFIER                                    { $$ = PrintIdentifierSemanticAction( $2);}
-|    PRINT STRING                                            { $$ = PrintStringSemanticAction($2); }       ;
+|    PRINT STRING_START STRING STRING_END                            { $$ = PrintStringSemanticAction($3); }       ;
 
 
 %%

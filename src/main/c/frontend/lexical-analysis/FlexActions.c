@@ -80,16 +80,17 @@ void EndSingleLineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerCo
 	}
 }
 
-void BeginStringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-	if (_logIgnoredLexemes) {
-		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	}
+Token BeginStringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token= STRING_START;
+	return STRING_START;
+
 }
 
-void EndStringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-	if (_logIgnoredLexemes) {
-		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	}
+Token EndStringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token= STRING_END;
+	return STRING_END;
 }
 
 void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {

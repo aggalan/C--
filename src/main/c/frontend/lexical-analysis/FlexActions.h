@@ -25,8 +25,8 @@ void BeginMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerC
 void EndMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void BeginSingleLineLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void EndSingleLineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
-void BeginStringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
-void EndStringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token BeginStringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token EndStringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 Token ArithmeticOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
