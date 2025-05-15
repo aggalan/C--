@@ -49,4 +49,9 @@ ConditionalExpression * BooleanExpressionSemanticAction(BoolExpression * bool_ex
 ConditionalExpression * NotExpressionSemanticAction(ConditionalExpression * conditionalExpression1);
 ConditionalExpression * ParenthesizedExpressionSemanticAction(ConditionalExpression * conditionalExpression1);
 Statement * PrintStatementSemanticAction(PrintStatement * stmt);
+Statement * MacroStatementSemanticAction(MacroStatement * stmt);
+MacroStatement * MacroSemanticAction(String id, StringList *args, Statement * body);
+StringList * SingleStringListSemanticAction(String str);
+StringList * AppendStringListSemanticAction(StringList *list, String str);
+Factor * IdentifierFactorSemanticAction(String id);
 #endif

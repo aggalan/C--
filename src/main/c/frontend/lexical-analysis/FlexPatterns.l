@@ -42,7 +42,7 @@
 <SINGLE_LINE_COMMENT>\n           { EndSingleLineCommentLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL);}
 
 
-
+"->"								{ return MatchLexemeAction(createLexicalAnalyzerContext(),ARROW); }
 "++"                                { return AddOneLexemeAction(createLexicalAnalyzerContext()); }
 "--"                                { return MinusOneLexemeAction(createLexicalAnalyzerContext()); }
 
@@ -62,7 +62,7 @@
 "/"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), DIV); }
 "+"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), ADD); }
 
-"->"								{ return MatchLexemeAction(createLexicalAnalyzerContext(),ARROW); }
+
 
 "="                                 { return AssignmentLexemeAction(createLexicalAnalyzerContext()); }
 
@@ -79,7 +79,7 @@
 
 "FOR"                               { return ForLexemeAction(createLexicalAnalyzerContext()); }
 "WHILE"                             { return WhileLexemeAction(createLexicalAnalyzerContext()); }
-
+","                                  {return CommaLexemeAction(createLexicalAnalyzerContext());}
 "IF"                                { return IfLexemeAction(createLexicalAnalyzerContext()); }
 "ELSE"                              { return ElseLexemeAction(createLexicalAnalyzerContext()); }
 "TO"                                { return ToLexemeAction(createLexicalAnalyzerContext()); }

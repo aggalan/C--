@@ -32,6 +32,8 @@
     ConditionalExpression * conditionalExpression;
     BoolExpression * boolExpression;
     PrintStatement * printStatement;
+    MacroStatement * macroStatement;
+    StringList * stringList;
 }
 
 /**
@@ -100,9 +102,10 @@
 %token <token> SORT
 %token <token> OPEN_BRACE
 %token <token> CLOSE_BRACE
-
+%token <token> COMMA
 %token <token> UNKNOWN
-%token <token>  ARROW  RETURN
+%token <token> ARROW
+%token <token> RETURN
 
 
 /** Non-terminals. */
@@ -123,8 +126,8 @@
 %type <conditionalExpression> conditionalExpression
 %type <boolExpression> boolExpression
 %type <printStatement> print_statement
-
-
+%type <macroStatement> macro_statement
+%type <stringList> stringList
 /**
  * Precedence and associativity.
  *
@@ -143,8 +146,6 @@
 program: statementList                                              { $$ = StatementListProgramSemanticAction(currentCompilerState(), $1); }
     ;
 
- //statement                                                        { $$ = SingleStatementListSemanticAction($1); }
-
 statementList: statementList statement                              { $$ = AppendStatementListSemanticAction($1, $2); }
     |                                                               { $$ = NULL; }
 	;
@@ -155,11 +156,16 @@ statement: mathExpression                                           { $$ = Expre
   | while_loop                                                      { $$ = WhileLoopStatementSemanticAction($1); }
   | if_statement                                                    { $$ = IfStatementSemanticAction($1); }
   | print_statement                                                 { $$ = PrintStatementSemanticAction($1);}
+  | macro_statement                                                 { $$ = MacroStatementSemanticAction($1); }
   ;
 
 matchStatement: MATCH IDENTIFIER OPEN_BRACE matchCaseList CLOSE_BRACE
                                                                     { $$ = MatchSemanticAction($2, $4); }
-   ;
+
+macro_statement: MACRO IDENTIFIER OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS ARROW statement
+                                                                        { $$ = MacroSemanticAction($2, $4, $7); }
+ ;
+
 
 matchCaseList: matchCase                                            { $$ = SingleCaseListSemanticAction($1); }
   | matchCaseList matchCase                                         { $$ = AppendCaseListSemanticAction($1, $2); }
@@ -191,6 +197,7 @@ mathExpression: mathExpression[left] ADD mathExpression[right]		{ $$ = Arithmeti
 
 factor: OPEN_PARENTHESIS mathExpression CLOSE_PARENTHESIS			{ $$ = ExpressionFactorSemanticAction($2); }
 	| constant														{ $$ = ConstantFactorSemanticAction($1); }
+	| IDENTIFIER													{ $$ = IdentifierFactorSemanticAction($1); }
 	;
 
 constant: INTEGER													{ $$ = IntegerConstantSemanticAction($1); }
@@ -217,4 +224,8 @@ print_statement: PRINT IDENTIFIER                                   { $$ = Print
     ;
 
 
+stringList:
+    IDENTIFIER                                       { $$ = SingleStringListSemanticAction($1); }
+  | stringList COMMA IDENTIFIER                            { $$ = AppendStringListSemanticAction($1, $3); }
+  ;
 %%

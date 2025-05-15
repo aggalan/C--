@@ -39,6 +39,8 @@ typedef struct AssignmentExpression AssignmentExpression;
 typedef struct BoolExpression BoolExpression;
 typedef struct NotConditionalExpression NotConditionalExpression;
 typedef struct ParenthesizedConditionalExpression ParenthesizedConditionalExpression;
+typedef struct MacroStatement MacroStatement;
+typedef struct StringList StringList;
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
@@ -70,6 +72,15 @@ enum ConditionalType {
 	PARENTHESIS,
 	BOOLEAN,
 	OPERATOR
+};
+struct StringList {
+    String *strings;
+    int count;
+};
+struct MacroStatement {
+	String identifier;
+	StringList * parameters;
+	Statement *  statement;
 };
 struct ConditionalExpression {
 	union {
@@ -121,7 +132,8 @@ struct Statement {
 		STATEMENT_MATCH,
 		STATEMENT_WHILE,
 		STATEMENT_IF,
-    	STATEMENT_PRINT
+    	STATEMENT_PRINT,
+    	STATEMENT_MACRO
 	} type;
 	union {
 		MathExpression *mathExpression;
@@ -130,6 +142,7 @@ struct Statement {
 		WhileLoop *whileLoop;
 		IfStatement *ifStatement;
         PrintStatement *printStatement;
+        MacroStatement *macroStatement;
 	};
 };
 
@@ -165,7 +178,8 @@ struct AssignmentMathExpression {
 
 enum FactorType {
 	CONSTANT,
-	EXPRESSION
+	EXPRESSION,
+	VARIABLE
 };
 
 struct Constant {
@@ -176,6 +190,7 @@ struct Factor {
 	union {
 		Constant * constant;
 		MathExpression * mathExpression;
+		String identifier;
 	};
 	FactorType type;
 };
