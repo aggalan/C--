@@ -34,6 +34,7 @@
     PrintStatement * printStatement;
     MacroStatement * macroStatement;
     StringList * stringList;
+    ComparisonExpression * comparisonExpression;
 }
 
 /**
@@ -128,6 +129,7 @@
 %type <printStatement> print_statement
 %type <macroStatement> macro_statement
 %type <stringList> stringList
+%type <comparisonExpression> comparisonExpression
 /**
  * Precedence and associativity.
  *
@@ -205,20 +207,34 @@ constant: INTEGER													{ $$ = IntegerConstantSemanticAction($1); }
 
 assignmentMathExpression: IDENTIFIER ASSIGNMENT mathExpression		{ $$ = assignmentMathExpressionSemanticAction($1, $3); }
     ;
-conditionalExpression: boolExpression                               { $$ = BooleanExpressionSemanticAction($1);  }
-    | conditionalExpression AND conditionalExpression               { $$ = ConditionalExpressionSemanticAction($1, $3, LOGICAL_AND); }
-    | conditionalExpression OR conditionalExpression                { $$ = ConditionalExpressionSemanticAction($1, $3, LOGICAL_OR); }
-    | NOT conditionalExpression                                     { $$ = NotExpressionSemanticAction($2); }
-    | OPEN_PARENTHESIS conditionalExpression CLOSE_PARENTHESIS      { $$ = ParenthesizedExpressionSemanticAction($2); }
+
+
+conditionalExpression
+    : boolExpression                     { $$ = ConditionalExpressionSemanticAction($1); }
+    | mathExpression                     { $$ = IdentifierConditionalExpressionSemanticAction($1); }
+    | boolExpression
     ;
 
-boolExpression: mathExpression EQ mathExpression                    { $$ = BooleanSemanticAction($1, $3, EQUAL); }
-    | mathExpression NEQ mathExpression                             { $$ = BooleanSemanticAction($1, $3, NOT_EQUAL); }
-    | mathExpression LT mathExpression                              { $$ = BooleanSemanticAction($1, $3, LESS_THAN); }
-    | mathExpression LTE mathExpression                             { $$ = BooleanSemanticAction($1, $3, LESS_EQUAL); }
-    | mathExpression GT mathExpression                              { $$ = BooleanSemanticAction($1, $3, GREATER_THAN); }
-    | mathExpression GTE mathExpression                             { $$ = BooleanSemanticAction($1, $3, GREATER_EQUAL); }
+
+boolExpression
+    : boolExpression AND boolExpression     { $$ = BoolExpressionSemanticAction($1, $3, AND); }
+    | boolExpression OR boolExpression     { $$ = BoolExpressionSemanticAction($1, $3, OR); }
+    | NOT boolExpression                { $$ = BoolExpressionSemanticAction($2, NULL, NOT); }
+    | comparisonExpression                { $$ = ComparisonBoolExpressionSemanticAction($1); }
     ;
+
+    comparisonExpression
+        : mathExpression LTE mathExpression              { $$ = ComparisonExpressionSemanticAction($1, $3, LESS_EQUAL); }
+        | mathExpression LT mathExpression               { $$ = ComparisonExpressionSemanticAction($1, $3, LESS_THAN); }
+        | mathExpression GTE mathExpression           { $$ = ComparisonExpressionSemanticAction($1, $3, GREATER_EQUAL); }
+        | mathExpression EQ mathExpression           { $$ = ComparisonExpressionSemanticAction($1, $3, EQUAL); }
+        | mathExpression NEQ mathExpression          { $$ = ComparisonExpressionSemanticAction($1, $3, NOT_EQUAL); }
+        | OPEN_PARENTHESIS boolExpression CLOSE_PARENTHESIS     { $$ = ParenthesisBoolExpressionSemanticAction($2); }
+        | mathExpression GT mathExpression               { $$ = ComparisonExpressionSemanticAction($1, $3, GREATER_THAN); }
+        ;
+
+
+
 print_statement: PRINT IDENTIFIER                                   { $$ = PrintIdentifierSemanticAction($2); }
     |    PRINT STRING_START STRING STRING_END                       { $$ = PrintStringSemanticAction($3); }
     ;

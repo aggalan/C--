@@ -1,3 +1,8 @@
 FOR I = 2 TO 5 {
     PRINT I
 }
+
+IF a < A {
+    PRINT "QUESO"
+    a + 1
+}

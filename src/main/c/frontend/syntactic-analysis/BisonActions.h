@@ -43,7 +43,7 @@ AssignmentMathExpression *assignmentMathExpressionSemanticAction(String id, Math
 MatchStatement *MatchSemanticAction(String id, CaseList *cases);
 PrintStatement * PrintIdentifierSemanticAction(String id);
 PrintStatement * PrintStringSemanticAction(String str);
-ConditionalExpression * ConditionalExpressionSemanticAction(ConditionalExpression * conditionalExpression1, ConditionalExpression * conditionalExpression2, OperatorType type);
+ConditionalExpression * ConditionalExpressionSemanticAction(BoolExpression * bool_expression);
 BoolExpression * BooleanSemanticAction(MathExpression * math_expression1,MathExpression * math_expression2, ComparatorType type );
 ConditionalExpression * BooleanExpressionSemanticAction(BoolExpression * bool_expression);
 ConditionalExpression * NotExpressionSemanticAction(ConditionalExpression * conditionalExpression1);
@@ -54,4 +54,17 @@ MacroStatement * MacroSemanticAction(String id, StringList *args, Statement * bo
 StringList * SingleStringListSemanticAction(String str);
 StringList * AppendStringListSemanticAction(StringList *list, String str);
 Factor * IdentifierFactorSemanticAction(String id);
+ConditionalExpression * FactorConditionalExpression(Factor * factor);
+BoolExpression * IdentifierBooleanSemanticAction(String id);
+ConditionalExpression * IdentifierExpressionSemanticAction(String id);
+Condition * ConditionFromConditionalExpression(ConditionalExpression * conditionalExpression);
+Condition * ConditionFromFactor(Factor * factor);
+ConditionalExpression * SimpleConditionSemanticAction(Condition * condition);
+BoolExpression * BoolExpressionSemanticAction(BoolExpression * exp1,BoolExpression * exp2, ConditionalType type);
+BoolExpression * ComparisonBoolExpressionSemanticAction(ComparisonExpression * comparisonExpression);
+ComparisonExpression * ComparisonExpressionSemanticAction(MathExpression * math_expression1, MathExpression * math_expression2, ComparatorType type);
+ConditionalExpression * ParenthesizedConditionalExpressionSemanticAction(BoolExpression * conditionalExpression1);
+ComparisonExpression * ParenthesisBoolExpressionSemanticAction(BoolExpression * bool_expression);
+ConditionalExpression * IdentifierConditionalExpressionSemanticAction(String id);
+ComparisonExpression * SingleMathComparisonExpression(MathExpression * math_expression);
 #endif

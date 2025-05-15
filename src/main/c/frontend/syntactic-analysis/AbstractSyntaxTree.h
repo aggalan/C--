@@ -41,6 +41,8 @@ typedef struct NotConditionalExpression NotConditionalExpression;
 typedef struct ParenthesizedConditionalExpression ParenthesizedConditionalExpression;
 typedef struct MacroStatement MacroStatement;
 typedef struct StringList StringList;
+typedef struct Condition Condition;
+typedef struct ComparisonExpression ComparisonExpression;
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
@@ -48,6 +50,8 @@ typedef struct StringList StringList;
 struct PrintStatement {
 	String identifier;
 };
+
+
 
 enum ComparatorType {
 	EQUAL,
@@ -58,11 +62,6 @@ enum ComparatorType {
 	GREATER_EQUAL
 };
 
-struct BoolExpression {
-	MathExpression * math_expression1;
-	MathExpression * math_expression2;
-	ComparatorType type;
-};
 enum OperatorType {
 	LOGICAL_AND,
 	LOGICAL_OR
@@ -71,8 +70,25 @@ enum ConditionalType {
 	CONDITIONAL_NOT,
 	PARENTHESIS,
 	BOOLEAN,
-	OPERATOR
+	OPERATOR,
+	CONDITIONAL_IDENTIFIER
 };
+struct ComparisonExpression {
+	MathExpression * math_expression1;
+	MathExpression * math_expression2;
+	ComparatorType type;
+	BoolExpression * boolExpression;
+};
+
+struct BoolExpression {
+	BoolExpression * boolExpression1;
+	BoolExpression * boolExpression2;
+	ConditionalType type;
+	ComparisonExpression * comparisonExpression;
+	MathExpression * math_expression;
+
+};
+
 struct StringList {
     String *strings;
     int count;
@@ -83,18 +99,8 @@ struct MacroStatement {
 	Statement *  statement;
 };
 struct ConditionalExpression {
-	union {
-		struct {
-			ConditionalExpression * condition1;
-			ConditionalExpression * condition2;
-			OperatorType operatorType;
-		};
-		ConditionalExpression * conditional_expression;
-		ConditionalExpression * parenthesized_conditional_expression;
-		BoolExpression * bool_expression;
-		ConditionalType type;
-	} ;
-
+	BoolExpression * boolExpression;
+	String identifier;
 };
 
 
@@ -205,6 +211,7 @@ struct MathExpression {
 	};
 	MathExpressionType type;
 };
+
 
 /**
  * Node recursive destructors.
