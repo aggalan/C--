@@ -83,7 +83,7 @@
 %token <token> INDENT
 %token <token> DEDENT
 
-%token <String> STRING
+%token <string> STRING
 
 %token <token> MATCH
 %token <token> ASSIGNMENT
@@ -117,7 +117,7 @@
 %type <forLoop> for_loop
 %type <whileLoop> while_loop
 %type <ifStatement> if_statement
-%type <conditionalExpression> conditional_expression
+%type <conditionalExpression> conditionalExpression
 %type <printStatement> print_statement
 
 
@@ -190,11 +190,10 @@ constant: INTEGER													{ $$ = IntegerConstantSemanticAction($1); }
 
 assignmentMathExpression: IDENTIFIER ASSIGNMENT mathExpression			{ $$ = assignmentMathExpressionSemanticAction($1, $3); }
     ;
-conditionalExpression: IDENTIFIER /* FIXME */                        {}
+conditionalExpression: IDENTIFIER                      { $$ =   conditionalExpressionSemanticAction($1); } /* FIXME */
     ;
-print_statement: PRINT IDENTIFIER                                    { $$ = PrintIdenifierSemanticAction($1, $2);}
-       |    PRINT STRING                                            { $$ = PrintStringSemanticAction($1, $2); }
-       ;
+print_statement: PRINT IDENTIFIER                                    { $$ = PrintIdentifierSemanticAction( $2);}
+|    PRINT STRING                                            { $$ = PrintStringSemanticAction($2); }       ;
 
 
 %%

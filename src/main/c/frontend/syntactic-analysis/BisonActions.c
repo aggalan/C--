@@ -231,3 +231,28 @@ MatchStatement *MatchSemanticAction(String id, CaseList *cases) {
 	match->caseList = cases;
 	return match;
 }
+PrintStatement * PrintIdentifierSemanticAction(String id){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	PrintStatement * print = calloc(1, sizeof(PrintStatement));
+	print->identifier = id;
+	return print;
+}
+PrintStatement * PrintStringSemanticAction(String str){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	PrintStatement * print = calloc(1, sizeof(PrintStatement));
+	print->identifier = str;
+	return print;
+}
+ConditionalExpression * ConditionalExpressionSemanticAction(String id){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ConditionalExpression * conditional = calloc(1, sizeof(ConditionalExpression));
+	conditional->identifier = id;
+	return conditional;
+}
+Statement * PrintStatementSemanticAction(PrintStatement * stmt){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Statement * statement = calloc(1, sizeof(Statement));
+	statement->type = STATEMENT_PRINT;
+	statement->printStatement = stmt;
+	return statement;
+}

@@ -17,7 +17,6 @@ void shutdownBisonActionsModule();
 /**
  * Bison semantic actions.
  */
-
 Constant * IntegerConstantSemanticAction(const int value);
 MathExpression * ArithmeticExpressionSemanticAction( MathExpression * leftExpression, MathExpression * rightExpression, MathExpressionType type);
 MathExpression * FactorExpressionSemanticAction(Factor * factor);
@@ -42,4 +41,8 @@ IfStatement *IfThenSemanticAction(MathExpression *condition, StatementList *then
 IfStatement *IfElseSemanticAction(MathExpression *condition, StatementList *thenBranch, StatementList *elseBranch);
 AssignmentMathExpression *assignmentMathExpressionSemanticAction(String id, MathExpression *expr);
 MatchStatement *MatchSemanticAction(String id, CaseList *cases);
+PrintStatement * PrintIdentifierSemanticAction(String id);
+PrintStatement * PrintStringSemanticAction(String str);
+ConditionalExpression * ConditionalExpressionSemanticAction(String id);
+Statement * PrintStatementSemanticAction(PrintStatement * stmt);
 #endif

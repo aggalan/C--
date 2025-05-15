@@ -31,10 +31,18 @@ typedef struct AssignmentMathExpression AssignmentMathExpression;
 typedef struct ConditionalMathExpression ConditionalMathExpression;
 typedef struct WhileLoop WhileLoop;
 typedef struct IfStatement IfStatement;
-
+typedef struct PrintStatement PrintStatement;
+typedef struct ConditionalExpression ConditionalExpression;
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
+
+struct PrintStatement {
+	String identifier;
+};
+struct ConditionalExpression {
+	String identifier;
+};
 
 struct IfStatement {
 	MathExpression *condition;
@@ -69,7 +77,8 @@ struct Statement {
 		STATEMENT_FOR,
 		STATEMENT_MATCH,
 		STATEMENT_WHILE,
-		STATEMENT_IF
+		STATEMENT_IF,
+    	STATEMENT_PRINT
 	} type;
 	union {
 		MathExpression *mathExpression;
@@ -77,6 +86,7 @@ struct Statement {
 		MatchStatement *matchStatement;
 		WhileLoop *whileLoop;
 		IfStatement *ifStatement;
+        PrintStatement *printStatement;
 	};
 };
 
