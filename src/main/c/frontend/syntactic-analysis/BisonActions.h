@@ -50,4 +50,11 @@ ConditionalExpression * NotExpressionSemanticAction(ConditionalExpression * cond
 ConditionalExpression * ParenthesizedExpressionSemanticAction(ConditionalExpression * conditionalExpression1);
 Statement * PrintStatementSemanticAction(PrintStatement * stmt);
 ConditionalExpression * IdentifierConditionalExpressionSemanticAction(String identifier);
+Statement *VariableDeclarationSemanticAction(Token type, String identifier);
+Statement *VariableDeclarationWithAssignmentSemanticAction(Token type, String identifier, MathExpression *expr);
+Statement *VariableDeclarationWithStringAssignmentSemanticAction(Token type, String identifier, String value);
+Statement *VariableDeclarationWithArrayAssignmentSemanticAction(String identifier, Array *array);
+Array *ArrayInitSemanticAction(ArrayElements *elements);
+ArrayElements *SingleArrayElementSemanticAction(Constant *constant);
+ArrayElements *AppendArrayElementSemanticAction(ArrayElements *list, Constant *constant);
 #endif

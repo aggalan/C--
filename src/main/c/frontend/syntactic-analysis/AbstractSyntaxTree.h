@@ -39,9 +39,42 @@ typedef struct AssignmentExpression AssignmentExpression;
 typedef struct BoolExpression BoolExpression;
 typedef struct NotConditionalExpression NotConditionalExpression;
 typedef struct ParenthesizedConditionalExpression ParenthesizedConditionalExpression;
+typedef struct Array Array;
+typedef struct ArrayElements ArrayElements;
+typedef struct Variable Variable;
+typedef enum DeclarationType DeclarationType;
+
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
+
+struct Array {
+	int size;
+	int *values;
+};
+
+struct ArrayElements {
+	int count;
+	int *values;
+};
+
+struct Variable {
+	String identifier;
+	union {
+		MathExpression *  math_expression;
+		String stringValue;
+		Array *arrayValue;
+		int boolValue;
+	};
+	DeclarationType declType;
+};
+
+enum DeclarationType {
+	VAR_INT,
+	VAR_STRING,
+	VAR_BOOL,
+	VAR_ARRAY
+};
 
 struct PrintStatement {
 	String identifier;
@@ -124,7 +157,8 @@ struct Statement {
 		STATEMENT_MATCH,
 		STATEMENT_WHILE,
 		STATEMENT_IF,
-    	STATEMENT_PRINT
+    	STATEMENT_PRINT,
+		STATEMENT_DECLARATION
 	} type;
 	union {
 		MathExpression *mathExpression;
@@ -133,6 +167,7 @@ struct Statement {
 		WhileLoop *whileLoop;
 		IfStatement *ifStatement;
         PrintStatement *printStatement;
+		Variable *variable;
 	};
 };
 

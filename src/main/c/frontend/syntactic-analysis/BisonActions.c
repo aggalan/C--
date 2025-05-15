@@ -314,6 +314,47 @@ ConditionalExpression * IdentifierConditionalExpressionSemanticAction(String ide
 	return condition;
 }
 
+Statement *VariableDeclarationSemanticAction(String identifier, Token type) {
+	return VariableDeclarationWithAssignmentSemanticAction(identifier, NULL , type);
+}
+
+// decl->stringValue = strdup((String)value);
+
+Statement *VariableDeclarationAssignmentSemanticAction(String identifier, void *value, Token type) {
+	Variable *var = malloc(sizeof(Variable));
+	var->identifier = identifier;
+	switch (type) {
+		case INTEGER:
+			var->declType = VAR_INT;
+			var->math_expression = (MathExpression *)value;
+			break;
+		case STRING_TYPE:
+			var->declType = VAR_STRING;
+			var->stringValue =  strdup(value);
+			break;
+		case BOOL:
+			var->declType = VAR_BOOL;
+			var->boolValue = value; //todo: fixme
+			break;
+		default: break;
+	}
+	Statement *stmt = malloc(sizeof(Statement));
+	stmt->type = STATEMENT_DECLARATION;
+	stmt->variable = var;
+	return stmt;
+}
+
+Statement *VariableDeclarationArraySemanticAction(String identifier, Array *array) {
+	Variable *decl = malloc(sizeof(Variable));
+	decl->declType = VAR_ARRAY; // or set appropriately
+	decl->identifier = identifier;
+	decl->arrayValue = array;
+	Statement *stmt = malloc(sizeof(Statement));
+	stmt->type = STATEMENT_DECLARATION;
+	stmt->variable = decl;
+	return stmt;
+}
+
 // ConditionalExpression *MathConditionalExpressionSemanticAction(MathExpression *math_expression) {
 // 	_logSyntacticAnalyzerAction(__FUNCTION__);
 // 	ConditionalExpression * condition = calloc(1, sizeof(ConditionalExpression));

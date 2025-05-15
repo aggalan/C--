@@ -155,6 +155,7 @@ statement: mathExpression                                           { $$ = Expre
   | while_loop                                                      { $$ = WhileLoopStatementSemanticAction($1); }
   | if_statement                                                    { $$ = IfStatementSemanticAction($1); }
   | print_statement                                                 { $$ = PrintStatementSemanticAction($1);}
+  | variableDeclaration                                             { $$ = VariableDeclarationStatementSemanticAction($1); }
   ;
 
 matchStatement: MATCH IDENTIFIER OPEN_BRACE matchCaseList CLOSE_BRACE
@@ -218,6 +219,22 @@ boolExpression: mathExpression EQ mathExpression                    { $$ = Boole
 print_statement: PRINT IDENTIFIER                                   { $$ = PrintIdentifierSemanticAction($2); }
     |    PRINT STRING_START STRING STRING_END                       { $$ = PrintStringSemanticAction($3); }
     ;
+
+variableDeclaration: INT IDENTIFIER                                 { $$ = VariableDeclarationSemanticAction($2, INTEGER); }
+  | STRING_TYPE IDENTIFIER                                          { $$ = VariableDeclarationSemanticAction($2, STRING_TYPE); }
+  | BOOL IDENTIFIER                                                 { $$ = VariableDeclarationSemanticAction($2, BOOL); }
+  | INT IDENTIFIER ASSIGNMENT mathExpression                        { $$ = VariableDeclarationAssignmentSemanticAction($2, $4, INTEGER); }
+  | STRING_TYPE IDENTIFIER ASSIGNMENT STRING                        { $$ = VariableDeclarationAssignmentSemanticAction($2, $4, STRING_TYPE); }
+  | BOOL IDENTIFIER ASSIGNMENT STRING                               { $$ = VariableDeclarationAssignmentSemanticAction($2, $4, BOOL); }
+  | IDENTIFIER OPEN_BRACKETS CLOSE_BRACKETS ASSIGNMENT array        { $$ = VariableDeclarationArraySemanticAction($1, $5); }
+  ;
+
+array: OPEN_BRACE arrayElements CLOSE_BRACE                         { $$ = ArrayInitSemanticAction($2); }
+  ;
+
+arrayElements: constant                                             { $$ = SingleArrayElementSemanticAction($1); }
+  | arrayElements ',' constant                                      { $$ = AppendArrayElementSemanticAction($1, $3); }
+  ;
 
 
 %%
