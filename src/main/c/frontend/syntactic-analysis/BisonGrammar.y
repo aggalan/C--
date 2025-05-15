@@ -191,7 +191,6 @@ mathExpression: mathExpression[left] ADD mathExpression[right]		{ $$ = Arithmeti
 
 factor: OPEN_PARENTHESIS mathExpression CLOSE_PARENTHESIS			{ $$ = ExpressionFactorSemanticAction($2); }
 	| constant														{ $$ = ConstantFactorSemanticAction($1); }
-	| IDENTIFIER                                                    { $$ = IdentifierFactorSemanticAction($1); }
 	;
 
 constant: INTEGER													{ $$ = IntegerConstantSemanticAction($1); }
