@@ -2,6 +2,6 @@ FOR I = 2 TO 5 {
     PRINT I
 }
 
-IF QUESO >= QUESO {
+IF QUESO {
     PRINT "QUESO"
 }
