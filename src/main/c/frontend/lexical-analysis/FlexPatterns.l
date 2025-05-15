@@ -42,6 +42,7 @@
 <SINGLE_LINE_COMMENT>\n           { EndSingleLineCommentLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL);}
 
 \r\n[ ]*                            { Token token = IndentationLexemeAction(createLexicalAnalyzerContext()); if(token != IGNORE) return token; }
+\n[ ]*                            { Token token = IndentationLexemeAction(createLexicalAnalyzerContext()); if(token != IGNORE) return token; }
 
 "++"                                { return AddOneLexemeAction(createLexicalAnalyzerContext()); }
 "--"                                { return MinusOneLexemeAction(createLexicalAnalyzerContext()); }
