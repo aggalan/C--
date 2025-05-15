@@ -306,13 +306,28 @@ Statement * PrintStatementSemanticAction(PrintStatement * stmt){
 	return statement;
 }
 
-ConditionalExpression * IdentifierConditionalExpressionSemanticAction(String identifier) {
+// ConditionalExpression * IdentifierConditionalExpressionSemanticAction(String identifier) {
+// 	_logSyntacticAnalyzerAction(__FUNCTION__);
+// 	ConditionalExpression * condition= calloc(1, sizeof(ConditionalExpression));
+// 	condition->identifier = identifier;
+// 	condition->type = CONDITIONAL_IDENTIFIER;
+// 	return condition;
+// }
+
+ConditionalExpression * MathConditionalExpressionSemanticAction(MathExpression * math_expression) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	ConditionalExpression * condition= calloc(1, sizeof(ConditionalExpression));
-	condition->identifier = identifier;
-	condition->type = CONDITIONAL_IDENTIFIER;
+	ConditionalExpression * condition = calloc(1, sizeof(ConditionalExpression));
+	condition->math_expression = math_expression;
+	condition->type= MATH_EXPRESSION;
 	return condition;
 }
+Factor * IdentifierFactorSemanticAction(String identifier) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Factor * factor = calloc(1, sizeof(Factor));
+	factor->identifier = identifier;
+	factor->type = FACTOR_IDENTIFIER;
+	return factor;
+};
 
 // ConditionalExpression *MathConditionalExpressionSemanticAction(MathExpression *math_expression) {
 // 	_logSyntacticAnalyzerAction(__FUNCTION__);

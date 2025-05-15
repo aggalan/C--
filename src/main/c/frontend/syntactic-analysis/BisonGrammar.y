@@ -205,7 +205,7 @@ conditionalExpression: boolExpression                               { $$ = Boole
     | conditionalExpression OR conditionalExpression                { $$ = ConditionalExpressionSemanticAction($1, $3, LOGICAL_OR); }
     | NOT conditionalExpression                                     { $$ = NotExpressionSemanticAction($2); }
     | OPEN_PARENTHESIS conditionalExpression CLOSE_PARENTHESIS      { $$ = ParenthesizedExpressionSemanticAction($2); }
-    | IDENTIFIER                                                    { $$ = IdentifierConditionalExpressionSemanticAction($1); }
+    | mathExpression                                                { $$ = MathConditionalExpressionSemanticAction($1); }
     ;
 
 boolExpression: mathExpression EQ mathExpression                    { $$ = BooleanSemanticAction($1, $3, EQUAL); }
