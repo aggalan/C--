@@ -20,7 +20,7 @@ void shutdownFlexActionsModule();
 /**
  * Flex lexeme processing actions.
  */
-
+void BeginSingleLineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void BeginMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void EndMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void BeginSingleLineLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);

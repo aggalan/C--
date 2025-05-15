@@ -31,7 +31,6 @@ typedef struct MatchStatement MatchStatement;
 typedef struct Case Case;
 typedef struct CaseList CaseList;
 typedef struct AssignmentMathExpression AssignmentMathExpression;
-typedef struct ConditionalMathExpression ConditionalMathExpression;
 typedef struct WhileLoop WhileLoop;
 typedef struct IfStatement IfStatement;
 typedef struct PrintStatement PrintStatement;

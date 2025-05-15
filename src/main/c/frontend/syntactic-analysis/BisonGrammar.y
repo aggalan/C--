@@ -209,7 +209,7 @@ boolExpression:       mathExpression EQ mathExpression       { $$ = BooleanSeman
                      | mathExpression GT mathExpression       { $$ = BooleanSemanticAction($1, $3, GREATER_THAN); }
                      | mathExpression GTE mathExpression      { $$ = BooleanSemanticAction($1, $3, GREATER_EQUAL); }
                      ;
-print_statement: PRINT IDENTIFIER                                    { $$ = PrintIdentifierSemanticAction( $2);}
+print_statement: PRINT IDENTIFIER                                    { $$ = PrintIdentifierSemanticAction($2);}
 |    PRINT STRING_START STRING STRING_END                            { $$ = PrintStringSemanticAction($3); }       ;
 
 

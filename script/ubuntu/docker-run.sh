@@ -2,7 +2,7 @@
 
 set -euxo pipefail
 
-BASE_PATH="$(dirname "$0")/../.."
+BASE_PATH="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$BASE_PATH"
 
 # @see https://docs.docker.com/reference/cli/docker/container/run/
@@ -12,7 +12,7 @@ docker run \
 	--rm \
 	--user root \
 	--tty \
-	--volume .:/home/ubuntu/Flex-Bison-Compiler \
+	--volume "${BASE_PATH}:/home/ubuntu/Flex-Bison-Compiler" \
 	--workdir=/home/ubuntu/Flex-Bison-Compiler \
 	flex-bison-compiler:latest
 

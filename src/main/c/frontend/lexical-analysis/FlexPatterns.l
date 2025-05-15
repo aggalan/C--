@@ -36,8 +36,8 @@
 <STRING>\"                  {  BEGIN(INITIAL); return EndStringLexemeAction(createLexicalAnalyzerContext()); }
 <STRING>[^\\"\n]+           { return StringLexemeAction(createLexicalAnalyzerContext()); }
 
-"//"                                { BEGIN(SINGLE_LINE_COMMENT); EndSingleLineCommentLexemeAction(createLexicalAnalyzerContext()); }
-"#"                                 { BEGIN(SINGLE_LINE_COMMENT); EndSingleLineCommentLexemeAction(createLexicalAnalyzerContext());}
+"//"                                { BEGIN(SINGLE_LINE_COMMENT); BeginSingleLineCommentLexemeAction(createLexicalAnalyzerContext()); }
+"#"                                 { BEGIN(SINGLE_LINE_COMMENT); BeginSingleLineCommentLexemeAction(createLexicalAnalyzerContext());}
 <SINGLE_LINE_COMMENT>[^\n]*       { IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 <SINGLE_LINE_COMMENT>\n           { EndSingleLineCommentLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL);}
 

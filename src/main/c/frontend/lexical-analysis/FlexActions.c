@@ -44,6 +44,7 @@ IndentStack indentStack = {{0}, 0};
 
 Token IndentationLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+
 	if (lexicalAnalyzerContext->length > indentStack.stack[indentStack.last]) {
 		indentStack.stack[++indentStack.last] = lexicalAnalyzerContext->length;
 		lexicalAnalyzerContext->semanticValue->token = INDENT;
