@@ -69,7 +69,8 @@ enum ConditionalType {
 	CONDITIONAL_NOT,
 	PARENTHESIS,
 	BOOLEAN,
-	OPERATOR
+	OPERATOR,
+	CONDITIONAL_IDENTIFIER
 };
 struct ConditionalExpression {
 	union {
@@ -81,8 +82,10 @@ struct ConditionalExpression {
 		ConditionalExpression * conditional_expression;
 		ConditionalExpression * parenthesized_conditional_expression;
 		BoolExpression * bool_expression;
-		ConditionalType type;
+		String identifier;
 	} ;
+
+	ConditionalType type;
 
 };
 
@@ -165,7 +168,7 @@ struct AssignmentMathExpression {
 
 enum FactorType {
 	CONSTANT,
-	EXPRESSION
+	EXPRESSION,
 };
 
 struct Constant {

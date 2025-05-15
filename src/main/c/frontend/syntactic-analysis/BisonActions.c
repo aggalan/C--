@@ -305,3 +305,19 @@ Statement * PrintStatementSemanticAction(PrintStatement * stmt){
 	statement->printStatement = stmt;
 	return statement;
 }
+
+ConditionalExpression * IdentifierConditionalExpressionSemanticAction(String identifier) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ConditionalExpression * condition= calloc(1, sizeof(ConditionalExpression));
+	condition->identifier = identifier;
+	condition->type = CONDITIONAL_IDENTIFIER;
+	return condition;
+}
+
+// ConditionalExpression *MathConditionalExpressionSemanticAction(MathExpression *math_expression) {
+// 	_logSyntacticAnalyzerAction(__FUNCTION__);
+// 	ConditionalExpression * condition = calloc(1, sizeof(ConditionalExpression));
+// 	condition->math_expression = math_expression;
+// 	condition->type= MATH_EXPRESSION;
+// 	return condition;
+// }

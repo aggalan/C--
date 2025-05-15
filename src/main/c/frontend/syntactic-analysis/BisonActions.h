@@ -49,4 +49,5 @@ ConditionalExpression * BooleanExpressionSemanticAction(BoolExpression * bool_ex
 ConditionalExpression * NotExpressionSemanticAction(ConditionalExpression * conditionalExpression1);
 ConditionalExpression * ParenthesizedExpressionSemanticAction(ConditionalExpression * conditionalExpression1);
 Statement * PrintStatementSemanticAction(PrintStatement * stmt);
+ConditionalExpression * IdentifierConditionalExpressionSemanticAction(String identifier);
 #endif

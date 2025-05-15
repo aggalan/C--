@@ -191,6 +191,7 @@ mathExpression: mathExpression[left] ADD mathExpression[right]		{ $$ = Arithmeti
 
 factor: OPEN_PARENTHESIS mathExpression CLOSE_PARENTHESIS			{ $$ = ExpressionFactorSemanticAction($2); }
 	| constant														{ $$ = ConstantFactorSemanticAction($1); }
+	| IDENTIFIER                                                    { $$ = IdentifierFactorSemanticAction($1); }
 	;
 
 constant: INTEGER													{ $$ = IntegerConstantSemanticAction($1); }
@@ -198,11 +199,13 @@ constant: INTEGER													{ $$ = IntegerConstantSemanticAction($1); }
 
 assignmentMathExpression: IDENTIFIER ASSIGNMENT mathExpression		{ $$ = assignmentMathExpressionSemanticAction($1, $3); }
     ;
+
 conditionalExpression: boolExpression                               { $$ = BooleanExpressionSemanticAction($1);  }
     | conditionalExpression AND conditionalExpression               { $$ = ConditionalExpressionSemanticAction($1, $3, LOGICAL_AND); }
     | conditionalExpression OR conditionalExpression                { $$ = ConditionalExpressionSemanticAction($1, $3, LOGICAL_OR); }
     | NOT conditionalExpression                                     { $$ = NotExpressionSemanticAction($2); }
     | OPEN_PARENTHESIS conditionalExpression CLOSE_PARENTHESIS      { $$ = ParenthesizedExpressionSemanticAction($2); }
+    | IDENTIFIER                                                    { $$ = IdentifierConditionalExpressionSemanticAction($1); }
     ;
 
 boolExpression: mathExpression EQ mathExpression                    { $$ = BooleanSemanticAction($1, $3, EQUAL); }
@@ -212,6 +215,7 @@ boolExpression: mathExpression EQ mathExpression                    { $$ = Boole
     | mathExpression GT mathExpression                              { $$ = BooleanSemanticAction($1, $3, GREATER_THAN); }
     | mathExpression GTE mathExpression                             { $$ = BooleanSemanticAction($1, $3, GREATER_EQUAL); }
     ;
+
 print_statement: PRINT IDENTIFIER                                   { $$ = PrintIdentifierSemanticAction($2); }
     |    PRINT STRING_START STRING STRING_END                       { $$ = PrintStringSemanticAction($3); }
     ;
