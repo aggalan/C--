@@ -1,5 +1,7 @@
 #include "BisonActions.h"
 
+#include "BisonParser.h"
+
 /* MODULE INTERNAL STATE */
 
 static Logger * _logger = NULL;
@@ -186,7 +188,7 @@ Statement *WhileLoopStatementSemanticAction(WhileLoop *loop) {
 	stmt->whileLoop = loop;
 	return stmt;
 }
-WhileLoop *WhileLoopSemanticAction(MathExpression *condition, StatementList *body) {
+WhileLoop *WhileLoopSemanticAction(ConditionalExpression *condition, StatementList *body) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	WhileLoop *loop = calloc(1, sizeof(WhileLoop));
 	loop->condition = condition;
@@ -200,7 +202,7 @@ Statement *IfStatementSemanticAction(IfStatement *stmt) {
 	statement->ifStatement = stmt;
 	return statement;
 }
-IfStatement *IfThenSemanticAction(MathExpression *condition, StatementList *thenBranch) {
+IfStatement *IfThenSemanticAction(ConditionalExpression *condition, StatementList *thenBranch) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	IfStatement *stmt = calloc(1, sizeof(IfStatement));
 	stmt->condition = condition;
@@ -208,7 +210,7 @@ IfStatement *IfThenSemanticAction(MathExpression *condition, StatementList *then
 	stmt->elseBranch = NULL;
 	return stmt;
 }
-IfStatement *IfElseSemanticAction(MathExpression *condition, StatementList *thenBranch, StatementList *elseBranch) {
+IfStatement *IfElseSemanticAction(ConditionalExpression *condition, StatementList *thenBranch, StatementList *elseBranch) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	IfStatement *stmt = calloc(1, sizeof(IfStatement));
 	stmt->condition = condition;
@@ -243,11 +245,44 @@ PrintStatement * PrintStringSemanticAction(String str){
 	print->identifier = str;
 	return print;
 }
-ConditionalExpression * ConditionalExpressionSemanticAction(String id){
+ConditionalExpression * ConditionalExpressionSemanticAction(ConditionalExpression * conditionalExpression1, ConditionalExpression * conditionalExpression2, OperatorType type) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	ConditionalExpression * conditional = calloc(1, sizeof(ConditionalExpression));
-	conditional->identifier = id;
-	return conditional;
+	ConditionalExpression * condition = calloc(1, sizeof(ConditionalExpression));
+	condition->condition1 = conditionalExpression1;
+	condition->condition2 = conditionalExpression2;
+	condition->operatorType = type;
+	condition->type= OPERATOR;
+	return condition;
+}
+BoolExpression * BooleanSemanticAction(MathExpression * math_expression1,MathExpression * math_expression2, ComparatorType type ) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	BoolExpression * condition = calloc(1, sizeof(BoolExpression));
+	condition->math_expression1 = math_expression1;
+	condition->math_expression1 = math_expression2;
+	condition->type = type;
+	return condition;
+}
+ConditionalExpression * BooleanExpressionSemanticAction(BoolExpression * bool_expression) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ConditionalExpression * condition = calloc(1, sizeof(ConditionalExpression));
+	condition->bool_expression = bool_expression;
+	condition->type= BOOL;
+	return condition;
+}
+
+ConditionalExpression * NotExpressionSemanticAction(ConditionalExpression * conditionalExpression) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ConditionalExpression * condition = calloc(1, sizeof(ConditionalExpression));
+	condition->conditional_expression = conditionalExpression;
+	condition->type = CONDITIONAL_NOT;
+	return condition;
+}
+ConditionalExpression * ParenthesizedExpressionSemanticAction(ConditionalExpression * conditionalExpression1) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ConditionalExpression * condition = calloc(1, sizeof(ConditionalExpression));
+	condition->parenthesized_conditional_expression = conditionalExpression1;
+	condition->type= PARENTHESIS;
+	return condition;
 }
 Statement * PrintStatementSemanticAction(PrintStatement * stmt){
 	_logSyntacticAnalyzerAction(__FUNCTION__);

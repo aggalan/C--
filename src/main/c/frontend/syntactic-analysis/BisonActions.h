@@ -32,17 +32,21 @@ Statement *MatchStatementSemanticAction(MatchStatement *stmt);
 MatchStatement *MatchSemanticAction(String id, CaseList *cases);
 CaseList *SingleCaseListSemanticAction(Case *c);
 CaseList *AppendCaseListSemanticAction(CaseList *list, Case *c);
-Case *MatchCaseSemanticAction(int value, StatementList *body);
+Case *MatchCaseSemanticAction(int value, StatementList *body); //FIXME
 ForLoop *ForLoopSemanticAction(AssignmentMathExpression * assignment, Constant * end, StatementList* body);
 Statement *WhileLoopStatementSemanticAction(WhileLoop *loop);
-WhileLoop *WhileLoopSemanticAction(MathExpression *condition, StatementList *body);
+WhileLoop *WhileLoopSemanticAction(ConditionalExpression *condition, StatementList *body);
 Statement *IfStatementSemanticAction(IfStatement *stmt);
-IfStatement *IfThenSemanticAction(MathExpression *condition, StatementList *thenBranch);
-IfStatement *IfElseSemanticAction(MathExpression *condition, StatementList *thenBranch, StatementList *elseBranch);
+IfStatement *IfThenSemanticAction(ConditionalExpression *condition, StatementList *thenBranch);
+IfStatement *IfElseSemanticAction(ConditionalExpression *condition, StatementList *thenBranch, StatementList *elseBranch);
 AssignmentMathExpression *assignmentMathExpressionSemanticAction(String id, MathExpression *expr);
 MatchStatement *MatchSemanticAction(String id, CaseList *cases);
 PrintStatement * PrintIdentifierSemanticAction(String id);
 PrintStatement * PrintStringSemanticAction(String str);
-ConditionalExpression * ConditionalExpressionSemanticAction(String id);
+ConditionalExpression * ConditionalExpressionSemanticAction(ConditionalExpression * conditionalExpression1, ConditionalExpression * conditionalExpression2, OperatorType type);
+BoolExpression * BooleanSemanticAction(MathExpression * math_expression1,MathExpression * math_expression2, ComparatorType type );
+ConditionalExpression * BooleanExpressionSemanticAction(BoolExpression * bool_expression);
+ConditionalExpression * NotExpressionSemanticAction(ConditionalExpression * conditionalExpression1);
+ConditionalExpression * ParenthesizedExpressionSemanticAction(ConditionalExpression * conditionalExpression1);
 Statement * PrintStatementSemanticAction(PrintStatement * stmt);
 #endif

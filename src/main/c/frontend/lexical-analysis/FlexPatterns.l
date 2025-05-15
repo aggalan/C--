@@ -41,17 +41,17 @@
 <SINGLE_LINE_COMMENT>[^\n]*       { IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 <SINGLE_LINE_COMMENT>\n           { EndSingleLineCommentLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL);}
 
-\r\n[ ]*                            { return IndentationLexemeAction(createLexicalAnalyzerContext()); }
+\r\n[ ]*                            { Token token = IndentationLexemeAction(createLexicalAnalyzerContext()); if(token != IGNORE) return token; }
 
 "++"                                { return AddOneLexemeAction(createLexicalAnalyzerContext()); }
 "--"                                { return MinusOneLexemeAction(createLexicalAnalyzerContext()); }
 
-">="                                { return ConditionalLexemeAction(createLexicalAnalyzerContext(), GREATER_OR_EQUAL);}
-"<="                                { return ConditionalLexemeAction(createLexicalAnalyzerContext(), SMALLER_OR_EQUAL);}
-"=="                                { return ConditionalLexemeAction(createLexicalAnalyzerContext(), CONDITIONAL_EQUAL);}
-"!="                                { return ConditionalLexemeAction(createLexicalAnalyzerContext(), DIFFERENT);}
-"<"                                 { return ConditionalLexemeAction(createLexicalAnalyzerContext(), SMALLER);}
-">"                                 { return ConditionalLexemeAction(createLexicalAnalyzerContext(), GREATER);}
+">="                                { return ConditionalLexemeAction(createLexicalAnalyzerContext(), GTE);}
+"<="                                { return ConditionalLexemeAction(createLexicalAnalyzerContext(), LTE);}
+"=="                                { return ConditionalLexemeAction(createLexicalAnalyzerContext(), EQ);}
+"!="                                { return ConditionalLexemeAction(createLexicalAnalyzerContext(), NEQ);}
+"<"                                 { return ConditionalLexemeAction(createLexicalAnalyzerContext(), LT);}
+">"                                 { return ConditionalLexemeAction(createLexicalAnalyzerContext(), GT);}
 
 "AND"                               { return LogicalOperatorLexemeAction(createLexicalAnalyzerContext(), AND); }
 "OR"                                { return LogicalOperatorLexemeAction(createLexicalAnalyzerContext(), OR); }

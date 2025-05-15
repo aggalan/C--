@@ -54,7 +54,7 @@ Token IndentationLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 		lexicalAnalyzerContext->semanticValue->token = DEDENT;
 		return DEDENT;
 	}
-	return lexicalAnalyzerContext->semanticValue->token;
+	return IGNORE;
 }
 
 void BeginMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {

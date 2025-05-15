@@ -30,9 +30,8 @@
     WhileLoop * whileLoop;
     IfStatement * ifStatement;
     ConditionalExpression * conditionalExpression;
+    BoolExpression * boolExpression;
     PrintStatement * printStatement;
-
-
 }
 
 /**
@@ -67,16 +66,17 @@
 %token <token> CLOSE_BRACKETS
 %token <token> STRING_START
 %token <token> STRING_END
+%token <token> IGNORE
 
 %token <token> ADD_ONE
 %token <token> MINUS_ONE
 
-%token <token> GREATER_OR_EQUAL
-%token <token> SMALLER_OR_EQUAL
-%token <token> CONDITIONAL_EQUAL
-%token <token> DIFFERENT
-%token <token> SMALLER
-%token <token> GREATER
+%token <token> GTE
+%token <token> LTE
+%token <token> EQ
+%token <token> NEQ
+%token <token> LT
+%token <token> GT
 
 %token <token> AND
 %token <token> OR
@@ -120,6 +120,7 @@
 %type <whileLoop> while_loop
 %type <ifStatement> if_statement
 %type <conditionalExpression> conditionalExpression
+%type <boolExpression> boolExpression
 %type <printStatement> print_statement
 
 
@@ -130,6 +131,9 @@
  */
 %left ADD SUB
 %left MUL DIV
+
+%left OR AND
+%left NOT
 
 %%
 
@@ -168,12 +172,11 @@ for_loop:
 	;
 
 while_loop:
-    WHILE mathExpression INDENT statementList DEDENT                   { $$ = WhileLoopSemanticAction($2, $4); }
+    WHILE conditionalExpression INDENT statementList DEDENT                   { $$ = WhileLoopSemanticAction($2, $4); }
     ;
 
-if_statement: IF mathExpression INDENT statementList DEDENT            { $$ = IfThenSemanticAction($2, $4); }
-  | IF mathExpression INDENT statementList DEDENT
-    ELSE INDENT statementList DEDENT                               { $$ = IfElseSemanticAction($2, $4, $8); }
+if_statement: IF conditionalExpression INDENT statementList DEDENT            { $$ = IfThenSemanticAction($2, $4); }//FIXME
+ //ELSE: { $$ = IfElseSemanticAction($2, $4, $8); }
   ;
 
 mathExpression: mathExpression[left] ADD mathExpression[right]					{ $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
@@ -192,8 +195,20 @@ constant: INTEGER													{ $$ = IntegerConstantSemanticAction($1); }
 
 assignmentMathExpression: IDENTIFIER ASSIGNMENT mathExpression			{ $$ = assignmentMathExpressionSemanticAction($1, $3); }
     ;
-conditionalExpression: IDENTIFIER                      { $$ =   conditionalExpressionSemanticAction($1); } /* FIXME */
+conditionalExpression: boolExpression                  { $$ = BooleanExpressionSemanticAction($1);  }
+    | conditionalExpression AND conditionalExpression  { $$ = ConditionalExpressionSemanticAction($1, $3, LOGICAL_AND); }
+    | conditionalExpression OR conditionalExpression   { $$ = ConditionalExpressionSemanticAction($1, $3, LOGICAL_OR); }
+    | NOT conditionalExpression              { $$ = NotExpressionSemanticAction($2); }
+    | OPEN_PARENTHESIS conditionalExpression CLOSE_PARENTHESIS { $$ = ParenthesizedExpressionSemanticAction($2); }
     ;
+
+boolExpression:       mathExpression EQ mathExpression       { $$ = BooleanSemanticAction($1, $3, EQUAL); }
+                     | mathExpression NEQ mathExpression      { $$ = BooleanSemanticAction($1, $3, NOT_EQUAL); }
+                     | mathExpression LT mathExpression       { $$ = BooleanSemanticAction($1, $3, LESS_THAN); }
+                     | mathExpression LTE mathExpression      { $$ = BooleanSemanticAction($1, $3, LESS_EQUAL); }
+                     | mathExpression GT mathExpression       { $$ = BooleanSemanticAction($1, $3, GREATER_THAN); }
+                     | mathExpression GTE mathExpression      { $$ = BooleanSemanticAction($1, $3, GREATER_EQUAL); }
+                     ;
 print_statement: PRINT IDENTIFIER                                    { $$ = PrintIdentifierSemanticAction( $2);}
 |    PRINT STRING_START STRING STRING_END                            { $$ = PrintStringSemanticAction($3); }       ;
 
