@@ -1,6 +1,8 @@
-WHILE 1 <= 2
+WHILE 1 <= 2 {
     PRINT "Hello"
     PRINT "Goodbye"
-    IF 2 > 3
-        PRINT tito
+    IF 2 > 3 {
+    PRINT tito
+    }
     PRINT JUAN
+}

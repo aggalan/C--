@@ -98,7 +98,8 @@
 %token <token> PRINT
 %token <token> MACRO
 %token <token> SORT
-
+%token <token> OPEN_BRACE
+%token <token> CLOSE_BRACE
 
 %token <token> UNKNOWN
 %token <token>  ARROW  RETURN
@@ -155,7 +156,7 @@ statement: mathExpression                                               { $$ = E
   ;
 
 matchStatement:
-    MATCH IDENTIFIER INDENT matchCaseList DEDENT                  { $$ = MatchSemanticAction($2, $4); }
+    MATCH IDENTIFIER OPEN_BRACE matchCaseList CLOSE_BRACE                  { $$ = MatchSemanticAction($2, $4); }
    ;
 
 matchCaseList: matchCase                                         { $$ = SingleCaseListSemanticAction($1); }
@@ -163,19 +164,19 @@ matchCaseList: matchCase                                         { $$ = SingleCa
   ;
 
 matchCase:
-    INTEGER ARROW INDENT statementList DEDENT                      { $$ = MatchCaseSemanticAction($1, $4); }
+    INTEGER ARROW OPEN_BRACE statementList CLOSE_BRACE                      { $$ = MatchCaseSemanticAction($1, $4); }
     ;
 
 for_loop:
-    FOR assignmentMathExpression TO constant INDENT statementList DEDENT
+    FOR assignmentMathExpression TO constant OPEN_BRACE statementList CLOSE_BRACE
                                                                         {$$ = ForLoopSemanticAction($2, $4, $6); }
 	;
 
 while_loop:
-    WHILE conditionalExpression INDENT statementList DEDENT                   { $$ = WhileLoopSemanticAction($2, $4); }
+    WHILE conditionalExpression OPEN_BRACE statementList CLOSE_BRACE                   { $$ = WhileLoopSemanticAction($2, $4); }
     ;
 
-if_statement: IF conditionalExpression INDENT statementList DEDENT            { $$ = IfThenSemanticAction($2, $4); }//FIXME
+if_statement: IF conditionalExpression OPEN_BRACE statementList CLOSE_BRACE            { $$ = IfThenSemanticAction($2, $4); }//FIXME
  //ELSE: { $$ = IfElseSemanticAction($2, $4, $8); }
   ;
 

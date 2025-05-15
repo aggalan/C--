@@ -41,8 +41,7 @@
 <SINGLE_LINE_COMMENT>[^\n]*       { IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 <SINGLE_LINE_COMMENT>\n           { EndSingleLineCommentLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL);}
 
-\r\n[ ]*                            { Token token = IndentationLexemeAction(createLexicalAnalyzerContext()); if(token != IGNORE) return token; }
-\n[ ]*                            { Token token = IndentationLexemeAction(createLexicalAnalyzerContext()); if(token != IGNORE) return token; }
+
 
 "++"                                { return AddOneLexemeAction(createLexicalAnalyzerContext()); }
 "--"                                { return MinusOneLexemeAction(createLexicalAnalyzerContext()); }
@@ -71,7 +70,8 @@
 ")"									{ return ParenthesisLexemeAction(createLexicalAnalyzerContext(), CLOSE_PARENTHESIS); }
 "["                                 { return BracketLexemeAction(createLexicalAnalyzerContext(), OPEN_BRACKETS); }
 "]"                                 { return BracketLexemeAction(createLexicalAnalyzerContext(), CLOSE_BRACKETS); }
-
+"}"                                 { return BracketLexemeAction(createLexicalAnalyzerContext(), CLOSE_BRACE); }
+"{"                                 { return BracketLexemeAction(createLexicalAnalyzerContext(), OPEN_BRACE); }
 "INT"                               { return TypeLexemeAction(createLexicalAnalyzerContext(), INT);}
 "STRING"                            { return TypeLexemeAction(createLexicalAnalyzerContext(), STRING_TYPE);}
 "BOOL"                              { return TypeLexemeAction(createLexicalAnalyzerContext(), BOOL);}
