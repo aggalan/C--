@@ -68,4 +68,6 @@ Program * ProgramSemanticAction(CompilerState * compilerState, Unit * unit);
 Program * EmptyProgramSemanticAction(CompilerState * compilerState);
 ElseStatement* ElseStatementSemanticAction(StatementList * stml);
 ElseStatement * ElseIfStatementSemanticAction(IfStatement * ifStatement);
+Statement * UnaryChangeOperatorStatementSemanticAction( UnaryChangeOperatorStatement * stmt);
+UnaryChangeOperatorStatement * UnaryChangeOperatorSemanticAction(String identifier, int type);
 #endif

@@ -40,7 +40,7 @@
     Unit * unit;
     ExternalDeclaration * externalDeclaration;
     ElseStatement * else_statement;
-
+    UnaryChangeOperatorStatement * unaryChangeOperatorStatement;
 }
 
 /**
@@ -141,6 +141,7 @@
 %type <unit> unit
 %type <externalDeclaration> externalDeclaration
 %type <else_statement> else_statement
+%type <unaryChangeOperatorStatement> unaryChangeOperatorStatement
 /**
  * Precedence and associativity.
  *
@@ -192,8 +193,11 @@ statement:
   | macro_statement                                                 { $$ = MacroStatementSemanticAction($1); }
   | returnStatement                                               { $$ = ReturnStatementSemanticAction($1); }
   | functionStatement                                              { $$ = FunctionStatementSemanticAction($1); }
+  | unaryChangeOperatorStatement                                    { $$ = UnaryChangeOperatorStatementSemanticAction($1); }
   ;
-
+unaryChangeOperatorStatement:
+    IDENTIFIER ADD_ONE                                          { $$ = UnaryChangeOperatorSemanticAction($1, ADDITION); }
+    | IDENTIFIER MINUS_ONE                                         { $$ = UnaryChangeOperatorSemanticAction($1, SUBTRACTION); }
 
 
 returnStatement: RETURN expression                                   { $$ = ReturnSemanticAction($2); }

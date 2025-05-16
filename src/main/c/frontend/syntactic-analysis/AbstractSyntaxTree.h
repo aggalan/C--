@@ -50,6 +50,7 @@ typedef struct FunctionDefinition FunctionDefinition;
 typedef struct Unit Unit;
 typedef struct ExternalDeclaration ExternalDeclaration;
 typedef struct ElseStatement ElseStatement;
+typedef struct UnaryChangeOperatorStatement UnaryChangeOperatorStatement;
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
@@ -149,7 +150,8 @@ enum StatementType {
     STATEMENT_MACRO,
     STATEMENT_FUNCTION,
     STATEMENT_RETURN,
-	STATEMENT_ASSIGNMENT
+	STATEMENT_ASSIGNMENT,
+	STATEMENT_UNARY_CHANGE_OPERATOR,
 
 } ;
 
@@ -167,6 +169,7 @@ struct Statement {
         MacroStatement *macroStatement;
         FunctionStatement * functionStatement;
         ReturnStatement * returnStatement;
+		UnaryChangeOperatorStatement * unaryChangeOperatorStatement;
 	};
 };
 struct AssignmentStatement {
@@ -194,6 +197,13 @@ struct ElseStatement {
     StatementList *body;
     ElseType type;
     IfStatement * elseIfStatement;
+};
+struct UnaryChangeOperatorStatement {
+	String identifier;
+	enum {
+		INCREMENT,
+		DECREMENT
+	} type;
 };
 
 struct Program {
