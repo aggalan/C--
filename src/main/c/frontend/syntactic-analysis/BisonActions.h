@@ -70,5 +70,6 @@ ElseStatement* ElseStatementSemanticAction(StatementList * stml);
 ElseStatement * ElseIfStatementSemanticAction(IfStatement * ifStatement);
 Statement * VariableStatementSemanticAction(VariableStatement * var);
 VariableStatement * VariableDeclarationSemanticAction(Type type, String identifier, Expression * expression);
-
+Statement * UnaryChangeOperatorStatementSemanticAction( UnaryChangeOperatorStatement * stmt);
+UnaryChangeOperatorStatement * UnaryChangeOperatorSemanticAction(String identifier, int type);
 #endif

@@ -41,6 +41,7 @@
     ExternalDeclaration * externalDeclaration;
     ElseStatement * else_statement;
     VariableStatement * variableStatement;
+    UnaryChangeOperatorStatement * unaryChangeOperatorStatement;
 }
 
 /**
@@ -143,8 +144,7 @@
 %type <else_statement> else_statement
 %type <variableStatement> variableStatement
 %type <token> type
-
-
+%type <unaryChangeOperatorStatement> unaryChangeOperatorStatement
 /**
  * Precedence and associativity.
  *
@@ -156,7 +156,6 @@
 %left ADD SUB             // +, -
 %left MUL DIV             // *, /
 %right NOT                // ! (prefijo)
-%right ADD_ONE MINUS_ONE  // a++, a-- si son postfijos, aunque parecen ser prefijos acá
 
 
 %%
@@ -196,11 +195,17 @@ statement:
   | sort_statement                                                  { $$ = SortStatementSemanticAction($1);}
   | assignmentStatement                                             { $$ = AssignmentStatementSemanticAction($1);}
   | macro_statement                                                 { $$ = MacroStatementSemanticAction($1); }
+  | unaryChangeOperatorStatement                                    { $$ = UnaryChangeOperatorStatementSemanticAction($1); }
   | returnStatement                                                 { $$ = ReturnStatementSemanticAction($1); }
   | functionStatement                                               { $$ = FunctionStatementSemanticAction($1); }
   | variableStatement                                               { $$ = VariableStatementSemanticAction($1); }
   ;
 
+unaryChangeOperatorStatement:
+    IDENTIFIER ADD_ONE                                          { $$ = UnaryChangeOperatorSemanticAction($1, POST_INCREMENT); }
+    | IDENTIFIER MINUS_ONE                                         { $$ = UnaryChangeOperatorSemanticAction($1, POST_DECREMENT); }
+    | ADD_ONE IDENTIFIER                                          { $$ = UnaryChangeOperatorSemanticAction($2, PRE_INCREMENT); }
+    | MINUS_ONE IDENTIFIER                                         { $$ = UnaryChangeOperatorSemanticAction($2, PRE_DECREMENT); }
 
 
 returnStatement: RETURN expression                                   { $$ = ReturnSemanticAction($2); }

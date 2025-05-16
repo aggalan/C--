@@ -51,6 +51,7 @@ typedef struct FunctionDefinition FunctionDefinition;
 typedef struct Unit Unit;
 typedef struct ExternalDeclaration ExternalDeclaration;
 typedef struct ElseStatement ElseStatement;
+typedef struct UnaryChangeOperatorStatement UnaryChangeOperatorStatement;
 typedef struct VariableStatement VariableStatement;
 /**
  * Node types for the Abstract Syntax Tree (AST).
@@ -169,6 +170,7 @@ enum StatementType {
     STATEMENT_FUNCTION,
     STATEMENT_RETURN,
 	STATEMENT_ASSIGNMENT,
+	STATEMENT_UNARY_CHANGE_OPERATOR,
 	STATEMENT_VARIABLE
 } ;
 
@@ -187,6 +189,7 @@ struct Statement {
         FunctionStatement * functionStatement;
         ReturnStatement * returnStatement;
 		VariableStatement * variableStatement;
+		UnaryChangeOperatorStatement * unaryChangeOperatorStatement;
 	};
 };
 struct AssignmentStatement {
@@ -214,6 +217,16 @@ struct ElseStatement {
     StatementList *body;
     ElseType type;
     IfStatement * elseIfStatement;
+};
+
+struct UnaryChangeOperatorStatement {
+	String identifier;
+	enum {
+		PRE_INCREMENT,
+		PRE_DECREMENT,
+		POST_INCREMENT,
+		POST_DECREMENT
+	} type;
 };
 
 struct Program {

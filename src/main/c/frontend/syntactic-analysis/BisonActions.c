@@ -469,6 +469,20 @@ ElseStatement * ElseIfStatementSemanticAction(IfStatement * ifStatement){
      elseStatement->type = ELSE_IF_STATEMENT;
      return elseStatement;
 }
+Statement * UnaryChangeOperatorStatementSemanticAction(UnaryChangeOperatorStatement * stmt) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Statement * statement = calloc(1, sizeof(Statement));
+	statement->type = STATEMENT_UNARY_CHANGE_OPERATOR;
+	statement->unaryChangeOperatorStatement = stmt;
+	return statement;
+}
+UnaryChangeOperatorStatement * UnaryChangeOperatorSemanticAction(String identifier, int type) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	UnaryChangeOperatorStatement * statement = calloc(1, sizeof(UnaryChangeOperatorStatement));
+	statement->identifier = identifier;
+	statement->type = type;
+	return statement;
+}
 
 Statement * VariableStatementSemanticAction(VariableStatement * var) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);

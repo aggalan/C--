@@ -2,6 +2,7 @@ IF (a) {
     A = 1
 } ELSE IF (a == 0) {
     PRINT a
+    -- I
 } ELSE {
     PRINT "brbr patapim"
 }
