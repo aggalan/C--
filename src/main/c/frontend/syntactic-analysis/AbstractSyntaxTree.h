@@ -14,6 +14,7 @@ void shutdownAbstractSyntaxTreeModule();
  * This typedefs allows self-referencing types.
  */
 
+typedef enum Type Type;
 typedef enum MathExpressionType MathExpressionType;
 typedef enum FactorType FactorType;
 typedef enum OperatorType OperatorType;
@@ -50,12 +51,29 @@ typedef struct FunctionDefinition FunctionDefinition;
 typedef struct Unit Unit;
 typedef struct ExternalDeclaration ExternalDeclaration;
 typedef struct ElseStatement ElseStatement;
+typedef struct VariableStatement VariableStatement;
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
 
+
+enum Type {
+	_INT,
+	_STRING,
+	_BOOL,
+	_VOID
+};
+
+struct VariableStatement {
+	String identifier;
+	Type type;
+	Expression * expression;
+};
+
+
 struct FunctionDefinition {
     String identifier;
+	Type type;
     StringList * parameters;
     StatementList * body;
 };
@@ -76,6 +94,7 @@ enum ComparatorType {
 	GREATER_THAN,
 	GREATER_EQUAL
 };
+
 struct FunctionStatement {
     StringList * parameters;
     String identifier;
@@ -149,8 +168,8 @@ enum StatementType {
     STATEMENT_MACRO,
     STATEMENT_FUNCTION,
     STATEMENT_RETURN,
-	STATEMENT_ASSIGNMENT
-
+	STATEMENT_ASSIGNMENT,
+	STATEMENT_VARIABLE
 } ;
 
 struct Statement {
@@ -167,6 +186,7 @@ struct Statement {
         MacroStatement *macroStatement;
         FunctionStatement * functionStatement;
         ReturnStatement * returnStatement;
+		VariableStatement * variableStatement;
 	};
 };
 struct AssignmentStatement {

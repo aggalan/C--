@@ -369,11 +369,12 @@ ReturnStatement * ReturnFunctionStatementSemanticAction(FunctionStatement * func
 
 
 
-FunctionDefinition  * FunctionDefinitionSemanticAction(String identifier, StringList * parameters, StatementList * body){
+FunctionDefinition  * FunctionDefinitionSemanticAction(Type type, String identifier, StringList * parameters, StatementList * body){
     _logSyntacticAnalyzerAction(__FUNCTION__);
     FunctionDefinition * functionDefinition = calloc(1, sizeof(FunctionDefinition));
     functionDefinition->identifier = identifier;
     functionDefinition->parameters = parameters;
+	functionDefinition->type = type;
     functionDefinition->body = body;
     return functionDefinition;
 }
@@ -467,6 +468,24 @@ ElseStatement * ElseIfStatementSemanticAction(IfStatement * ifStatement){
      elseStatement->elseIfStatement = ifStatement;
      elseStatement->type = ELSE_IF_STATEMENT;
      return elseStatement;
+}
+
+Statement * VariableStatementSemanticAction(VariableStatement * var) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Statement * statement = calloc(1, sizeof(Statement));
+	statement->type = STATEMENT_VARIABLE;
+	statement->variableStatement = var;
+	return statement;
+}
+
+
+VariableStatement * VariableDeclarationSemanticAction(Type type, String identifier, Expression * expression) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	VariableStatement * variable = calloc(1, sizeof(VariableStatement));
+	variable->identifier = identifier;
+	variable->type = type;
+	variable->expression = expression;
+	return variable;
 }
 
 // ConditionalExpression *MathConditionalExpressionSemanticAction(MathExpression *math_expression) {

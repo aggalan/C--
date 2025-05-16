@@ -57,7 +57,7 @@ Factor * BooleanFactorSemanticAction(Bool value);
 FunctionStatement * FunctionSemanticAction(String identifier, StringList * parameters);
 Statement * ReturnStatementSemanticAction(ReturnStatement * stmt);
 Statement * FunctionStatementSemanticAction(FunctionStatement * stmt);
-FunctionDefinition * FunctionDefinitionSemanticAction(String identifier, StringList * parameters, StatementList * body);
+FunctionDefinition * FunctionDefinitionSemanticAction(Type type,String identifier, StringList * parameters, StatementList * body);
 ReturnStatement * ReturnSemanticAction(Expression * expression);
 ReturnStatement * ReturnFunctionStatementSemanticAction(FunctionStatement * functionStatement);
 Unit * SingleExternalDeclarationSemanticAction(ExternalDeclaration * externalDeclaration);
@@ -68,4 +68,7 @@ Program * ProgramSemanticAction(CompilerState * compilerState, Unit * unit);
 Program * EmptyProgramSemanticAction(CompilerState * compilerState);
 ElseStatement* ElseStatementSemanticAction(StatementList * stml);
 ElseStatement * ElseIfStatementSemanticAction(IfStatement * ifStatement);
+Statement * VariableStatementSemanticAction(VariableStatement * var);
+VariableStatement * VariableDeclarationSemanticAction(Type type, String identifier, Expression * expression);
+
 #endif

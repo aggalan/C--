@@ -40,7 +40,7 @@
     Unit * unit;
     ExternalDeclaration * externalDeclaration;
     ElseStatement * else_statement;
-
+    VariableStatement * variableStatement;
 }
 
 /**
@@ -141,6 +141,10 @@
 %type <unit> unit
 %type <externalDeclaration> externalDeclaration
 %type <else_statement> else_statement
+%type <variableStatement> variableStatement
+%type <token> type
+
+
 /**
  * Precedence and associativity.
  *
@@ -178,7 +182,9 @@ statementList: statementList statement                              { $$ = Appen
 	;
 
 
-functionDefinition: INT IDENTIFIER OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS OPEN_BRACE statementList CLOSE_BRACE  { $$ = FunctionDefinitionSemanticAction($2, $4, $7); }
+functionDefinition:
+      type IDENTIFIER OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS OPEN_BRACE statementList CLOSE_BRACE  { $$ = FunctionDefinitionSemanticAction($1, $2, $4, $7); }
+    | VOID IDENTIFIER OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS OPEN_BRACE statementList CLOSE_BRACE  { $$ = FunctionDefinitionSemanticAction(_VOID, $2, $4, $7); }
     ;
 
 statement:
@@ -190,8 +196,9 @@ statement:
   | sort_statement                                                  { $$ = SortStatementSemanticAction($1);}
   | assignmentStatement                                             { $$ = AssignmentStatementSemanticAction($1);}
   | macro_statement                                                 { $$ = MacroStatementSemanticAction($1); }
-  | returnStatement                                               { $$ = ReturnStatementSemanticAction($1); }
-  | functionStatement                                              { $$ = FunctionStatementSemanticAction($1); }
+  | returnStatement                                                 { $$ = ReturnStatementSemanticAction($1); }
+  | functionStatement                                               { $$ = FunctionStatementSemanticAction($1); }
+  | variableStatement                                               { $$ = VariableStatementSemanticAction($1); }
   ;
 
 
@@ -243,7 +250,7 @@ else_statement:
 
 factor:
     OPEN_PARENTHESIS expression CLOSE_PARENTHESIS                { $$ = ParenthesisFactorSemanticAction($2); }
-	|  constant														{ $$ = ConstantFactorSemanticAction($1); }
+	| constant														{ $$ = ConstantFactorSemanticAction($1); }
 	| IDENTIFIER                                                    { $$ = IdentifierFactorSemanticAction($1);}
 	| TRUE                                                        { $$ = BooleanFactorSemanticAction(TRUE); }
 	| FALSE                                                       { $$ = BooleanFactorSemanticAction(FALSE); }
@@ -267,16 +274,28 @@ expression:
     | expression AND expression                                     { $$ = ConditionalExpressionSemanticAction($1, $3, LOGICAL_AND); }
     | expression OR expression                                      { $$ = ConditionalExpressionSemanticAction($1, $3, LOGICAL_OR); }
     | NOT expression                                                { $$ = NotExpressionSemanticAction($2); }
-    | STRING                                                        { $$ = StringExpressionSemanticAction($1); }
+    | STRING_START STRING STRING_END                                { $$ = StringExpressionSemanticAction($2); }
     ;
 
 assignmentStatement: IDENTIFIER ASSIGNMENT expression               { $$ = AssignmentExpressionSemanticAction($1,$3);}
      ;
 
+variableStatement:
+      type IDENTIFIER ASSIGNMENT expression                         { $$ = VariableDeclarationSemanticAction($1, $2, $4); }
+    | type IDENTIFIER                                               { $$ = VariableDeclarationSemanticAction($1, $2, NULL); }
+    ;
+
+type:
+      INT                                                           { $$ = _INT; }
+    | STRING_TYPE                                                   { $$ = _STRING; }
+    | BOOL                                                          { $$ = _BOOL; }
+    ;
+
 
 print_statement: PRINT IDENTIFIER                                   { $$ = PrintIdentifierSemanticAction($2); }
     |    PRINT STRING_START STRING STRING_END                       { $$ = PrintStringSemanticAction($3); }
     ;
+
 stringList:
     IDENTIFIER                                       { $$ = SingleStringListSemanticAction($1); }
   | stringList COMMA IDENTIFIER                            { $$ = AppendStringListSemanticAction($1, $3); }
