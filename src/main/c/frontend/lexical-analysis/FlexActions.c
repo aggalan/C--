@@ -1,9 +1,10 @@
 #include "FlexActions.h"
+#include <stdbool.h>
 
 /* MODULE INTERNAL STATE */
 
 static Logger * _logger = NULL;
-static boolean _logIgnoredLexemes = true;
+static bool _logIgnoredLexemes = true;
 
 void initializeFlexActionsModule() {
 	_logIgnoredLexemes = getBooleanOrDefault("LOG_IGNORED_LEXEMES", _logIgnoredLexemes);
@@ -232,6 +233,13 @@ Token DefaultLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext){
 	lexicalAnalyzerContext->semanticValue->token = DEFAULT;
 	return DEFAULT;
 }
+
+Token BooleanLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token){
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = token;
+	return token;
+}
+
 Token ToLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext){
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	lexicalAnalyzerContext->semanticValue->token = TO;

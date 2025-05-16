@@ -29,7 +29,6 @@
     ForLoop * forLoop;
     WhileLoop * whileLoop;
     IfStatement * ifStatement;
-    ConditionalExpression * conditionalExpression;
     BoolExpression * boolExpression;
     PrintStatement * printStatement;
 }
@@ -100,6 +99,8 @@
 %token <token> SORT
 %token <token> OPEN_BRACE
 %token <token> CLOSE_BRACE
+%token <token> TRUE
+%token <token> FALSE
 
 %token <token> UNKNOWN
 %token <token>  ARROW  RETURN
@@ -120,7 +121,6 @@
 %type <forLoop> for_loop
 %type <whileLoop> while_loop
 %type <ifStatement> if_statement
-%type <conditionalExpression> conditionalExpression
 %type <boolExpression> boolExpression
 %type <printStatement> print_statement
 
@@ -173,11 +173,11 @@ for_loop: FOR assignmentMathExpression TO constant OPEN_BRACE statementList CLOS
 	;
 
 while_loop:
-    WHILE conditionalExpression OPEN_BRACE statementList CLOSE_BRACE
+    WHILE boolExpression OPEN_BRACE statementList CLOSE_BRACE
                                                                     { $$ = WhileLoopSemanticAction($2, $4); }
     ;
 
-if_statement: IF conditionalExpression OPEN_BRACE statementList CLOSE_BRACE
+if_statement: IF boolExpression OPEN_BRACE statementList CLOSE_BRACE
                                                                     { $$ = IfThenSemanticAction($2, $4); }//FIXME
  //ELSE: { $$ = IfElseSemanticAction($2, $4, $8); }
   ;
@@ -200,20 +200,18 @@ constant: INTEGER													{ $$ = IntegerConstantSemanticAction($1); }
 assignmentMathExpression: IDENTIFIER ASSIGNMENT mathExpression		{ $$ = assignmentMathExpressionSemanticAction($1, $3); }
     ;
 
-conditionalExpression: boolExpression                               { $$ = BooleanExpressionSemanticAction($1);  }
-    | conditionalExpression AND conditionalExpression               { $$ = ConditionalExpressionSemanticAction($1, $3, LOGICAL_AND); }
-    | conditionalExpression OR conditionalExpression                { $$ = ConditionalExpressionSemanticAction($1, $3, LOGICAL_OR); }
-    | NOT conditionalExpression                                     { $$ = NotExpressionSemanticAction($2); }
-    | OPEN_PARENTHESIS conditionalExpression CLOSE_PARENTHESIS      { $$ = ParenthesizedExpressionSemanticAction($2); }
-    | mathExpression                                                { $$ = MathConditionalExpressionSemanticAction($1); }
-    ;
-
-boolExpression: mathExpression EQ mathExpression                    { $$ = BooleanSemanticAction($1, $3, EQUAL); }
-    | mathExpression NEQ mathExpression                             { $$ = BooleanSemanticAction($1, $3, NOT_EQUAL); }
-    | mathExpression LT mathExpression                              { $$ = BooleanSemanticAction($1, $3, LESS_THAN); }
-    | mathExpression LTE mathExpression                             { $$ = BooleanSemanticAction($1, $3, LESS_EQUAL); }
-    | mathExpression GT mathExpression                              { $$ = BooleanSemanticAction($1, $3, GREATER_THAN); }
-    | mathExpression GTE mathExpression                             { $$ = BooleanSemanticAction($1, $3, GREATER_EQUAL); }
+boolExpression: mathExpression EQ mathExpression                    { $$ = BooleanMathSemanticAction($1, $3, EQUAL); }
+    | mathExpression NEQ mathExpression                             { $$ = BooleanMathSemanticAction($1, $3, NOT_EQUAL); }
+    | mathExpression LT mathExpression                              { $$ = BooleanMathSemanticAction($1, $3, LESS_THAN); }
+    | mathExpression LTE mathExpression                             { $$ = BooleanMathSemanticAction($1, $3, LESS_EQUAL); }
+    | mathExpression GT mathExpression                              { $$ = BooleanMathSemanticAction($1, $3, GREATER_THAN); }
+    | mathExpression GTE mathExpression                             { $$ = BooleanMathSemanticAction($1, $3, GREATER_EQUAL); }
+    | boolExpression AND boolExpression                             { $$ = BooleanBinaryExpressionSemanticAction($1, $3, LOGICAL_AND); }
+    | boolExpression OR boolExpression                              { $$ = BooleanBinaryExpressionSemanticAction($1, $3, LOGICAL_OR); }
+    | OPEN_PARENTHESIS boolExpression[exp] CLOSE_PARENTHESIS        { $$ = $exp; }
+    | NOT boolExpression                                            { $$ = NotExpressionSemanticAction($2); }
+    | TRUE                                                          { $$ = BooleanConstantSemanticAction(TRUE); }
+    | FALSE                                                         { $$ = BooleanConstantSemanticAction(FALSE); }
     ;
 
 print_statement: PRINT IDENTIFIER                                   { $$ = PrintIdentifierSemanticAction($2); }

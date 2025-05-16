@@ -16,9 +16,10 @@ void shutdownAbstractSyntaxTreeModule();
 
 typedef enum MathExpressionType MathExpressionType;
 typedef enum FactorType FactorType;
-typedef enum OperatorType OperatorType;
+typedef enum BooleanOperator BooleanOperator;
 typedef enum ComparatorType ComparatorType;
-typedef enum ConditionalType ConditionalType;
+typedef enum BooleanType BooleanType;
+typedef enum BoolConstant BoolConstant;
 typedef struct Constant Constant;
 typedef struct MathExpression MathExpression;
 typedef struct Factor Factor;
@@ -34,7 +35,7 @@ typedef struct AssignmentMathExpression AssignmentMathExpression;
 typedef struct WhileLoop WhileLoop;
 typedef struct IfStatement IfStatement;
 typedef struct PrintStatement PrintStatement;
-typedef struct ConditionalExpression ConditionalExpression;
+typedef struct BoolExpression BoolExpression;
 typedef struct AssignmentExpression AssignmentExpression;
 typedef struct BoolExpression BoolExpression;
 typedef struct NotConditionalExpression NotConditionalExpression;
@@ -53,51 +54,54 @@ enum ComparatorType {
 	LESS_THAN,
 	LESS_EQUAL,
 	GREATER_THAN,
-	GREATER_EQUAL
+	GREATER_EQUAL,
 };
+
+enum BooleanOperator {
+	LOGICAL_AND,
+	LOGICAL_OR,
+  LOGICAL_NOT,
+};
+
+enum BooleanType {
+	MATH_BINARY,
+	BOOL_BINARY,
+	BOOL_UNARY,
+  BOOL_CONSTANT,
+};
+
+enum BoolConstant { LOGICAL_TRUE, LOGICAL_FALSE };
 
 struct BoolExpression {
-	MathExpression * math_expression1;
-	MathExpression * math_expression2;
-	ComparatorType type;
-};
-enum OperatorType {
-	LOGICAL_AND,
-	LOGICAL_OR
-};
-enum ConditionalType {
-	CONDITIONAL_NOT,
-	PARENTHESIS,
-	BOOLEAN,
-	OPERATOR,
-	MATH_EXPRESSION
-};
-struct ConditionalExpression {
+	BooleanType type;
 	union {
 		struct {
-			ConditionalExpression * condition1;
-			ConditionalExpression * condition2;
-			OperatorType operatorType;
+			MathExpression * math_exp_1;
+			MathExpression * math_exp_2;
+			ComparatorType comparatorType;
 		};
-		ConditionalExpression * conditional_expression;
-		ConditionalExpression * parenthesized_conditional_expression;
-		BoolExpression * bool_expression;
-		MathExpression * math_expression;
+		struct {
+			BoolExpression * bool_exp_1;
+			BoolExpression * bool_exp_2;
+			BooleanOperator operatorTypeBinary;
+		};
+		struct {
+			BoolExpression * bool_exp;
+			BooleanOperator operatorTypeUnary;
+		};
+    BoolConstant constant;
 	} ;
-
-	ConditionalType type;
-
 };
 
 
 struct IfStatement {
-	ConditionalExpression *condition;
+	BoolExpression *condition;
 	StatementList *thenBranch;
 	StatementList *elseBranch;
 };
 
 struct WhileLoop {
-	ConditionalExpression *condition;
+	BoolExpression *condition;
 	StatementList *body;
 };
 

@@ -1,5 +1,6 @@
 #include "BisonActions.h"
 
+#include "AbstractSyntaxTree.h"
 #include "BisonParser.h"
 
 /* MODULE INTERNAL STATE */
@@ -202,7 +203,7 @@ Statement *WhileLoopStatementSemanticAction(WhileLoop *loop) {
 	stmt->whileLoop = loop;
 	return stmt;
 }
-WhileLoop *WhileLoopSemanticAction(ConditionalExpression *condition, StatementList *body) {
+WhileLoop *WhileLoopSemanticAction(BoolExpression *condition, StatementList *body) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	WhileLoop *loop = calloc(1, sizeof(WhileLoop));
 	loop->condition = condition;
@@ -216,7 +217,7 @@ Statement *IfStatementSemanticAction(IfStatement *stmt) {
 	statement->ifStatement = stmt;
 	return statement;
 }
-IfStatement *IfThenSemanticAction(ConditionalExpression *condition, StatementList *thenBranch) {
+IfStatement *IfThenSemanticAction(BoolExpression *condition, StatementList *thenBranch) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	IfStatement *stmt = calloc(1, sizeof(IfStatement));
 	stmt->condition = condition;
@@ -224,7 +225,7 @@ IfStatement *IfThenSemanticAction(ConditionalExpression *condition, StatementLis
 	stmt->elseBranch = NULL;
 	return stmt;
 }
-IfStatement *IfElseSemanticAction(ConditionalExpression *condition, StatementList *thenBranch, StatementList *elseBranch) {
+IfStatement *IfElseSemanticAction(BoolExpression *condition, StatementList *thenBranch, StatementList *elseBranch) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	IfStatement *stmt = calloc(1, sizeof(IfStatement));
 	stmt->condition = condition;
@@ -259,45 +260,44 @@ PrintStatement * PrintStringSemanticAction(String str){
 	print->identifier = str;
 	return print;
 }
-ConditionalExpression * ConditionalExpressionSemanticAction(ConditionalExpression * conditionalExpression1, ConditionalExpression * conditionalExpression2, OperatorType type) {
+BoolExpression * BooleanBinaryExpressionSemanticAction(BoolExpression * boolExpression1, BoolExpression * boolExpression2, BooleanOperator type) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	ConditionalExpression * condition = calloc(1, sizeof(ConditionalExpression));
-	condition->condition1 = conditionalExpression1;
-	condition->condition2 = conditionalExpression2;
-	condition->operatorType = type;
-	condition->type= OPERATOR;
-	return condition;
-}
-BoolExpression * BooleanSemanticAction(MathExpression * math_expression1,MathExpression * math_expression2, ComparatorType type ) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	BoolExpression * condition = calloc(1, sizeof(BoolExpression));
-	condition->math_expression1 = math_expression1;
-	condition->math_expression1 = math_expression2;
-	condition->type = type;
-	return condition;
-}
-ConditionalExpression * BooleanExpressionSemanticAction(BoolExpression * bool_expression) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	ConditionalExpression * condition = calloc(1, sizeof(ConditionalExpression));
-	condition->bool_expression = bool_expression;
-	condition->type= BOOL;
-	return condition;
+	BoolExpression * boolExpr = calloc(1, sizeof(BoolExpression));
+	boolExpr->bool_exp_1 = boolExpression1;
+	boolExpr->bool_exp_2 = boolExpression2;
+	boolExpr->operatorTypeBinary = type;
+	boolExpr->type= BOOL_BINARY;
+	return boolExpr;
 }
 
-ConditionalExpression * NotExpressionSemanticAction(ConditionalExpression * conditionalExpression) {
+BoolExpression * BooleanMathSemanticAction(MathExpression * math_expression1, MathExpression * math_expression2, ComparatorType type ) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	ConditionalExpression * condition = calloc(1, sizeof(ConditionalExpression));
-	condition->conditional_expression = conditionalExpression;
-	condition->type = CONDITIONAL_NOT;
-	return condition;
+	BoolExpression * boolExpr = calloc(1, sizeof(BoolExpression));
+	boolExpr->math_exp_1 = math_expression1;
+	boolExpr->math_exp_2 = math_expression2;
+	boolExpr->comparatorType = type;
+	boolExpr->type = MATH_BINARY;
+	return boolExpr;
 }
-ConditionalExpression * ParenthesizedExpressionSemanticAction(ConditionalExpression * conditionalExpression1) {
+
+BoolExpression * BooleanConstantSemanticAction(BoolConstant constant) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	ConditionalExpression * condition = calloc(1, sizeof(ConditionalExpression));
-	condition->parenthesized_conditional_expression = conditionalExpression1;
-	condition->type= PARENTHESIS;
-	return condition;
+	BoolExpression * boolExpr = calloc(1, sizeof(BoolExpression));
+  boolExpr->type = BOOL_CONSTANT;
+  boolExpr->constant = constant;
+
+  return boolExpr;
 }
+
+BoolExpression * NotExpressionSemanticAction(BoolExpression * boolExpression) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	BoolExpression * boolExpr = calloc(1, sizeof(BoolExpression));
+	boolExpr->bool_exp = boolExpression;
+	boolExpr->operatorTypeUnary = LOGICAL_NOT;
+  boolExpr->type = BOOL_UNARY;
+	return boolExpr;
+}
+
 Statement * PrintStatementSemanticAction(PrintStatement * stmt){
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Statement * statement = calloc(1, sizeof(Statement));
@@ -306,21 +306,6 @@ Statement * PrintStatementSemanticAction(PrintStatement * stmt){
 	return statement;
 }
 
-// ConditionalExpression * IdentifierConditionalExpressionSemanticAction(String identifier) {
-// 	_logSyntacticAnalyzerAction(__FUNCTION__);
-// 	ConditionalExpression * condition= calloc(1, sizeof(ConditionalExpression));
-// 	condition->identifier = identifier;
-// 	condition->type = CONDITIONAL_IDENTIFIER;
-// 	return condition;
-// }
-
-ConditionalExpression * MathConditionalExpressionSemanticAction(MathExpression * math_expression) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	ConditionalExpression * condition = calloc(1, sizeof(ConditionalExpression));
-	condition->math_expression = math_expression;
-	condition->type= MATH_EXPRESSION;
-	return condition;
-}
 Factor * IdentifierFactorSemanticAction(String identifier) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Factor * factor = calloc(1, sizeof(Factor));
@@ -328,11 +313,3 @@ Factor * IdentifierFactorSemanticAction(String identifier) {
 	factor->type = FACTOR_IDENTIFIER;
 	return factor;
 };
-
-// ConditionalExpression *MathConditionalExpressionSemanticAction(MathExpression *math_expression) {
-// 	_logSyntacticAnalyzerAction(__FUNCTION__);
-// 	ConditionalExpression * condition = calloc(1, sizeof(ConditionalExpression));
-// 	condition->math_expression = math_expression;
-// 	condition->type= MATH_EXPRESSION;
-// 	return condition;
-// }
