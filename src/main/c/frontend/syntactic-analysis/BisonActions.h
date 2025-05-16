@@ -33,8 +33,8 @@ ForLoop *ForLoopSemanticAction(AssignmentStatement * assignment, Constant * end,
 Statement *WhileLoopStatementSemanticAction(WhileLoop *loop);
 WhileLoop *WhileLoopSemanticAction(Expression *condition, StatementList *body);
 Statement *IfStatementSemanticAction(IfStatement *stmt);
-IfStatement *IfThenSemanticAction(Expression *condition, StatementList *thenBranch);
-IfStatement *IfElseSemanticAction(Expression *condition, StatementList *thenBranch, StatementList *elseBranch);
+IfStatement *IfThenSemanticAction(Expression *condition, StatementList *thenBranch,ElseStatement *elseBranch);
+IfStatement *IfElseSemanticAction(Expression *condition, StatementList *thenBranch, ElseStatement *elseBranch);
 MatchStatement *MatchSemanticAction(String id, CaseList *cases);
 PrintStatement * PrintIdentifierSemanticAction(String id);
 PrintStatement * PrintStringSemanticAction(String str);
@@ -66,5 +66,6 @@ ExternalDeclaration * FunctionDefinitionExternalDeclarationSemanticAction(Functi
 ExternalDeclaration * StatementExternalDeclarationSemanticAction(Statement * statement);
 Program * ProgramSemanticAction(CompilerState * compilerState, Unit * unit);
 Program * EmptyProgramSemanticAction(CompilerState * compilerState);
-
+ElseStatement* ElseStatementSemanticAction(StatementList * stml);
+ElseStatement * ElseIfStatementSemanticAction(IfStatement * ifStatement);
 #endif

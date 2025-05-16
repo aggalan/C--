@@ -39,6 +39,8 @@
     FunctionDefinition * functionDefinition;
     Unit * unit;
     ExternalDeclaration * externalDeclaration;
+    ElseStatement * else_statement;
+
 }
 
 /**
@@ -138,6 +140,7 @@
 %type <functionDefinition> functionDefinition
 %type <unit> unit
 %type <externalDeclaration> externalDeclaration
+%type <else_statement> else_statement
 /**
  * Precedence and associativity.
  *
@@ -229,11 +232,14 @@ while_loop:
                                                                     { $$ = WhileLoopSemanticAction($2, $4); }
     ;
 
-if_statement: IF expression OPEN_BRACE statementList CLOSE_BRACE
-                                                                    { $$ = IfThenSemanticAction($2, $4); }//FIXME
- //ELSE: { $$ = IfElseSemanticAction($2, $4, $8); }
+if_statement: IF expression OPEN_BRACE statementList CLOSE_BRACE else_statement  { $$ = IfThenSemanticAction($2, $4,$6); }
   ;
 
+else_statement:
+    ELSE OPEN_BRACE statementList CLOSE_BRACE                      { $$ = ElseStatementSemanticAction($3); }
+  | ELSE if_statement                                             { $$ = ElseIfStatementSemanticAction($2); }
+  | %empty                                                        { $$ = NULL; }
+  ;
 
 factor:
     OPEN_PARENTHESIS expression CLOSE_PARENTHESIS                { $$ = ParenthesisFactorSemanticAction($2); }

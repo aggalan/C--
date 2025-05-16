@@ -171,15 +171,15 @@ Statement *IfStatementSemanticAction(IfStatement *stmt) {
 	statement->ifStatement = stmt;
 	return statement;
 }
-IfStatement *IfThenSemanticAction(Expression *condition, StatementList *thenBranch) {
+IfStatement *IfThenSemanticAction(Expression *condition, StatementList *thenBranch, ElseStatement *elseBranch) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	IfStatement *stmt = calloc(1, sizeof(IfStatement));
 	stmt->condition = condition;
 	stmt->thenBranch = thenBranch;
-	stmt->elseBranch = NULL;
+    stmt->elseBranch = elseBranch;
 	return stmt;
 }
-IfStatement *IfElseSemanticAction(Expression *condition, StatementList *thenBranch, StatementList *elseBranch) {
+IfStatement *IfElseSemanticAction(Expression *condition, StatementList *thenBranch, ElseStatement *elseBranch) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	IfStatement *stmt = calloc(1, sizeof(IfStatement));
 	stmt->condition = condition;
@@ -452,6 +452,23 @@ Program * EmptyProgramSemanticAction(CompilerState * compilerState) {
 	}
 	return program;
 }
+
+
+ElseStatement* ElseStatementSemanticAction(StatementList * stml){
+    _logSyntacticAnalyzerAction(__FUNCTION__);
+    ElseStatement * elseStatement = calloc(1, sizeof(ElseStatement));
+    elseStatement->body = stml;
+    elseStatement->type = ELSE_STATEMENT;
+    return elseStatement;
+}
+ElseStatement * ElseIfStatementSemanticAction(IfStatement * ifStatement){
+     _logSyntacticAnalyzerAction(__FUNCTION__);
+     ElseStatement * elseStatement = calloc(1, sizeof(ElseStatement));
+     elseStatement->elseIfStatement = ifStatement;
+     elseStatement->type = ELSE_IF_STATEMENT;
+     return elseStatement;
+}
+
 // ConditionalExpression *MathConditionalExpressionSemanticAction(MathExpression *math_expression) {
 // 	_logSyntacticAnalyzerAction(__FUNCTION__);
 // 	ConditionalExpression * condition = calloc(1, sizeof(ConditionalExpression));

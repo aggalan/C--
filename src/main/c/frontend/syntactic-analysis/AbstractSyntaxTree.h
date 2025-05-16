@@ -20,6 +20,7 @@ typedef enum OperatorType OperatorType;
 typedef enum ComparatorType ComparatorType;
 typedef enum ConditionalType ConditionalType;
 typedef enum StatementType StatementType;
+typedef enum ElseType ElseType;
 typedef struct Constant Constant;
 typedef struct Factor Factor;
 typedef struct Program Program;
@@ -48,6 +49,7 @@ typedef struct ReturnStatement ReturnStatement;
 typedef struct FunctionDefinition FunctionDefinition;
 typedef struct Unit Unit;
 typedef struct ExternalDeclaration ExternalDeclaration;
+typedef struct ElseStatement ElseStatement;
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
@@ -112,7 +114,7 @@ struct MacroStatement {
 struct IfStatement {
 	Expression *condition;
 	StatementList *thenBranch;
-	StatementList *elseBranch;
+	ElseStatement *elseBranch;
 };
 
 struct WhileLoop {
@@ -181,6 +183,17 @@ struct ForLoop {
 	AssignmentStatement * assignment;
 	Constant * endValue;
 	StatementList *body;
+};
+
+enum ElseType {
+    ELSE_STATEMENT,
+    ELSE_IF_STATEMENT,
+};
+
+struct ElseStatement {
+    StatementList *body;
+    ElseType type;
+    IfStatement * elseIfStatement;
 };
 
 struct Program {

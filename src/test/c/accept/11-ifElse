@@ -1,0 +1,19 @@
+IF (a) {
+    A = 1
+} ELSE IF (a == 0) {
+    PRINT a
+} ELSE {
+    PRINT "brbr patapim"
+}
+
+IF A {
+    PRINT "A"
+} ELSE IF (a == 0) {
+    PRINT a
+} ELSE {
+    PRINT "brbr patapim"
+}
+
+IF NICO {
+    PRINT "NICO"
+}
