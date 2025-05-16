@@ -326,7 +326,36 @@ Factor * BooleanFactorSemanticAction(Bool value) {
 	factor->type = BOOLEAN_FACTOR;
 	return factor;
 }
+MacroStatement * MacroSemanticAction(String identifier, StringList *args, Statement * body) {
+    _logSyntacticAnalyzerAction(__FUNCTION__);
+    MacroStatement * macro = calloc(1, sizeof(MacroStatement));
+    macro->identifier = identifier;
+    macro->parameters = args;
+    macro->statement = body;
+    return macro;
+}
 
+StringList * SingleStringListSemanticAction(String str) {
+    _logSyntacticAnalyzerAction(__FUNCTION__);
+    StringList * list = calloc(1, sizeof(StringList));
+    list->strings = calloc(1, sizeof(String));
+    list->strings[0] = str;
+    list->count = 1;
+    return list;
+}
+StringList * AppendStringListSemanticAction(StringList *list, String str) {
+    _logSyntacticAnalyzerAction(__FUNCTION__);
+    list->strings = realloc(list->strings, sizeof(String) * (list->count + 1));
+    list->strings[list->count++] = str;
+    return list;
+}
+Statement * MacroStatementSemanticAction(MacroStatement * stmt) {
+    _logSyntacticAnalyzerAction(__FUNCTION__);
+    Statement * statement = calloc(1, sizeof(Statement));
+    statement->type = STATEMENT_MACRO;
+    statement->macroStatement = stmt;
+    return statement;
+}
 // ConditionalExpression *MathConditionalExpressionSemanticAction(MathExpression *math_expression) {
 // 	_logSyntacticAnalyzerAction(__FUNCTION__);
 // 	ConditionalExpression * condition = calloc(1, sizeof(ConditionalExpression));

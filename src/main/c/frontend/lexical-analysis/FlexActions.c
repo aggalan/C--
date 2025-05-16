@@ -173,7 +173,7 @@ Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 Token MatchLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	lexicalAnalyzerContext->semanticValue->token = token;
-	return MATCH;
+	return token;
 }
 
 Token AssignmentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
@@ -241,4 +241,9 @@ Token BooleanLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	lexicalAnalyzerContext->semanticValue->token = token;
 	return token;
+}
+Token CommaLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext){
+    _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+    lexicalAnalyzerContext->semanticValue->token = COMMA;
+    return COMMA;
 }

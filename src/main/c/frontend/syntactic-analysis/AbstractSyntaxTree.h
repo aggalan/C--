@@ -41,6 +41,8 @@ typedef struct Expression Expression;
 typedef struct NotConditionalExpression NotConditionalExpression;
 typedef struct ParenthesizedConditionalExpression ParenthesizedConditionalExpression;
 typedef struct SortStatement SortStatement;
+typedef struct MacroStatement MacroStatement;
+typedef struct StringList StringList;
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
@@ -70,7 +72,19 @@ enum ConditionalType {
 	CONDITIONAL_NOT,
 	PARENTHESIS,
 	BOOLEAN,
-	OPERATOR
+	OPERATOR,
+	CONDITIONAL_IDENTIFIER
+};
+
+struct StringList {
+	String *strings;
+	int count;
+};
+
+struct MacroStatement {
+	String identifier;
+	StringList * parameters;
+	Statement *  statement;
 };
 
 
@@ -109,7 +123,8 @@ enum StatementType {
 	STATEMENT_IF,
 	STATEMENT_PRINT,
 	STATEMENT_SORT,
-	STATEMENT_ASSIGNMENT
+	STATEMENT_ASSIGNMENT,
+    STATEMENT_MACRO
 } ;
 
 struct Statement {
@@ -123,6 +138,7 @@ struct Statement {
         PrintStatement *printStatement;
 		SortStatement * sort_statement;
 		AssignmentStatement * assignment_statement;
+        MacroStatement *macroStatement;
 	};
 };
 struct AssignmentStatement {
