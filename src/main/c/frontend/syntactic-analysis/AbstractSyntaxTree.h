@@ -46,6 +46,8 @@ typedef struct StringList StringList;
 typedef struct FunctionStatement FunctionStatement;
 typedef struct ReturnStatement ReturnStatement;
 typedef struct FunctionDefinition FunctionDefinition;
+typedef struct Unit Unit;
+typedef struct ExternalDeclaration ExternalDeclaration;
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
@@ -182,8 +184,11 @@ struct ForLoop {
 };
 
 struct Program {
-	StatementList *statements;
-    FunctionDefinition * functionDefinition;
+	Unit * unit;
+	enum {
+		EMPTY,
+		NOT_EMPTY
+	} type;
 };
 
 enum MathExpressionType {
@@ -271,6 +276,23 @@ struct Factor {
 		Bool boolean;
 	};
 	FactorType type;
+};
+
+struct Unit {
+	Unit *units;
+	ExternalDeclaration *externalDeclaration;
+	enum {
+		SINGLE,
+		NODE
+	}type;
+};
+struct ExternalDeclaration {
+	FunctionDefinition * functionDefinition;
+	Statement * statement;
+	enum {
+		FUNCTION_DEFINITION,
+		STATEMENT
+	} type;
 };
 
 

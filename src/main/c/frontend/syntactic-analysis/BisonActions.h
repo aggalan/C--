@@ -21,7 +21,6 @@ Constant * IntegerConstantSemanticAction(const int value);
 Expression * ArithmeticExpressionSemanticAction( Expression * leftExpression, Expression * rightExpression, MathExpressionType type);
 Expression * FactorExpressionSemanticAction(Factor * factor);
 Factor * ConstantFactorSemanticAction(Constant * constant);
-Program * StatementListProgramSemanticAction(CompilerState * compilerState, StatementList *statementList);
 StatementList *SingleStatementListSemanticAction(Statement *stmt);
 StatementList * AppendStatementListSemanticAction(StatementList *list, Statement *stmt);
 Statement *ForLoopStatementSemanticAction(ForLoop *loop);
@@ -58,9 +57,14 @@ Factor * BooleanFactorSemanticAction(Bool value);
 FunctionStatement * FunctionSemanticAction(String identifier, StringList * parameters);
 Statement * ReturnStatementSemanticAction(ReturnStatement * stmt);
 Statement * FunctionStatementSemanticAction(FunctionStatement * stmt);
-Program * FunctionDefinitionProgramSemanticAction(CompilerState * compilerState, FunctionDefinition * functionDefinition);
 FunctionDefinition * FunctionDefinitionSemanticAction(String identifier, StringList * parameters, StatementList * body);
 ReturnStatement * ReturnSemanticAction(Expression * expression);
 ReturnStatement * ReturnFunctionStatementSemanticAction(FunctionStatement * functionStatement);
+Unit * SingleExternalDeclarationSemanticAction(ExternalDeclaration * externalDeclaration);
+Unit * AppendExternalDeclarationSemanticAction(Unit * unit, ExternalDeclaration * externalDeclaration);
+ExternalDeclaration * FunctionDefinitionExternalDeclarationSemanticAction(FunctionDefinition * functionDefinition);
+ExternalDeclaration * StatementExternalDeclarationSemanticAction(Statement * statement);
+Program * ProgramSemanticAction(CompilerState * compilerState, Unit * unit);
+Program * EmptyProgramSemanticAction(CompilerState * compilerState);
 
 #endif

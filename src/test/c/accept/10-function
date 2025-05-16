@@ -1,5 +1,14 @@
 
-
 INT hola () {
     PRINT "HOLA"
+}
+
+IF true {
+    PRINT "HOLA"
+}
+INT nico() {
+    PRINT "HOLA"
+    IF false {
+        PRINT tutti
+    }
 }

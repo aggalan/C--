@@ -67,20 +67,6 @@ Factor * ConstantFactorSemanticAction(Constant * constant) {
 	return factor;
 }
 
-Program * StatementListProgramSemanticAction(CompilerState * compilerState, StatementList * statementList) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Program * program = calloc(1, sizeof(Program));
-	program->statements = statementList;
-	compilerState->abstractSyntaxtTree = program;
-	if (0 < flexCurrentContext()) {
-		logError(_logger, "The final context is not the default (0): %d", flexCurrentContext());
-		compilerState->succeed = false;
-	}
-	else {
-		compilerState->succeed = true;
-	}
-	return program;
-}
 StatementList* SingleStatementListSemanticAction(Statement* stmt) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	StatementList* list = calloc(1, sizeof(StatementList));
@@ -381,20 +367,6 @@ ReturnStatement * ReturnFunctionStatementSemanticAction(FunctionStatement * func
 
 }
 
-Program * FunctionDefinitionProgramSemanticAction(CompilerState * compilerState, FunctionDefinition * functionDefinition){
-    _logSyntacticAnalyzerAction(__FUNCTION__);
-    Program * program = calloc(1, sizeof(Program));
-    program->functionDefinition = functionDefinition;
-    compilerState->abstractSyntaxtTree = program;
-    if (0 < flexCurrentContext()) {
-        logError(_logger, "The final context is not the default (0): %d", flexCurrentContext());
-        compilerState->succeed = false;
-    }
-    else {
-        compilerState->succeed = true;
-    }
-    return program;
-}
 
 
 FunctionDefinition  * FunctionDefinitionSemanticAction(String identifier, StringList * parameters, StatementList * body){
@@ -420,7 +392,66 @@ Statement * FunctionStatementSemanticAction(FunctionStatement * stmt){
     return statement;
 
 }
+Unit * SingleExternalDeclarationSemanticAction(ExternalDeclaration * externalDeclaration) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Unit * unit = calloc(1, sizeof(Unit));
+	unit->externalDeclaration = externalDeclaration;
+	unit->type = SINGLE;
+	return unit;
+}
+Unit * AppendExternalDeclarationSemanticAction(Unit * unit, ExternalDeclaration * externalDeclaration) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Unit * newUnit = calloc(1, sizeof(Unit));
+	unit->externalDeclaration = externalDeclaration;
+	unit->units = unit;
+	unit->type = NODE;
+	return newUnit;
+}
+ExternalDeclaration * FunctionDefinitionExternalDeclarationSemanticAction(FunctionDefinition * functionDefinition) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ExternalDeclaration * externalDeclaration = calloc(1, sizeof(ExternalDeclaration));
+	externalDeclaration->functionDefinition = functionDefinition;
+	externalDeclaration->type = FUNCTION_DEFINITION;
+	return externalDeclaration;
+}
+ExternalDeclaration * StatementExternalDeclarationSemanticAction(Statement * statement) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ExternalDeclaration * externalDeclaration = calloc(1, sizeof(ExternalDeclaration));
+	externalDeclaration->statement = statement;
+	externalDeclaration->type = STATEMENT;
+	return externalDeclaration;
+}
+Program * ProgramSemanticAction(CompilerState * compilerState, Unit * unit) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Program * program = calloc(1, sizeof(Program));
+	program->unit = unit;
+	program->type = NOT_EMPTY;
+	compilerState->abstractSyntaxtTree = program;
+	if (0 < flexCurrentContext()) {
+		logError(_logger, "The final context is not the default (0): %d", flexCurrentContext());
+		compilerState->succeed = false;
+	}
+	else {
+		compilerState->succeed = true;
+	}
+	return program;
+}
 
+Program * EmptyProgramSemanticAction(CompilerState * compilerState) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Program * program = calloc(1, sizeof(Program));
+	compilerState->abstractSyntaxtTree = program;
+	program->unit = NULL;
+	program->type = EMPTY;
+	if (0 < flexCurrentContext()) {
+		logError(_logger, "The final context is not the default (0): %d", flexCurrentContext());
+		compilerState->succeed = false;
+	}
+	else {
+		compilerState->succeed = true;
+	}
+	return program;
+}
 // ConditionalExpression *MathConditionalExpressionSemanticAction(MathExpression *math_expression) {
 // 	_logSyntacticAnalyzerAction(__FUNCTION__);
 // 	ConditionalExpression * condition = calloc(1, sizeof(ConditionalExpression));

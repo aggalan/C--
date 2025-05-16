@@ -37,6 +37,8 @@
     ReturnStatement * returnStatement;
     FunctionStatement * functionStatement;
     FunctionDefinition * functionDefinition;
+    Unit * unit;
+    ExternalDeclaration * externalDeclaration;
 }
 
 /**
@@ -134,6 +136,8 @@
 %type <returnStatement> returnStatement
 %type <functionStatement> functionStatement
 %type <functionDefinition> functionDefinition
+%type <unit> unit
+%type <externalDeclaration> externalDeclaration
 /**
  * Precedence and associativity.
  *
@@ -152,14 +156,22 @@
 
 // IMPORTANT: To use λ in the following grammar, use the %empty symbol.
 
-program: statementList                                              { $$ = StatementListProgramSemanticAction(currentCompilerState(), $1); }
-    | functionDefinition                      { $$ = FunctionDefinitionProgramSemanticAction(currentCompilerState(),$1); }
+program: unit                                                       { $$ = ProgramSemanticAction(currentCompilerState(), $1); }
+    | %empty                                                        { $$ = EmptyProgramSemanticAction(currentCompilerState()); }
+    ;
+unit:
+      externalDeclaration                                           { $$ = SingleExternalDeclarationSemanticAction($1); }
+    | unit externalDeclaration                                      { $$ = AppendExternalDeclarationSemanticAction($1, $2); }
+    ;
+externalDeclaration:
+      functionDefinition                                            { $$ = FunctionDefinitionExternalDeclarationSemanticAction($1); }
+    | statement                                                     { $$ = StatementExternalDeclarationSemanticAction($1); }
     ;
 
  //statement                                                        { $$ = SingleStatementListSemanticAction($1); }
 
 statementList: statementList statement                              { $$ = AppendStatementListSemanticAction($1, $2); }
-    | %empty                                                        { $$ = NULL; }
+    | statement                                                        { $$ = SingleStatementListSemanticAction($1); }
 	;
 
 
