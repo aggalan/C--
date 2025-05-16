@@ -5,3 +5,6 @@ FOR I = 2 TO 5 {
 IF QUESO {
     PRINT "QUESO"
 }
+IF (a < 1) {
+    PRINT "JUNIOR"
+}

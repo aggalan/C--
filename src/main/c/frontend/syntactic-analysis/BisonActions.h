@@ -52,4 +52,6 @@ Statement * PrintStatementSemanticAction(PrintStatement * stmt);
 ConditionalExpression * IdentifierConditionalExpressionSemanticAction(String identifier);
 Statement * SortStatementSemanticAction(SortStatement * identifier);
 SortStatement * SortSemanticAction(String identifier);
+Factor * IdentifierFactorSemanticAction(String identifier);
+BoolExpression * IdentifierBooleanSemanticAction(String identifier);
 #endif

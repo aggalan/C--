@@ -149,11 +149,11 @@ program: statementList                                              { $$ = State
  //statement                                                        { $$ = SingleStatementListSemanticAction($1); }
 
 statementList: statementList statement                              { $$ = AppendStatementListSemanticAction($1, $2); }
-    |                                                               { $$ = NULL; }
+    | %empty                                                        { $$ = NULL; }
 	;
 
-statement: mathExpression                                           { $$ = ExpressionStatementSemanticAction($1); }
-  | for_loop                                                        { $$ = ForLoopStatementSemanticAction($1); }
+statement:
+    for_loop                                                        { $$ = ForLoopStatementSemanticAction($1); }
   | matchStatement                                                  { $$ = MatchStatementSemanticAction($1); }
   | while_loop                                                      { $$ = WhileLoopStatementSemanticAction($1); }
   | if_statement                                                    { $$ = IfStatementSemanticAction($1); }
@@ -188,15 +188,21 @@ if_statement: IF conditionalExpression OPEN_BRACE statementList CLOSE_BRACE
  //ELSE: { $$ = IfElseSemanticAction($2, $4, $8); }
   ;
 
-mathExpression: mathExpression[left] ADD mathExpression[right]		{ $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
+mathExpression:
+      mathExpression[left] ADD mathExpression[right]		        { $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
 	| mathExpression[left] DIV mathExpression[right]				{ $$ = ArithmeticExpressionSemanticAction($left, $right, DIVISION); }
 	| mathExpression[left] MUL mathExpression[right]				{ $$ = ArithmeticExpressionSemanticAction($left, $right, MULTIPLICATION); }
 	| mathExpression[left] SUB mathExpression[right]			    { $$ = ArithmeticExpressionSemanticAction($left, $right, SUBTRACTION); }
+	| OPEN_PARENTHESIS mathExpression[left] ADD mathExpression[right] CLOSE_PARENTHESIS	        { $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
+    | OPEN_PARENTHESIS mathExpression[left] DIV mathExpression[right] CLOSE_PARENTHESIS				{ $$ = ArithmeticExpressionSemanticAction($left, $right, DIVISION); }
+    | OPEN_PARENTHESIS mathExpression[left] MUL mathExpression[right] CLOSE_PARENTHESIS				{ $$ = ArithmeticExpressionSemanticAction($left, $right, MULTIPLICATION); }
+    | OPEN_PARENTHESIS mathExpression[left] SUB mathExpression[right] CLOSE_PARENTHESIS			    { $$ = ArithmeticExpressionSemanticAction($left, $right, SUBTRACTION); }
 	| factor														{ $$ = FactorExpressionSemanticAction($1); }
 	;
 
-factor: OPEN_PARENTHESIS mathExpression CLOSE_PARENTHESIS			{ $$ = ExpressionFactorSemanticAction($2); }
-	| constant														{ $$ = ConstantFactorSemanticAction($1); }
+factor:
+	  constant														{ $$ = ConstantFactorSemanticAction($1); }
+	| IDENTIFIER                                                    { $$ = IdentifierFactorSemanticAction($1);}
 	;
 
 constant: INTEGER													{ $$ = IntegerConstantSemanticAction($1); }
@@ -208,9 +214,9 @@ assignmentMathExpression: IDENTIFIER ASSIGNMENT mathExpression		{ $$ = assignmen
 conditionalExpression: boolExpression                               { $$ = BooleanExpressionSemanticAction($1);  }
     | conditionalExpression AND conditionalExpression               { $$ = ConditionalExpressionSemanticAction($1, $3, LOGICAL_AND); }
     | conditionalExpression OR conditionalExpression                { $$ = ConditionalExpressionSemanticAction($1, $3, LOGICAL_OR); }
+    | OPEN_PARENTHESIS conditionalExpression AND conditionalExpression CLOSE_PARENTHESIS            { $$ = ConditionalExpressionSemanticAction($2, $4, LOGICAL_AND); }
+    | OPEN_PARENTHESIS conditionalExpression OR conditionalExpression CLOSE_PARENTHESIS             { $$ = ConditionalExpressionSemanticAction($2, $4, LOGICAL_OR); }
     | NOT conditionalExpression                                     { $$ = NotExpressionSemanticAction($2); }
-    | OPEN_PARENTHESIS conditionalExpression CLOSE_PARENTHESIS      { $$ = ParenthesizedExpressionSemanticAction($2); }
-    | IDENTIFIER                                                    { $$ = IdentifierConditionalExpressionSemanticAction($1); }
     ;
 
 boolExpression: mathExpression EQ mathExpression                    { $$ = BooleanSemanticAction($1, $3, EQUAL); }
@@ -219,6 +225,13 @@ boolExpression: mathExpression EQ mathExpression                    { $$ = Boole
     | mathExpression LTE mathExpression                             { $$ = BooleanSemanticAction($1, $3, LESS_EQUAL); }
     | mathExpression GT mathExpression                              { $$ = BooleanSemanticAction($1, $3, GREATER_THAN); }
     | mathExpression GTE mathExpression                             { $$ = BooleanSemanticAction($1, $3, GREATER_EQUAL); }
+    | OPEN_PARENTHESIS mathExpression EQ mathExpression CLOSE_PARENTHESIS    { $$ = BooleanSemanticAction($2, $4, EQUAL); }
+    | OPEN_PARENTHESIS mathExpression NEQ mathExpression CLOSE_PARENTHESIS   { $$ = BooleanSemanticAction($2, $4, NOT_EQUAL); }
+    | OPEN_PARENTHESIS mathExpression LT mathExpression CLOSE_PARENTHESIS    { $$ = BooleanSemanticAction($2, $4, LESS_THAN); }
+    | OPEN_PARENTHESIS mathExpression LTE mathExpression CLOSE_PARENTHESIS   { $$ = BooleanSemanticAction($2, $4, LESS_EQUAL); }
+    | OPEN_PARENTHESIS mathExpression GT mathExpression CLOSE_PARENTHESIS    { $$ = BooleanSemanticAction($2, $4, GREATER_THAN); }
+    | OPEN_PARENTHESIS mathExpression GTE mathExpression CLOSE_PARENTHESIS   { $$ = BooleanSemanticAction($2, $4, GREATER_EQUAL); }
+    | IDENTIFIER                                                    { $$ = IdentifierBooleanSemanticAction($1); }
     ;
 
 print_statement: PRINT IDENTIFIER                                   { $$ = PrintIdentifierSemanticAction($2); }

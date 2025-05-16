@@ -63,9 +63,19 @@ enum ComparatorType {
 };
 
 struct BoolExpression {
-	MathExpression * math_expression1;
-	MathExpression * math_expression2;
-	ComparatorType type;
+	union {
+		struct {
+			MathExpression * math_expression1;
+			MathExpression * math_expression2;
+			ComparatorType comparatorType;
+		};
+		String identifier;
+	};
+	enum {
+		BOOL_IDENTIFIER,
+		MATH_DERIVED
+	} type;
+
 };
 enum OperatorType {
 	LOGICAL_AND,
@@ -179,6 +189,7 @@ struct AssignmentMathExpression {
 enum FactorType {
 	CONSTANT,
 	EXPRESSION,
+	FACTOR_IDENTIFIER
 };
 
 struct Constant {
@@ -189,6 +200,7 @@ struct Factor {
 	union {
 		Constant * constant;
 		MathExpression * mathExpression;
+		String identifier;
 	};
 	FactorType type;
 };

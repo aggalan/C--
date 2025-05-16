@@ -273,7 +273,8 @@ BoolExpression * BooleanSemanticAction(MathExpression * math_expression1,MathExp
 	BoolExpression * condition = calloc(1, sizeof(BoolExpression));
 	condition->math_expression1 = math_expression1;
 	condition->math_expression1 = math_expression2;
-	condition->type = type;
+	condition->comparatorType = type;
+	condition->type= MATH_DERIVED;
 	return condition;
 }
 ConditionalExpression * BooleanExpressionSemanticAction(BoolExpression * bool_expression) {
@@ -327,6 +328,20 @@ SortStatement * SortSemanticAction(String identifier) {
 	SortStatement * statement = calloc(1, sizeof(SortStatement));
 	statement->identifier = identifier;
 	return statement;
+}
+Factor * IdentifierFactorSemanticAction(String identifier) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Factor * factor = calloc(1, sizeof(Factor));
+	factor->identifier = identifier;
+	factor->type= FACTOR_IDENTIFIER;
+	return factor;
+}
+BoolExpression * IdentifierBooleanSemanticAction(String identifier) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	BoolExpression * bool_expression = calloc(1, sizeof(BoolExpression));
+	bool_expression->identifier = identifier;
+	bool_expression->type= BOOL_IDENTIFIER;
+	return bool_expression;
 }
 // ConditionalExpression *MathConditionalExpressionSemanticAction(MathExpression *math_expression) {
 // 	_logSyntacticAnalyzerAction(__FUNCTION__);
