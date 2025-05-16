@@ -153,7 +153,6 @@
 %left ADD SUB             // +, -
 %left MUL DIV             // *, /
 %right NOT                // ! (prefijo)
-%right ADD_ONE MINUS_ONE  // a++, a-- si son postfijos, aunque parecen ser prefijos acá
 
 
 %%
@@ -196,8 +195,10 @@ statement:
   | unaryChangeOperatorStatement                                    { $$ = UnaryChangeOperatorStatementSemanticAction($1); }
   ;
 unaryChangeOperatorStatement:
-    IDENTIFIER ADD_ONE                                          { $$ = UnaryChangeOperatorSemanticAction($1, ADDITION); }
-    | IDENTIFIER MINUS_ONE                                         { $$ = UnaryChangeOperatorSemanticAction($1, SUBTRACTION); }
+    IDENTIFIER ADD_ONE                                          { $$ = UnaryChangeOperatorSemanticAction($1, POST_INCREMENT); }
+    | IDENTIFIER MINUS_ONE                                         { $$ = UnaryChangeOperatorSemanticAction($1, POST_DECREMENT); }
+    | ADD_ONE IDENTIFIER                                          { $$ = UnaryChangeOperatorSemanticAction($2, PRE_INCREMENT); }
+    | MINUS_ONE IDENTIFIER                                         { $$ = UnaryChangeOperatorSemanticAction($2, PRE_DECREMENT); }
 
 
 returnStatement: RETURN expression                                   { $$ = ReturnSemanticAction($2); }

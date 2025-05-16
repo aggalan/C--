@@ -479,7 +479,7 @@ UnaryChangeOperatorStatement * UnaryChangeOperatorSemanticAction(String identifi
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	UnaryChangeOperatorStatement * statement = calloc(1, sizeof(UnaryChangeOperatorStatement));
 	statement->identifier = identifier;
-	statement->type = type == ADDITION ? INCREMENT : DECREMENT;
+	statement->type = type;
 	return statement;
 }
 

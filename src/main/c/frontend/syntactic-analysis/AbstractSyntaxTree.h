@@ -201,8 +201,10 @@ struct ElseStatement {
 struct UnaryChangeOperatorStatement {
 	String identifier;
 	enum {
-		INCREMENT,
-		DECREMENT
+		PRE_INCREMENT,
+		PRE_DECREMENT,
+		POST_INCREMENT,
+		POST_DECREMENT
 	} type;
 };
 
