@@ -79,7 +79,7 @@
 
 "FOR"                               { return ForLexemeAction(createLexicalAnalyzerContext()); }
 "WHILE"                             { return WhileLexemeAction(createLexicalAnalyzerContext()); }
-
+","                                  {return CommaLexemeAction(createLexicalAnalyzerContext());}
 "IF"                                { return IfLexemeAction(createLexicalAnalyzerContext()); }
 "ELSE"                              { return ElseLexemeAction(createLexicalAnalyzerContext()); }
 "TO"                                { return ToLexemeAction(createLexicalAnalyzerContext()); }

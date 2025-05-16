@@ -1,0 +1,1 @@
+MACRO HOLA (A,B) -> PRINT A

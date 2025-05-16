@@ -54,4 +54,8 @@ Statement * SortStatementSemanticAction(SortStatement * identifier);
 SortStatement * SortSemanticAction(String identifier);
 Factor * IdentifierFactorSemanticAction(String identifier);
 BoolExpression * IdentifierBooleanSemanticAction(String identifier);
+Statement  * MacroStatementSemanticAction(MacroStatement * stmt);
+MacroStatement * MacroSemanticAction(String identifier, StringList *args, Statement * body);
+StringList * SingleStringListSemanticAction(String str);
+StringList * AppendStringListSemanticAction(StringList *list, String str);
 #endif

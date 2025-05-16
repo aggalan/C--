@@ -33,6 +33,8 @@
     BoolExpression * boolExpression;
     PrintStatement * printStatement;
     SortStatement * sortStatement;
+    MacroStatement * macroStatement;
+    StringList * stringList;
 }
 
 /**
@@ -101,7 +103,7 @@
 %token <token> SORT
 %token <token> OPEN_BRACE
 %token <token> CLOSE_BRACE
-
+%token <token> COMMA
 
 %token <token> UNKNOWN
 %token <token>  ARROW  RETURN
@@ -126,7 +128,8 @@
 %type <boolExpression> boolExpression
 %type <printStatement> print_statement
 %type <sortStatement> sort_statement
-
+%type <macroStatement> macro_statement
+%type <stringList> stringList
 
 /**
  * Precedence and associativity.
@@ -159,7 +162,14 @@ statement:
   | if_statement                                                    { $$ = IfStatementSemanticAction($1); }
   | print_statement                                                 { $$ = PrintStatementSemanticAction($1);}
   | sort_statement                                                  { $$ = SortStatementSemanticAction($1);}
+   | macro_statement                                                 { $$ = MacroStatementSemanticAction($1); }
   ;
+
+
+macro_statement: MACRO IDENTIFIER OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS ARROW statement
+                                                                        { $$ = MacroSemanticAction($2, $4, $7); }
+ ;
+
 
 sort_statement: SORT IDENTIFIER                                     { $$ = SortSemanticAction($2); }
 
@@ -237,6 +247,9 @@ boolExpression: mathExpression EQ mathExpression                    { $$ = Boole
 print_statement: PRINT IDENTIFIER                                   { $$ = PrintIdentifierSemanticAction($2); }
     |    PRINT STRING_START STRING STRING_END                       { $$ = PrintStringSemanticAction($3); }
     ;
-
+stringList:
+    IDENTIFIER                                       { $$ = SingleStringListSemanticAction($1); }
+  | stringList COMMA IDENTIFIER                            { $$ = AppendStringListSemanticAction($1, $3); }
+  ;
 
 %%
