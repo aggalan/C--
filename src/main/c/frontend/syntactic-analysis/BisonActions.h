@@ -50,4 +50,6 @@ ConditionalExpression * NotExpressionSemanticAction(ConditionalExpression * cond
 ConditionalExpression * ParenthesizedExpressionSemanticAction(ConditionalExpression * conditionalExpression1);
 Statement * PrintStatementSemanticAction(PrintStatement * stmt);
 ConditionalExpression * IdentifierConditionalExpressionSemanticAction(String identifier);
+Statement * SortStatementSemanticAction(SortStatement * identifier);
+SortStatement * SortSemanticAction(String identifier);
 #endif

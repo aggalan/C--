@@ -32,6 +32,7 @@
     ConditionalExpression * conditionalExpression;
     BoolExpression * boolExpression;
     PrintStatement * printStatement;
+    SortStatement * sortStatement;
 }
 
 /**
@@ -101,6 +102,7 @@
 %token <token> OPEN_BRACE
 %token <token> CLOSE_BRACE
 
+
 %token <token> UNKNOWN
 %token <token>  ARROW  RETURN
 
@@ -123,6 +125,7 @@
 %type <conditionalExpression> conditionalExpression
 %type <boolExpression> boolExpression
 %type <printStatement> print_statement
+%type <sortStatement> sort_statement
 
 
 /**
@@ -155,7 +158,10 @@ statement: mathExpression                                           { $$ = Expre
   | while_loop                                                      { $$ = WhileLoopStatementSemanticAction($1); }
   | if_statement                                                    { $$ = IfStatementSemanticAction($1); }
   | print_statement                                                 { $$ = PrintStatementSemanticAction($1);}
+  | sort_statement                                                  { $$ = SortStatementSemanticAction($1);}
   ;
+
+sort_statement: SORT IDENTIFIER                                     { $$ = SortSemanticAction($2); }
 
 matchStatement: MATCH IDENTIFIER OPEN_BRACE matchCaseList CLOSE_BRACE
                                                                     { $$ = MatchSemanticAction($2, $4); }

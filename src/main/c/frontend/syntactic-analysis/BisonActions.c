@@ -138,7 +138,7 @@ StatementList* AppendStatementListSemanticAction(StatementList* list, Statement*
 Statement* ExpressionStatementSemanticAction(MathExpression* expr) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Statement* stmt = calloc(1, sizeof(Statement));
-	stmt->type = STATEMENT_MathExpression;
+	stmt->type = STATEMENT_MATH_EXPRESSION;
 	stmt->mathExpression = expr;
 	return stmt;
 }
@@ -314,6 +314,20 @@ ConditionalExpression * IdentifierConditionalExpressionSemanticAction(String ide
 	return condition;
 }
 
+Statement * SortStatementSemanticAction(SortStatement * sort_statement) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Statement * statement = calloc(1, sizeof(Statement));
+	statement->type= SORT;
+	statement->sort_statement = sort_statement;
+	return statement;
+}
+
+SortStatement * SortSemanticAction(String identifier) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	SortStatement * statement = calloc(1, sizeof(SortStatement));
+	statement->identifier = identifier;
+	return statement;
+}
 // ConditionalExpression *MathConditionalExpressionSemanticAction(MathExpression *math_expression) {
 // 	_logSyntacticAnalyzerAction(__FUNCTION__);
 // 	ConditionalExpression * condition = calloc(1, sizeof(ConditionalExpression));

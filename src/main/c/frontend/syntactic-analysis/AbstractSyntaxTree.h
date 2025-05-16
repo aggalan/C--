@@ -19,6 +19,7 @@ typedef enum FactorType FactorType;
 typedef enum OperatorType OperatorType;
 typedef enum ComparatorType ComparatorType;
 typedef enum ConditionalType ConditionalType;
+typedef enum StatementType StatementType;
 typedef struct Constant Constant;
 typedef struct MathExpression MathExpression;
 typedef struct Factor Factor;
@@ -39,11 +40,16 @@ typedef struct AssignmentExpression AssignmentExpression;
 typedef struct BoolExpression BoolExpression;
 typedef struct NotConditionalExpression NotConditionalExpression;
 typedef struct ParenthesizedConditionalExpression ParenthesizedConditionalExpression;
+typedef struct SortStatement SortStatement;
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
 
 struct PrintStatement {
+	String identifier;
+};
+
+struct SortStatement {
 	String identifier;
 };
 
@@ -117,15 +123,18 @@ struct MatchStatement {
 	CaseList *caseList;
 };
 
+enum StatementType {
+	STATEMENT_MATH_EXPRESSION,
+	STATEMENT_FOR,
+	STATEMENT_MATCH,
+	STATEMENT_WHILE,
+	STATEMENT_IF,
+	STATEMENT_PRINT,
+	STATEMENT_SORT,
+} ;
+
 struct Statement {
-	enum {
-		STATEMENT_MathExpression,
-		STATEMENT_FOR,
-		STATEMENT_MATCH,
-		STATEMENT_WHILE,
-		STATEMENT_IF,
-    	STATEMENT_PRINT
-	} type;
+	StatementType type;
 	union {
 		MathExpression *mathExpression;
 		ForLoop *forLoop;
@@ -133,6 +142,7 @@ struct Statement {
 		WhileLoop *whileLoop;
 		IfStatement *ifStatement;
         PrintStatement *printStatement;
+		SortStatement * sort_statement;
 	};
 };
 
