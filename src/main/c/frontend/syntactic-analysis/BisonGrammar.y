@@ -189,9 +189,9 @@ statement:
   | print_statement                                                 { $$ = PrintStatementSemanticAction($1);}
   | sort_statement                                                  { $$ = SortStatementSemanticAction($1);}
   | assignmentStatement                                             { $$ = AssignmentStatementSemanticAction($1);}
-   | macro_statement                                                 { $$ = MacroStatementSemanticAction($1); }
-   | returnStatement                                               { $$ = ReturnStatementSemanticAction($1); }
-    | functionStatement                                              { $$ = FunctionStatementSemanticAction($1); }
+  | macro_statement                                                 { $$ = MacroStatementSemanticAction($1); }
+  | returnStatement                                               { $$ = ReturnStatementSemanticAction($1); }
+  | functionStatement                                              { $$ = FunctionStatementSemanticAction($1); }
   ;
 
 
