@@ -83,12 +83,14 @@
 "IF"                                { return IfLexemeAction(createLexicalAnalyzerContext()); }
 "ELSE"                              { return ElseLexemeAction(createLexicalAnalyzerContext()); }
 "TO"                                { return ToLexemeAction(createLexicalAnalyzerContext()); }
-"MATCH"							    { return MatchLexemeAction(createLexicalAnalyzerContext(),MATCH); }
-"PRINT"						        { return PrintLexemeAction(createLexicalAnalyzerContext()); }
+"MATCH"							                { return MatchLexemeAction(createLexicalAnalyzerContext(),MATCH); }
+"PRINT"						                  { return PrintLexemeAction(createLexicalAnalyzerContext()); }
 "MACRO"                             { return MacroLexemeAction(createLexicalAnalyzerContext()); }
-"RETURN"						    { return ReturnLexemeAction(createLexicalAnalyzerContext()); }
+"RETURN"						                { return ReturnLexemeAction(createLexicalAnalyzerContext()); }
 "SORT"                              { return SortLexemeAction(createLexicalAnalyzerContext()); }
 "DEFAULT"                           { return DefaultLexemeAction(createLexicalAnalyzerContext()); }
+"TRUE"                              { return BooleanLexemeAction(createLexicalAnalyzerContext(), TRUE); }
+"FALSE"                             { return BooleanLexemeAction(createLexicalAnalyzerContext(), FALSE); }
 
 [[:alpha:]][[:alnum:]]*             { return IdentifierLexemeAction(createLexicalAnalyzerContext()); }
 
