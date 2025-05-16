@@ -1,0 +1,5 @@
+
+
+INT hola () {
+    PRINT "HOLA"
+}

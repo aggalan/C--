@@ -1,1 +1,14 @@
-31415926535
+var = pito
+nar = jinto
+var = 1
+nar = 2
+WHILE var <= nar {
+    PRINT "Hello"
+    PRINT "Goodbye"
+    IF nar > var {
+        PRINT tito
+    }
+    PRINT JUAN
+}
+var = 1
+nar = 2

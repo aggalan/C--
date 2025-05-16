@@ -64,4 +64,6 @@ Token ConditionalLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, T
 Token LogicalOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 Token CommaLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
+Token BooleanLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
+
 #endif
