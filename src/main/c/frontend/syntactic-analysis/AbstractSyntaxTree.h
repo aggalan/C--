@@ -43,9 +43,18 @@ typedef struct ParenthesizedConditionalExpression ParenthesizedConditionalExpres
 typedef struct SortStatement SortStatement;
 typedef struct MacroStatement MacroStatement;
 typedef struct StringList StringList;
+typedef struct FunctionStatement FunctionStatement;
+typedef struct ReturnStatement ReturnStatement;
+typedef struct FunctionDefinition FunctionDefinition;
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
+
+struct FunctionDefinition {
+    String identifier;
+    StringList * parameters;
+    StatementList * body;
+};
 
 struct PrintStatement {
 	String identifier;
@@ -62,6 +71,16 @@ enum ComparatorType {
 	LESS_EQUAL,
 	GREATER_THAN,
 	GREATER_EQUAL
+};
+
+struct FunctionStatement {
+    StringList * stringList;
+    String identifier;
+};
+
+struct ReturnStatement {
+    Expression expression;
+    FunctionStatement * functionStatement
 };
 
 struct BoolExpression {
@@ -155,7 +174,9 @@ enum StatementType {
 	STATEMENT_IF,
 	STATEMENT_PRINT,
 	STATEMENT_SORT,
-    STATEMENT_MACRO
+    STATEMENT_MACRO,
+    STATEMENT_FUNCTION,
+    STATEMENT_RETURN
 } ;
 
 struct Statement {
@@ -169,6 +190,8 @@ struct Statement {
         PrintStatement *printStatement;
 		SortStatement * sort_statement;
         MacroStatement *macroStatement;
+        FunctionStatement * functionStatement;
+        ReturnStatement * returnStatement;
 	};
 };
 
@@ -185,6 +208,7 @@ struct ForLoop {
 
 struct Program {
 	StatementList *statements;
+    FunctionDefinition * functionDefinition;
 };
 
 enum MathExpressionType {

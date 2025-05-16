@@ -35,6 +35,9 @@
     SortStatement * sortStatement;
     MacroStatement * macroStatement;
     StringList * stringList;
+    ReturnStatement * returnStatement;
+    FunctionStatement * functionStatement;
+    FunctionDefinition * functionDefinition;
 }
 
 /**
@@ -130,7 +133,9 @@
 %type <sortStatement> sort_statement
 %type <macroStatement> macro_statement
 %type <stringList> stringList
-
+%type <returnStatement> returnStatement
+%type <functionStatement> functionStatement
+%type <functionDefinition> functionDefinition
 /**
  * Precedence and associativity.
  *
@@ -147,6 +152,7 @@
 // IMPORTANT: To use λ in the following grammar, use the %empty symbol.
 
 program: statementList                                              { $$ = StatementListProgramSemanticAction(currentCompilerState(), $1); }
+    | functionDefinition                      { $$ = FunctionDefinitionProgramSemanticAction($1); }
     ;
 
  //statement                                                        { $$ = SingleStatementListSemanticAction($1); }
@@ -154,6 +160,13 @@ program: statementList                                              { $$ = State
 statementList: statementList statement                              { $$ = AppendStatementListSemanticAction($1, $2); }
     | %empty                                                        { $$ = NULL; }
 	;
+
+
+functionDefinition: INT IDENTIFIER OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS OPEN_BRACE statementList CLOSE_BRACE  { $$ = FunctionDefinitionSemanticAction($2, $4, $7); }
+    | VOID IDENTIFIER OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS OPEN_BRACE statementList CLOSE_BRACE  { $$ = FunctionDefinitionSemanticAction($2, $4, $7); }
+    | STRING IDENTIFIER OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS OPEN_BRACE statementList CLOSE_BRACE  { $$ = FunctionDefinitionSemanticAction($2, $4, $7); }
+    | BOOL IDENTIFIER OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS OPEN_BRACE statementList CLOSE_BRACE  { $$ = FunctionDefinitionSemanticAction($2, $4, $7); }
+    ;
 
 statement:
     for_loop                                                        { $$ = ForLoopStatementSemanticAction($1); }
@@ -163,7 +176,19 @@ statement:
   | print_statement                                                 { $$ = PrintStatementSemanticAction($1);}
   | sort_statement                                                  { $$ = SortStatementSemanticAction($1);}
    | macro_statement                                                 { $$ = MacroStatementSemanticAction($1); }
+   | returnStatement                                               { $$ = ReturnStatementSemanticAction($1); }
+    | functionStatement                                              { $$ = FunctionStatementSemanticAction($1); }
   ;
+
+
+
+returnStatement: RETURN expression                                   { $$ = ReturnStatementSemanticAction($2); }
+    | RETURN functionStatement                       { $$ = ReturnStatementSemanticAction($2); }
+    ;
+
+functionStatement: IDENTIFIER OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS
+                                                                        { $$ = FunctionSemanticAction($1, $2); }
+
 
 
 macro_statement: MACRO IDENTIFIER OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS ARROW statement

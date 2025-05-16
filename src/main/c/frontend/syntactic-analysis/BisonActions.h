@@ -58,4 +58,8 @@ Statement  * MacroStatementSemanticAction(MacroStatement * stmt);
 MacroStatement * MacroSemanticAction(String identifier, StringList *args, Statement * body);
 StringList * SingleStringListSemanticAction(String str);
 StringList * AppendStringListSemanticAction(StringList *list, String str);
+Statement * ReturnStatementSemanticAction(ReturnStatement * stmt);
+Statement * FunctionStatementSemanticAction(FunctionStatement * stmt);
+Program * FunctionDefinitionProgramSemanticAction(CompilerState * compilerState, FunctionDefinition * functionDefinition);
+FunctionDefinition * FunctionDefinitionSemanticAction(String identifier, StringList * parameters, StatementList * body);
 #endif
