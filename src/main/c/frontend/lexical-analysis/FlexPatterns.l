@@ -62,6 +62,11 @@
 "/"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), DIV); }
 "+"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), ADD); }
 
+"true"                              { return BooleanLexemeAction(createLexicalAnalyzerContext(), TRUE); }
+"false"                             { return BooleanLexemeAction(createLexicalAnalyzerContext(), FALSE); }
+"TRUE"                              { return BooleanLexemeAction(createLexicalAnalyzerContext(), TRUE); }
+"FALSE"                             { return BooleanLexemeAction(createLexicalAnalyzerContext(), FALSE); }
+
 "->"								{ return MatchLexemeAction(createLexicalAnalyzerContext(),ARROW); }
 
 "="                                 { return AssignmentLexemeAction(createLexicalAnalyzerContext()); }

@@ -21,23 +21,23 @@ typedef enum ComparatorType ComparatorType;
 typedef enum ConditionalType ConditionalType;
 typedef enum StatementType StatementType;
 typedef struct Constant Constant;
-typedef struct MathExpression MathExpression;
 typedef struct Factor Factor;
 typedef struct Program Program;
 typedef char * String;
+typedef int Bool;
 typedef struct Statement Statement;
 typedef struct StatementList StatementList;
 typedef struct ForLoop ForLoop;
 typedef struct MatchStatement MatchStatement;
 typedef struct Case Case;
 typedef struct CaseList CaseList;
-typedef struct AssignmentMathExpression AssignmentMathExpression;
+typedef struct AssignmentConditionalExpression AssignmentConditionalExpression;
+typedef struct AssignmentStringExpression AssignmentStringExpression;
 typedef struct WhileLoop WhileLoop;
 typedef struct IfStatement IfStatement;
 typedef struct PrintStatement PrintStatement;
-typedef struct ConditionalExpression ConditionalExpression;
-typedef struct AssignmentExpression AssignmentExpression;
-typedef struct BoolExpression BoolExpression;
+typedef struct AssignmentStatement AssignmentStatement;
+typedef struct Expression Expression;
 typedef struct NotConditionalExpression NotConditionalExpression;
 typedef struct ParenthesizedConditionalExpression ParenthesizedConditionalExpression;
 typedef struct SortStatement SortStatement;
@@ -62,21 +62,6 @@ enum ComparatorType {
 	GREATER_EQUAL
 };
 
-struct BoolExpression {
-	union {
-		struct {
-			MathExpression * math_expression1;
-			MathExpression * math_expression2;
-			ComparatorType comparatorType;
-		};
-		String identifier;
-	};
-	enum {
-		BOOL_IDENTIFIER,
-		MATH_DERIVED
-	} type;
-
-};
 enum OperatorType {
 	LOGICAL_AND,
 	LOGICAL_OR
@@ -85,35 +70,18 @@ enum ConditionalType {
 	CONDITIONAL_NOT,
 	PARENTHESIS,
 	BOOLEAN,
-	OPERATOR,
-	CONDITIONAL_IDENTIFIER
-};
-struct ConditionalExpression {
-	union {
-		struct {
-			ConditionalExpression * condition1;
-			ConditionalExpression * condition2;
-			OperatorType operatorType;
-		};
-		ConditionalExpression * conditional_expression;
-		ConditionalExpression * parenthesized_conditional_expression;
-		BoolExpression * bool_expression;
-		String identifier;
-	} ;
-
-	ConditionalType type;
-
+	OPERATOR
 };
 
 
 struct IfStatement {
-	ConditionalExpression *condition;
+	Expression *condition;
 	StatementList *thenBranch;
 	StatementList *elseBranch;
 };
 
 struct WhileLoop {
-	ConditionalExpression *condition;
+	Expression *condition;
 	StatementList *body;
 };
 
@@ -141,19 +109,25 @@ enum StatementType {
 	STATEMENT_IF,
 	STATEMENT_PRINT,
 	STATEMENT_SORT,
+	STATEMENT_ASSIGNMENT
 } ;
 
 struct Statement {
 	StatementType type;
 	union {
-		MathExpression *mathExpression;
+		Expression *mathExpression;
 		ForLoop *forLoop;
 		MatchStatement *matchStatement;
 		WhileLoop *whileLoop;
 		IfStatement *ifStatement;
         PrintStatement *printStatement;
 		SortStatement * sort_statement;
+		AssignmentStatement * assignment_statement;
 	};
+};
+struct AssignmentStatement {
+	Expression * expression;
+	String identifier;
 };
 
 struct StatementList {
@@ -162,7 +136,7 @@ struct StatementList {
 };
 
 struct ForLoop {
-	AssignmentMathExpression * assignment;
+	AssignmentStatement * assignment;
 	Constant * endValue;
 	StatementList *body;
 };
@@ -181,7 +155,16 @@ enum MathExpressionType {
 
 struct AssignmentMathExpression {
 	String identifier;
-	MathExpression *mathExpression;
+	Expression *mathExpression;
+};
+struct AssignmentStringExpression {
+	String identifier;
+	String expression;
+};
+
+struct AssignmentConditionalExpression {
+	String identifier;
+	Expression *condition;
 };
 
 
@@ -189,38 +172,72 @@ struct AssignmentMathExpression {
 enum FactorType {
 	CONSTANT,
 	EXPRESSION,
-	FACTOR_IDENTIFIER
+	FACTOR_IDENTIFIER,
+	BOOLEAN_FACTOR
 };
 
 struct Constant {
 	int value;
 };
+struct Expression {
+	enum {
+		CONDITIONAL_EXPRESSION,
+		MATH_EXPRESSION,
+		STRING_EXPRESSION
+	} type;
+	union {
+		struct {
+			union {
+				Factor * factor;
+				struct {
+					Expression * leftExpression;
+					Expression * rightExpression;
+				};
+			};
+			MathExpressionType mathType;
+		} math_expression;
+		String string_expression;
+		struct {
+			union {
+				struct {
+					Expression * condition1;
+					Expression * condition2;
+					OperatorType operatorType;
+				};
+				Expression * conditional_expression;
+				Expression * parenthesized_conditional_expression;
+				struct {
+					union {
+						struct {
+							Expression * math_expression1;
+							Expression * math_expression2;
+							ComparatorType comparatorType;
+						};
+					};
+				} bool_expression;
+			} ;
+
+			ConditionalType type;
+		} conditional_expression;
+};
+};
 
 struct Factor {
 	union {
 		Constant * constant;
-		MathExpression * mathExpression;
+		Expression * expression;
 		String identifier;
+		Bool boolean;
 	};
 	FactorType type;
 };
 
-struct MathExpression {
-	union {
-		Factor * factor;
-		struct {
-			MathExpression * leftExpression;
-			MathExpression * rightExpression;
-		};
-	};
-	MathExpressionType type;
-};
 
 /**
  * Node recursive destructors.
  */
 void releaseConstant(Constant * constant);
-void releaseExpression(MathExpression * MathExpression);
+void releaseExpression(Expression * MathExpression);
 void releaseFactor(Factor * factor);
 void releaseProgram(Program * program);
 void releaseStatement(Statement *stmt);

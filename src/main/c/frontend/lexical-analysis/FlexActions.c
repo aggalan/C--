@@ -237,3 +237,8 @@ Token ToLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext){
 	lexicalAnalyzerContext->semanticValue->token = TO;
 	return TO;
 }
+Token BooleanLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = token;
+	return token;
+}

@@ -23,7 +23,7 @@ void releaseConstant(Constant * constant) {
 	}
 }
 
-void releaseExpression(MathExpression * expression) {
+void releaseExpression(Expression * expression) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (expression != NULL) {
 		switch (expression->type) {
@@ -31,11 +31,11 @@ void releaseExpression(MathExpression * expression) {
 			case DIVISION:
 			case MULTIPLICATION:
 			case SUBTRACTION:
-				releaseExpression(expression->leftExpression);
-				releaseExpression(expression->rightExpression);
+				releaseExpression(expression->math_expression.leftExpression);
+				releaseExpression(expression->math_expression.rightExpression);
 				break;
 			case FACTOR:
-				releaseFactor(expression->factor);
+				releaseFactor(expression->math_expression.factor);
 				break;
 		}
 		free(expression);
@@ -50,7 +50,7 @@ void releaseFactor(Factor * factor) {
 				releaseConstant(factor->constant);
 				break;
 			case EXPRESSION:
-				releaseExpression(factor->mathExpression);
+				releaseExpression(factor->expression);
 				break;
 		}
 		free(factor);
