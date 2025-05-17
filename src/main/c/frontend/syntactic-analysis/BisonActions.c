@@ -321,20 +321,6 @@ MacroStatement * MacroSemanticAction(String identifier, StringList *args, Statem
     return macro;
 }
 
-StringList * SingleStringListSemanticAction(String str) {
-    _logSyntacticAnalyzerAction(__FUNCTION__);
-    StringList * list = calloc(1, sizeof(StringList));
-    list->strings = calloc(1, sizeof(String));
-    list->strings[0] = str;
-    list->count = 1;
-    return list;
-}
-StringList * AppendStringListSemanticAction(StringList *list, String str) {
-    _logSyntacticAnalyzerAction(__FUNCTION__);
-    list->strings = realloc(list->strings, sizeof(String) * (list->count + 1));
-    list->strings[list->count++] = str;
-    return list;
-}
 Statement * MacroStatementSemanticAction(MacroStatement * stmt) {
     _logSyntacticAnalyzerAction(__FUNCTION__);
     Statement * statement = calloc(1, sizeof(Statement));
@@ -500,6 +486,51 @@ VariableStatement * VariableDeclarationSemanticAction(Type type, String identifi
 	variable->type = type;
 	variable->expression = expression;
 	return variable;
+}
+
+StringList * SingleStringListSemanticAction(String str) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	StringList * list = calloc(1, sizeof(StringList));
+	list->strings = calloc(1, sizeof(String));
+	list->strings[0] = str;
+	list->count = 1;
+	return list;
+}
+StringList * AppendStringListSemanticAction(StringList *list, String str) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	list->strings = realloc(list->strings, sizeof(String) * (list->count + 1));
+	list->strings[list->count++] = str;
+	return list;
+}
+
+IntList * SingleArrayListSemanticAction(int integer) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	IntList * list = calloc(1, sizeof(IntList));
+	list->integers = calloc(1, sizeof(int));
+	list->integers[0] = integer;
+	list->count = 1;
+	return list;
+}
+IntList * AppendArrayListSemanticAction(IntList *list, int integer) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	list->integers = realloc(list->integers, sizeof(String) * (list->count + 1));
+	list->integers[list->count++] = integer;
+	return list;
+}
+
+Statement * ArrayStatementSemanticAction(ArrayStatement * array) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Statement * statement = calloc(1, sizeof(Statement));
+	statement->type = STATEMENT_ARRAY;
+	statement->arrayStatement = array;
+	return statement;
+}
+ArrayStatement * ArraySemanticAction(String identifier, IntList * elements) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ArrayStatement * array = calloc(1, sizeof(ArrayStatement));
+	array->identifier = identifier;
+	array->elements = elements;
+	return array;
 }
 
 // ConditionalExpression *MathConditionalExpressionSemanticAction(MathExpression *math_expression) {

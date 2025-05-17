@@ -42,6 +42,8 @@
     ElseStatement * else_statement;
     VariableStatement * variableStatement;
     UnaryChangeOperatorStatement * unaryChangeOperatorStatement;
+    ArrayStatement * arrayStatement;
+    IntList * integerList;
 }
 
 /**
@@ -145,6 +147,9 @@
 %type <variableStatement> variableStatement
 %type <token> type
 %type <unaryChangeOperatorStatement> unaryChangeOperatorStatement
+%type <integerList> integerList
+%type <arrayStatement> arrayStatement
+
 /**
  * Precedence and associativity.
  *
@@ -199,6 +204,7 @@ statement:
   | returnStatement                                                 { $$ = ReturnStatementSemanticAction($1); }
   | functionStatement                                               { $$ = FunctionStatementSemanticAction($1); }
   | variableStatement                                               { $$ = VariableStatementSemanticAction($1); }
+  | arrayStatement                                                  { $$ = ArrayStatementSemanticAction($1); }
   ;
 
 unaryChangeOperatorStatement:
@@ -296,6 +302,14 @@ type:
     | BOOL                                                          { $$ = _BOOL; }
     ;
 
+arrayStatement:
+    IDENTIFIER OPEN_BRACKETS CLOSE_BRACKETS ASSIGNMENT OPEN_BRACE integerList CLOSE_BRACE { $$ = ArraySemanticAction($1, $6); }
+    ;
+
+integerList:
+      INTEGER                                                      { $$ = SingleArrayListSemanticAction($1); }
+    | integerList COMMA INTEGER                                    { $$ = AppendArrayListSemanticAction($1, $3); }
+    ;
 
 print_statement: PRINT IDENTIFIER                                   { $$ = PrintIdentifierSemanticAction($2); }
     |    PRINT STRING_START STRING STRING_END                       { $$ = PrintStringSemanticAction($3); }

@@ -53,6 +53,8 @@ typedef struct ExternalDeclaration ExternalDeclaration;
 typedef struct ElseStatement ElseStatement;
 typedef struct UnaryChangeOperatorStatement UnaryChangeOperatorStatement;
 typedef struct VariableStatement VariableStatement;
+typedef struct ArrayStatement ArrayStatement;
+typedef struct IntList IntList;
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
@@ -65,12 +67,21 @@ enum Type {
 	_VOID
 };
 
+struct ArrayStatement {
+	String identifier;
+	IntList * elements;
+};
+
+struct IntList {
+	int *integers;
+	int count;
+};
+
 struct VariableStatement {
 	String identifier;
 	Type type;
 	Expression * expression;
 };
-
 
 struct FunctionDefinition {
     String identifier;
@@ -171,7 +182,8 @@ enum StatementType {
     STATEMENT_RETURN,
 	STATEMENT_ASSIGNMENT,
 	STATEMENT_UNARY_CHANGE_OPERATOR,
-	STATEMENT_VARIABLE
+	STATEMENT_VARIABLE,
+	STATEMENT_ARRAY,
 } ;
 
 struct Statement {
@@ -190,6 +202,7 @@ struct Statement {
         ReturnStatement * returnStatement;
 		VariableStatement * variableStatement;
 		UnaryChangeOperatorStatement * unaryChangeOperatorStatement;
+		ArrayStatement * arrayStatement;
 	};
 };
 struct AssignmentStatement {
