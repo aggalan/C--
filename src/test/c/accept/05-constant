@@ -2,7 +2,8 @@ var = pito
 nar = jinto
 var = 1
 nar = 2
-WHILE var <= nar {
+WHILE var <= nar
+{
     PRINT "Hello"
     PRINT "Goodbye"
     IF nar > var {

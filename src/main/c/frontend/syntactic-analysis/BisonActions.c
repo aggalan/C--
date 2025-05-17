@@ -68,12 +68,13 @@ Factor * ConstantFactorSemanticAction(Constant * constant) {
 }
 
 StatementList* SingleStatementListSemanticAction(Statement* stmt) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	StatementList* list = calloc(1, sizeof(StatementList));
-	list->statements = calloc(1, sizeof(Statement*));
-	list->statements[0] = stmt;
-	list->count = 1;
-	return list;
+    _logSyntacticAnalyzerAction(__FUNCTION__);
+    StatementList* list = calloc(1, sizeof(StatementList));
+    list->statements = calloc(1, sizeof(StatementNode ));
+    list->statements->statement = stmt;
+    list->last = list->statements;
+    list->count = 1;
+    return list;
 }
 
 // StatementList* AppendStatementListSemanticAction(StatementList* list, Statement* stmt) {
@@ -85,16 +86,12 @@ StatementList* SingleStatementListSemanticAction(Statement* stmt) {
 
 StatementList* AppendStatementListSemanticAction(StatementList* list, Statement* stmt) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	if (list == NULL) {
-		StatementList* newList = calloc(1, sizeof(StatementList));
-		newList->statements = calloc(1, sizeof(Statement*));
-		newList->statements[0] = stmt;
-		newList->count = 1;
-		return newList;
-	}
-	list->statements = realloc(list->statements, sizeof(Statement*) * (list->count + 1));
-	list->statements[list->count++] = stmt;
-	return list;
+    StatementNode * node = calloc(1, sizeof(StatementNode));
+    node->statement = stmt;
+    list->last->next = node;
+    list->last = node;
+    list->count++;
+    return list;
 }
 
 
@@ -116,26 +113,31 @@ Statement* MatchStatementSemanticAction(MatchStatement* stmt) {
 
 
 CaseList* SingleCaseListSemanticAction(Case* c) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	CaseList* list = calloc(1, sizeof(CaseList));
-	list->cases = calloc(1, sizeof(Case*));
-	list->cases[0] = c;
-	list->count = 1;
-	return list;
+    _logSyntacticAnalyzerAction(__FUNCTION__);
+    CaseList* list = calloc(1, sizeof(CaseList));
+    list->cases = calloc(1, sizeof(CaseNode));
+    list->cases->Case = c;
+    list->last = list->cases;
+    list->count = 1;
+    return list;
 }
 
 CaseList* AppendCaseListSemanticAction(CaseList* list, Case* c) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	list->cases = realloc(list->cases, sizeof(Case*) * (list->count + 1));
-	list->cases[list->count++] = c;
-	return list;
+    CaseNode * node = calloc(1, sizeof(CaseNode));
+    node->Case = c;
+    list->last->next = node;
+    list->last = node;
+    list->count++;
+    return list;
 }
 
-Case* MatchCaseSemanticAction(int value, StatementBlock* body) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Case* caseNode = calloc(1, sizeof(Case));
-	caseNode->matchValue = value;
-	caseNode->body = body;
+Case* MatchCaseSemanticAction(int value, Statement  * body) {
+    _logSyntacticAnalyzerAction(__FUNCTION__);
+    Case *caseNode = calloc(1, sizeof(Case));
+    caseNode->matchValue = value;
+    caseNode->body = body;
+    caseNode->type = INTEGER_CASE;
 	return caseNode;
 }
 
@@ -321,20 +323,6 @@ MacroStatement * MacroSemanticAction(String identifier, StringList *args, Statem
     return macro;
 }
 
-StringList * SingleStringListSemanticAction(String str) {
-    _logSyntacticAnalyzerAction(__FUNCTION__);
-    StringList * list = calloc(1, sizeof(StringList));
-    list->strings = calloc(1, sizeof(String));
-    list->strings[0] = str;
-    list->count = 1;
-    return list;
-}
-StringList * AppendStringListSemanticAction(StringList *list, String str) {
-    _logSyntacticAnalyzerAction(__FUNCTION__);
-    list->strings = realloc(list->strings, sizeof(String) * (list->count + 1));
-    list->strings[list->count++] = str;
-    return list;
-}
 Statement * MacroStatementSemanticAction(MacroStatement * stmt) {
     _logSyntacticAnalyzerAction(__FUNCTION__);
     Statement * statement = calloc(1, sizeof(Statement));
@@ -370,11 +358,12 @@ ReturnStatement * ReturnFunctionStatementSemanticAction(FunctionStatement * func
 
 
 
-FunctionDefinition  * FunctionDefinitionSemanticAction(String identifier, StringList * parameters, StatementBlock * body){
+FunctionDefinition  * FunctionDefinitionSemanticAction(Type type, String identifier, StringList * parameters, StatementBlock * body){
     _logSyntacticAnalyzerAction(__FUNCTION__);
     FunctionDefinition * functionDefinition = calloc(1, sizeof(FunctionDefinition));
     functionDefinition->identifier = identifier;
     functionDefinition->parameters = parameters;
+	functionDefinition->type = type;
     functionDefinition->body = body;
     return functionDefinition;
 }
@@ -508,6 +497,95 @@ Unit * NewLineUnitSemanticAction(Unit * unit) {
     unit->type = NEW_LINE_UNIT;
     return newUnit;
 }
+
+Statement * VariableStatementSemanticAction(VariableStatement * var) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Statement * statement = calloc(1, sizeof(Statement));
+	statement->type = STATEMENT_VARIABLE;
+	statement->variableStatement = var;
+	return statement;
+}
+
+
+VariableStatement * VariableDeclarationSemanticAction(Type type, String identifier, Expression * expression) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	VariableStatement * variable = calloc(1, sizeof(VariableStatement));
+	variable->identifier = identifier;
+	variable->type = type;
+	variable->expression = expression;
+	return variable;
+}
+
+StringList * SingleStringListSemanticAction(String str) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+    StringList * list = calloc(1, sizeof(StringList));
+    list->strings = calloc(1, sizeof(StringNode));
+    list->strings->string = str;
+    list->last = list->strings;
+    list->count = 1;
+    return list;
+}
+StringList * AppendStringListSemanticAction(StringList *list, String str) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+    StringNode * node = calloc(1, sizeof(StringNode));
+    node->string = str;
+    list->last->next = node;
+    list->last = node;
+    list->count++;
+    return list;
+}
+
+IntList * SingleArrayListSemanticAction(int integer) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	IntList * list = calloc(1, sizeof(IntList));
+	list->integers = calloc(1, sizeof(IntNode));
+	list->integers->integer = integer;
+    list->last = list->integers;
+	list->count = 1;
+	return list;
+}
+IntList * AppendArrayListSemanticAction(IntList *list, int integer) {
+    _logSyntacticAnalyzerAction(__FUNCTION__);
+    IntNode * node = calloc(1, sizeof(IntNode));
+    node->integer = integer;
+    list->last->next = node;
+    list->last = node;
+    list->count++;
+    return list;
+}
+
+Statement * ArrayStatementSemanticAction(ArrayStatement * array) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Statement * statement = calloc(1, sizeof(Statement));
+	statement->type = STATEMENT_ARRAY;
+	statement->arrayStatement = array;
+	return statement;
+}
+ArrayStatement * ArraySemanticAction(String identifier, IntList * elements) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ArrayStatement * array = calloc(1, sizeof(ArrayStatement));
+	array->identifier = identifier;
+	array->elements = elements;
+	return array;
+}
+
+Case * MatchDefaultCaseSemanticAction(Statement * body) {
+    _logSyntacticAnalyzerAction(__FUNCTION__);
+    Case * matchDefault = calloc(1, sizeof(Case));
+    matchDefault->type = DEFAULT_CASE;
+    matchDefault->body = body;
+    return matchDefault;
+}
+
+Case * MatchCaseStringSemanticAction(String str, Statement *body) {
+    _logSyntacticAnalyzerAction(__FUNCTION__);
+    Case * matchCase = calloc(1, sizeof(Case));
+    matchCase->type = STRING_CASE;
+    matchCase->body = body;
+    matchCase->string = str;
+    return matchCase;
+}
+
 // ConditionalExpression *MathConditionalExpressionSemanticAction(MathExpression *math_expression) {
 // 	_logSyntacticAnalyzerAction(__FUNCTION__);
 // 	ConditionalExpression * condition = calloc(1, sizeof(ConditionalExpression));

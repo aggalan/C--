@@ -40,7 +40,10 @@
     Unit * unit;
     ExternalDeclaration * externalDeclaration;
     ElseStatement * else_statement;
+    VariableStatement * variableStatement;
     UnaryChangeOperatorStatement * unaryChangeOperatorStatement;
+    ArrayStatement * arrayStatement;
+    IntList * integerList;
     StatementBlock * statement_block;
 }
 
@@ -115,7 +118,8 @@
 %token <token> COMMA
 
 %token <token> UNKNOWN
-%token <token>  ARROW  RETURN
+%token <token>  ARROW
+%token <token> RETURN
 
 
 /** Non-terminals. */
@@ -143,7 +147,12 @@
 %type <unit> unit
 %type <externalDeclaration> externalDeclaration
 %type <else_statement> else_statement
+%type <variableStatement> variableStatement
+%type <token> type
 %type <unaryChangeOperatorStatement> unaryChangeOperatorStatement
+%type <integerList> integerList
+%type <arrayStatement> arrayStatement
+
 %type <statement_block> statement_block
 /**
  * Precedence and associativity.
@@ -184,7 +193,9 @@ statementList:  statement NEW_LINE statementList                             { $
 	;
 
 
-functionDefinition: INT IDENTIFIER OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS statement_block  { $$ = FunctionDefinitionSemanticAction($2, $4, $6); }
+functionDefinition:
+      type IDENTIFIER OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS statement_block  { $$ = FunctionDefinitionSemanticAction($1, $2, $4, $6); }
+    | VOID IDENTIFIER OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS statement_block  { $$ = FunctionDefinitionSemanticAction(_VOID, $2, $4, $6); }
     ;
 
 statement:
@@ -196,10 +207,13 @@ statement:
   | sort_statement                                                  { $$ = SortStatementSemanticAction($1);}
   | assignmentStatement                                             { $$ = AssignmentStatementSemanticAction($1);}
   | macro_statement                                                 { $$ = MacroStatementSemanticAction($1); }
-  | returnStatement                                               { $$ = ReturnStatementSemanticAction($1); }
-  | functionStatement                                              { $$ = FunctionStatementSemanticAction($1); }
   | unaryChangeOperatorStatement                                    { $$ = UnaryChangeOperatorStatementSemanticAction($1); }
+  | returnStatement                                                 { $$ = ReturnStatementSemanticAction($1); }
+  | functionStatement                                               { $$ = FunctionStatementSemanticAction($1); }
+  | variableStatement                                               { $$ = VariableStatementSemanticAction($1); }
+  | arrayStatement                                                  { $$ = ArrayStatementSemanticAction($1); }
   ;
+
 unaryChangeOperatorStatement:
     IDENTIFIER ADD_ONE                                          { $$ = UnaryChangeOperatorSemanticAction($1, POST_INCREMENT); }
     | IDENTIFIER MINUS_ONE                                         { $$ = UnaryChangeOperatorSemanticAction($1, POST_DECREMENT); }
@@ -226,15 +240,19 @@ statement_block: OPEN_BRACE statementList CLOSE_BRACE           { $$ = Statement
 
 sort_statement: SORT IDENTIFIER                                     { $$ = SortSemanticAction($2); }
 
-matchStatement: MATCH IDENTIFIER OPEN_BRACE matchCaseList CLOSE_BRACE
-                                                                    { $$ = MatchSemanticAction($2, $4); }
+matchStatement: MATCH IDENTIFIER OPEN_BRACE matchCaseList CLOSE_BRACE   { $$ = MatchSemanticAction($2, $4); }
+    | MATCH IDENTIFIER OPEN_BRACE NEW_LINE matchCaseList CLOSE_BRACE { $$ = MatchSemanticAction($2, $5); }
    ;
 
-matchCaseList: matchCase                                            { $$ = SingleCaseListSemanticAction($1); }
-  | matchCaseList matchCase                                         { $$ = AppendCaseListSemanticAction($1, $2); }
+matchCaseList: matchCase                                           { $$ = SingleCaseListSemanticAction($1); }
+  | matchCase NEW_LINE matchCaseList                                         { $$ = AppendCaseListSemanticAction($3, $1); }
+  | matchCase NEW_LINE                                                  { $$ = SingleCaseListSemanticAction($1); }
   ;
 
-matchCase: INTEGER ARROW statement_block       { $$ = MatchCaseSemanticAction($1, $3); }
+matchCase: INTEGER ARROW  statement        { $$ = MatchCaseSemanticAction($1, $3); }
+| STRING_START STRING STRING_END ARROW statement { $$ = MatchCaseStringSemanticAction($2, $5); }
+| DEFAULT ARROW  statement
+                                                                    { $$ = MatchDefaultCaseSemanticAction($3); }
     ;
 
 for_loop: FOR assignmentStatement TO constant statement_block
@@ -257,7 +275,7 @@ else_statement:
 
 factor:
     OPEN_PARENTHESIS expression CLOSE_PARENTHESIS                { $$ = ParenthesisFactorSemanticAction($2); }
-	|  constant														{ $$ = ConstantFactorSemanticAction($1); }
+	| constant														{ $$ = ConstantFactorSemanticAction($1); }
 	| IDENTIFIER                                                    { $$ = IdentifierFactorSemanticAction($1);}
 	| TRUE                                                        { $$ = BooleanFactorSemanticAction(TRUE); }
 	| FALSE                                                       { $$ = BooleanFactorSemanticAction(FALSE); }
@@ -282,16 +300,36 @@ expression:
     | expression AND expression                                     { $$ = ConditionalExpressionSemanticAction($1, $3, LOGICAL_AND); }
     | expression OR expression                                      { $$ = ConditionalExpressionSemanticAction($1, $3, LOGICAL_OR); }
     | NOT expression                                                { $$ = NotExpressionSemanticAction($2); }
-    | STRING                                                        { $$ = StringExpressionSemanticAction($1); }
+    | STRING_START STRING STRING_END                                { $$ = StringExpressionSemanticAction($2); }
     ;
 
 assignmentStatement: IDENTIFIER ASSIGNMENT expression               { $$ = AssignmentExpressionSemanticAction($1,$3);}
      ;
 
+variableStatement:
+      type IDENTIFIER ASSIGNMENT expression                         { $$ = VariableDeclarationSemanticAction($1, $2, $4); }
+    | type IDENTIFIER                                               { $$ = VariableDeclarationSemanticAction($1, $2, NULL); }
+    ;
+
+type:
+      INT                                                           { $$ = _INT; }
+    | STRING_TYPE                                                   { $$ = _STRING; }
+    | BOOL                                                          { $$ = _BOOL; }
+    ;
+
+arrayStatement:
+    IDENTIFIER OPEN_BRACKETS CLOSE_BRACKETS ASSIGNMENT OPEN_BRACE integerList CLOSE_BRACE { $$ = ArraySemanticAction($1, $6); }
+    ;
+
+integerList:
+      INTEGER                                                      { $$ = SingleArrayListSemanticAction($1); }
+    | integerList COMMA INTEGER                                    { $$ = AppendArrayListSemanticAction($1, $3); }
+    ;
 
 print_statement: PRINT IDENTIFIER                                   { $$ = PrintIdentifierSemanticAction($2); }
     |    PRINT STRING_START STRING STRING_END                       { $$ = PrintStringSemanticAction($3); }
     ;
+
 stringList:
     IDENTIFIER                                       { $$ = SingleStringListSemanticAction($1); }
   | stringList COMMA IDENTIFIER                            { $$ = AppendStringListSemanticAction($1, $3); }

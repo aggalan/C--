@@ -42,6 +42,8 @@
 <SINGLE_LINE_COMMENT>\n           { EndSingleLineCommentLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL);}
 
 \n[[:space:]]*			            { return NewLineLexemeAction(createLexicalAnalyzerContext()); }
+\n[[:space:]]*"{"                   { return BracketLexemeAction(createLexicalAnalyzerContext(), OPEN_BRACE); }
+\n[[:space:]]*"}"                   { return BracketLexemeAction(createLexicalAnalyzerContext(), CLOSE_BRACE); }
 
 "++"                                { return AddOneLexemeAction(createLexicalAnalyzerContext()); }
 "--"                                { return MinusOneLexemeAction(createLexicalAnalyzerContext()); }

@@ -14,6 +14,7 @@ void shutdownAbstractSyntaxTreeModule();
  * This typedefs allows self-referencing types.
  */
 
+typedef enum Type Type;
 typedef enum MathExpressionType MathExpressionType;
 typedef enum FactorType FactorType;
 typedef enum OperatorType OperatorType;
@@ -52,12 +53,50 @@ typedef struct ExternalDeclaration ExternalDeclaration;
 typedef struct ElseStatement ElseStatement;
 typedef struct UnaryChangeOperatorStatement UnaryChangeOperatorStatement;
 typedef struct StatementBlock StatementBlock;
+typedef struct VariableStatement VariableStatement;
+typedef struct ArrayStatement ArrayStatement;
+typedef struct IntList IntList;
+typedef struct StringNode StringNode;
+typedef struct IntNode IntNode;
+typedef struct StatementNode StatementNode;
+typedef struct CaseNode CaseNode;
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
 
+
+enum Type {
+	_INT,
+	_STRING,
+	_BOOL,
+	_VOID
+};
+
+struct ArrayStatement {
+	String identifier;
+	IntList * elements;
+};
+
+struct IntNode {
+    int integer;
+    IntNode *next;
+};
+
+struct IntList {
+    IntNode *integers;
+    IntNode *last;
+	int count;
+};
+
+struct VariableStatement {
+	String identifier;
+	Type type;
+	Expression * expression;
+};
+
 struct FunctionDefinition {
     String identifier;
+	Type type;
     StringList * parameters;
     StatementBlock * body;
 };
@@ -78,6 +117,7 @@ enum ComparatorType {
 	GREATER_THAN,
 	GREATER_EQUAL
 };
+
 struct FunctionStatement {
     StringList * parameters;
     String identifier;
@@ -107,9 +147,19 @@ enum ConditionalType {
 	OPERATOR,
 	CONDITIONAL_IDENTIFIER
 };
+struct StringNode {
+    String string;
+     StringNode *next;
+};
+
+struct StatementNode {
+    Statement * statement;
+    StatementNode *next;
+};
 
 struct StringList {
-	String *strings;
+    StringNode *strings;
+    StringNode *last;
 	int count;
 };
 
@@ -134,11 +184,22 @@ struct WhileLoop {
 
 struct Case {
 	int matchValue;
-	StatementBlock *body;
+	Statement *body;
+    String string;
+    enum {
+        DEFAULT_CASE,
+        INTEGER_CASE,
+        STRING_CASE
+    } type;
 };
 
+struct CaseNode {
+    Case * Case;
+    CaseNode *next;
+};
 struct CaseList {
-	Case **cases;
+	CaseNode *cases;
+    CaseNode *last;
 	int count;
 };
 
@@ -160,7 +221,8 @@ enum StatementType {
     STATEMENT_RETURN,
 	STATEMENT_ASSIGNMENT,
 	STATEMENT_UNARY_CHANGE_OPERATOR,
-
+	STATEMENT_VARIABLE,
+	STATEMENT_ARRAY,
 } ;
 
 struct Statement {
@@ -177,7 +239,9 @@ struct Statement {
         MacroStatement *macroStatement;
         FunctionStatement * functionStatement;
         ReturnStatement * returnStatement;
+		VariableStatement * variableStatement;
 		UnaryChangeOperatorStatement * unaryChangeOperatorStatement;
+		ArrayStatement * arrayStatement;
 	};
 };
 struct AssignmentStatement {
@@ -186,7 +250,8 @@ struct AssignmentStatement {
 };
 
 struct StatementList {
-	Statement **statements;
+	StatementNode * statements;
+    StatementNode * last;
 	int count;
 };
 
@@ -206,6 +271,7 @@ struct ElseStatement {
     ElseType type;
     IfStatement * elseIfStatement;
 };
+
 struct UnaryChangeOperatorStatement {
 	String identifier;
 	enum {
