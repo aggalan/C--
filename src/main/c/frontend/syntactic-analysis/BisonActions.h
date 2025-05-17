@@ -28,7 +28,7 @@ Statement *MatchStatementSemanticAction(MatchStatement *stmt);
 MatchStatement *MatchSemanticAction(String id, CaseList *cases);
 CaseList *SingleCaseListSemanticAction(Case *c);
 CaseList *AppendCaseListSemanticAction(CaseList *list, Case *c);
-Case *MatchCaseSemanticAction(int value, StatementList *body); //FIXME
+Case *MatchCaseSemanticAction(int value, Statement *body);
 ForLoop *ForLoopSemanticAction(AssignmentStatement * assignment, Constant * end, StatementList* body);
 Statement *WhileLoopStatementSemanticAction(WhileLoop *loop);
 WhileLoop *WhileLoopSemanticAction(Expression *condition, StatementList *body);
@@ -76,4 +76,7 @@ Statement * ArrayStatementSemanticAction(ArrayStatement * array);
 ArrayStatement * ArraySemanticAction(String identifier, IntList * elements);
 IntList * SingleArrayListSemanticAction(int integer);
 IntList * AppendArrayListSemanticAction(IntList *list, int integer);
+Case * MatchDefaultCaseSemanticAction(Statement * body);
+ReturnStatement * ReturnEmptySemanticAction();
+Case * MatchCaseStringSemanticAction(String str, Statement *body);
 #endif

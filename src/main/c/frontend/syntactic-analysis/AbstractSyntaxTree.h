@@ -55,6 +55,10 @@ typedef struct UnaryChangeOperatorStatement UnaryChangeOperatorStatement;
 typedef struct VariableStatement VariableStatement;
 typedef struct ArrayStatement ArrayStatement;
 typedef struct IntList IntList;
+typedef struct StringNode StringNode;
+typedef struct IntNode IntNode;
+typedef struct StatementNode StatementNode;
+typedef struct CaseNode CaseNode;
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
@@ -72,8 +76,14 @@ struct ArrayStatement {
 	IntList * elements;
 };
 
+struct IntNode {
+    int integer;
+    IntNode *next;
+};
+
 struct IntList {
-	int *integers;
+    IntNode *integers;
+    IntNode *last;
 	int count;
 };
 
@@ -129,9 +139,19 @@ enum ConditionalType {
 	OPERATOR,
 	CONDITIONAL_IDENTIFIER
 };
+struct StringNode {
+    String string;
+     StringNode *next;
+};
+
+struct StatementNode {
+    Statement * statement;
+    StatementNode *next;
+};
 
 struct StringList {
-	String *strings;
+    StringNode *strings;
+    StringNode *last;
 	int count;
 };
 
@@ -156,11 +176,22 @@ struct WhileLoop {
 
 struct Case {
 	int matchValue;
-	StatementList *body;
+	Statement *body;
+    String string;
+    enum {
+        DEFAULT_CASE,
+        INTEGER_CASE,
+        STRING_CASE
+    } type;
 };
 
+struct CaseNode {
+    Case * Case;
+    CaseNode *next;
+};
 struct CaseList {
-	Case **cases;
+	CaseNode *cases;
+    CaseNode *last;
 	int count;
 };
 
@@ -211,7 +242,8 @@ struct AssignmentStatement {
 };
 
 struct StatementList {
-	Statement **statements;
+	StatementNode * statements;
+    StatementNode * last;
 	int count;
 };
 

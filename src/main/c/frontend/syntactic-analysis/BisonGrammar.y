@@ -116,7 +116,8 @@
 %token <token> COMMA
 
 %token <token> UNKNOWN
-%token <token>  ARROW  RETURN
+%token <token>  ARROW
+%token <token> RETURN
 
 
 /** Non-terminals. */
@@ -216,6 +217,7 @@ unaryChangeOperatorStatement:
 
 returnStatement: RETURN expression                                   { $$ = ReturnSemanticAction($2); }
     | RETURN functionStatement                       { $$ = ReturnFunctionStatementSemanticAction($2); }
+
     ;
 
 functionStatement: IDENTIFIER OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS
@@ -238,7 +240,10 @@ matchCaseList: matchCase                                            { $$ = Singl
   | matchCaseList matchCase                                         { $$ = AppendCaseListSemanticAction($1, $2); }
   ;
 
-matchCase: INTEGER ARROW OPEN_BRACE statementList CLOSE_BRACE       { $$ = MatchCaseSemanticAction($1, $4); }
+matchCase: INTEGER ARROW  statement        { $$ = MatchCaseSemanticAction($1, $3); }
+| STRING_START STRING STRING_END ARROW statement { $$ = MatchCaseStringSemanticAction($2, $5); }
+| DEFAULT ARROW  statement
+                                                                    { $$ = MatchDefaultCaseSemanticAction($3); }
     ;
 
 for_loop: FOR assignmentStatement TO constant OPEN_BRACE statementList CLOSE_BRACE
