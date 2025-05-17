@@ -131,7 +131,7 @@ CaseList* AppendCaseListSemanticAction(CaseList* list, Case* c) {
 	return list;
 }
 
-Case* MatchCaseSemanticAction(int value, StatementList* body) {
+Case* MatchCaseSemanticAction(int value, StatementBlock* body) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Case* caseNode = calloc(1, sizeof(Case));
 	caseNode->matchValue = value;
@@ -139,7 +139,7 @@ Case* MatchCaseSemanticAction(int value, StatementList* body) {
 	return caseNode;
 }
 
-ForLoop* ForLoopSemanticAction(AssignmentStatement * assignment, Constant * end, StatementList* body) {
+ForLoop* ForLoopSemanticAction(AssignmentStatement * assignment, Constant * end, StatementBlock* body) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	ForLoop* loop = calloc(1, sizeof(ForLoop));
 	loop->assignment = assignment;
@@ -157,7 +157,7 @@ Statement *WhileLoopStatementSemanticAction(WhileLoop *loop) {
 	stmt->whileLoop = loop;
 	return stmt;
 }
-WhileLoop *WhileLoopSemanticAction(Expression *condition, StatementList *body) {
+WhileLoop *WhileLoopSemanticAction(Expression *condition, StatementBlock *body) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	WhileLoop *loop = calloc(1, sizeof(WhileLoop));
 	loop->condition = condition;
@@ -171,7 +171,7 @@ Statement *IfStatementSemanticAction(IfStatement *stmt) {
 	statement->ifStatement = stmt;
 	return statement;
 }
-IfStatement *IfThenSemanticAction(Expression *condition, StatementList *thenBranch, ElseStatement *elseBranch) {
+IfStatement *IfThenSemanticAction(Expression *condition, StatementBlock *thenBranch, ElseStatement *elseBranch) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	IfStatement *stmt = calloc(1, sizeof(IfStatement));
 	stmt->condition = condition;
@@ -179,7 +179,7 @@ IfStatement *IfThenSemanticAction(Expression *condition, StatementList *thenBran
     stmt->elseBranch = elseBranch;
 	return stmt;
 }
-IfStatement *IfElseSemanticAction(Expression *condition, StatementList *thenBranch, ElseStatement *elseBranch) {
+IfStatement *IfElseSemanticAction(Expression *condition, StatementBlock *thenBranch, ElseStatement *elseBranch) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	IfStatement *stmt = calloc(1, sizeof(IfStatement));
 	stmt->condition = condition;
@@ -355,21 +355,22 @@ ReturnStatement * ReturnSemanticAction(Expression * expression){
     _logSyntacticAnalyzerAction(__FUNCTION__);
     ReturnStatement * returnStatement = calloc(1, sizeof(ReturnStatement));
     returnStatement->expression = expression;
+	returnStatement->type = RETURN_EXPRESSION;
     return returnStatement;
 
 }
 ReturnStatement * ReturnFunctionStatementSemanticAction(FunctionStatement * functionStatement){
     _logSyntacticAnalyzerAction(__FUNCTION__);
     ReturnStatement * returnStatement = calloc(1, sizeof(ReturnStatement));
-    returnStatement->expression = NULL;
     returnStatement->functionStatement = functionStatement;
+	returnStatement->type = RETURN_FUNCTION_STATEMENT;
     return returnStatement;
 
 }
 
 
 
-FunctionDefinition  * FunctionDefinitionSemanticAction(String identifier, StringList * parameters, StatementList * body){
+FunctionDefinition  * FunctionDefinitionSemanticAction(String identifier, StringList * parameters, StatementBlock * body){
     _logSyntacticAnalyzerAction(__FUNCTION__);
     FunctionDefinition * functionDefinition = calloc(1, sizeof(FunctionDefinition));
     functionDefinition->identifier = identifier;
@@ -454,7 +455,7 @@ Program * EmptyProgramSemanticAction(CompilerState * compilerState) {
 }
 
 
-ElseStatement* ElseStatementSemanticAction(StatementList * stml){
+ElseStatement* ElseStatementSemanticAction(StatementBlock * stml){
     _logSyntacticAnalyzerAction(__FUNCTION__);
     ElseStatement * elseStatement = calloc(1, sizeof(ElseStatement));
     elseStatement->body = stml;
@@ -482,7 +483,31 @@ UnaryChangeOperatorStatement * UnaryChangeOperatorSemanticAction(String identifi
 	statement->type = type;
 	return statement;
 }
-
+ReturnStatement * ReturnEmptySemanticAction() {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ReturnStatement * returnStatement = calloc(1, sizeof(ReturnStatement));
+	returnStatement->type = RETURN_EMPTY;
+	return returnStatement;
+}
+Factor * FunctionCallFactorSemanticAction(FunctionStatement * functionStatement) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Factor * factor = calloc(1, sizeof(Factor));
+	factor->functionStatement = functionStatement;
+	factor->type = FUNCTION;
+}
+StatementBlock * StatementBlockSemanticAction(StatementList * statementList) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	StatementBlock * statementBlock = calloc(1, sizeof(StatementBlock));
+	statementBlock->statementList = statementList;
+	return statementBlock;
+}
+Unit * NewLineUnitSemanticAction(Unit * unit) {
+    _logSyntacticAnalyzerAction(__FUNCTION__);
+    Unit * newUnit = calloc(1, sizeof(Unit));
+	unit->units = unit;
+    unit->type = NEW_LINE_UNIT;
+    return newUnit;
+}
 // ConditionalExpression *MathConditionalExpressionSemanticAction(MathExpression *math_expression) {
 // 	_logSyntacticAnalyzerAction(__FUNCTION__);
 // 	ConditionalExpression * condition = calloc(1, sizeof(ConditionalExpression));

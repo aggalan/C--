@@ -247,3 +247,8 @@ Token CommaLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext){
     lexicalAnalyzerContext->semanticValue->token = COMMA;
     return COMMA;
 }
+Token NewLineLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = NEW_LINE;
+	return NEW_LINE;
+}

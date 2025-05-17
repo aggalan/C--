@@ -66,4 +66,5 @@ Token CommaLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 Token BooleanLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 
+Token NewLineLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 #endif

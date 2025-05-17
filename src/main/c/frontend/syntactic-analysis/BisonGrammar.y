@@ -41,6 +41,7 @@
     ExternalDeclaration * externalDeclaration;
     ElseStatement * else_statement;
     UnaryChangeOperatorStatement * unaryChangeOperatorStatement;
+    StatementBlock * statement_block;
 }
 
 /**
@@ -75,6 +76,7 @@
 %token <token> STRING_START
 %token <token> STRING_END
 %token <token> IGNORE
+%token <token> NEW_LINE
 %token <boolean> TRUE
 %token <boolean> FALSE
 
@@ -142,6 +144,7 @@
 %type <externalDeclaration> externalDeclaration
 %type <else_statement> else_statement
 %type <unaryChangeOperatorStatement> unaryChangeOperatorStatement
+%type <statement_block> statement_block
 /**
  * Precedence and associativity.
  *
@@ -163,8 +166,10 @@ program: unit                                                       { $$ = Progr
     | %empty                                                        { $$ = EmptyProgramSemanticAction(currentCompilerState()); }
     ;
 unit:
-      externalDeclaration                                           { $$ = SingleExternalDeclarationSemanticAction($1); }
-    | unit externalDeclaration                                      { $$ = AppendExternalDeclarationSemanticAction($1, $2); }
+     NEW_LINE unit                                                          { $$ = NewLineUnitSemanticAction($2); }
+    |  externalDeclaration NEW_LINE                                          { $$ = SingleExternalDeclarationSemanticAction($1); }
+    | externalDeclaration                                                 { $$ = SingleExternalDeclarationSemanticAction($1); }
+    | externalDeclaration NEW_LINE unit                                      { $$ = AppendExternalDeclarationSemanticAction($3, $1); }
     ;
 externalDeclaration:
       functionDefinition                                            { $$ = FunctionDefinitionExternalDeclarationSemanticAction($1); }
@@ -173,12 +178,13 @@ externalDeclaration:
 
  //statement                                                        { $$ = SingleStatementListSemanticAction($1); }
 
-statementList: statementList statement                              { $$ = AppendStatementListSemanticAction($1, $2); }
-    | statement                                                        { $$ = SingleStatementListSemanticAction($1); }
+statementList:  statement NEW_LINE statementList                             { $$ = AppendStatementListSemanticAction($3, $1); }
+    | statement NEW_LINE                                                       { $$ = SingleStatementListSemanticAction($1); }
+    | statement                                                                 { $$ = SingleStatementListSemanticAction($1); }
 	;
 
 
-functionDefinition: INT IDENTIFIER OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS OPEN_BRACE statementList CLOSE_BRACE  { $$ = FunctionDefinitionSemanticAction($2, $4, $7); }
+functionDefinition: INT IDENTIFIER OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS statement_block  { $$ = FunctionDefinitionSemanticAction($2, $4, $6); }
     ;
 
 statement:
@@ -202,7 +208,7 @@ unaryChangeOperatorStatement:
 
 
 returnStatement: RETURN expression                                   { $$ = ReturnSemanticAction($2); }
-    | RETURN functionStatement                       { $$ = ReturnFunctionStatementSemanticAction($2); }
+    | RETURN                                          { $$ = ReturnEmptySemanticAction(); }
     ;
 
 functionStatement: IDENTIFIER OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS
@@ -214,6 +220,9 @@ macro_statement: MACRO IDENTIFIER OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS 
                                                                         { $$ = MacroSemanticAction($2, $4, $7); }
  ;
 
+statement_block: OPEN_BRACE statementList CLOSE_BRACE           { $$ = StatementBlockSemanticAction($2); }
+            | OPEN_BRACE NEW_LINE statementList CLOSE_BRACE     { $$ =  StatementBlockSemanticAction($3); }
+  ;
 
 sort_statement: SORT IDENTIFIER                                     { $$ = SortSemanticAction($2); }
 
@@ -225,23 +234,23 @@ matchCaseList: matchCase                                            { $$ = Singl
   | matchCaseList matchCase                                         { $$ = AppendCaseListSemanticAction($1, $2); }
   ;
 
-matchCase: INTEGER ARROW OPEN_BRACE statementList CLOSE_BRACE       { $$ = MatchCaseSemanticAction($1, $4); }
+matchCase: INTEGER ARROW statement_block       { $$ = MatchCaseSemanticAction($1, $3); }
     ;
 
-for_loop: FOR assignmentStatement TO constant OPEN_BRACE statementList CLOSE_BRACE
-                                                                    { $$ = ForLoopSemanticAction($2, $4, $6); }
+for_loop: FOR assignmentStatement TO constant statement_block
+                                                                    { $$ = ForLoopSemanticAction($2, $4, $5); }
 	;
 
 while_loop:
-    WHILE expression OPEN_BRACE statementList CLOSE_BRACE
-                                                                    { $$ = WhileLoopSemanticAction($2, $4); }
+    WHILE expression statement_block
+                                                                    { $$ = WhileLoopSemanticAction($2, $3); }
     ;
 
-if_statement: IF expression OPEN_BRACE statementList CLOSE_BRACE else_statement  { $$ = IfThenSemanticAction($2, $4,$6); }
+if_statement: IF expression statement_block else_statement  { $$ = IfThenSemanticAction($2, $3,$4); }
   ;
 
 else_statement:
-    ELSE OPEN_BRACE statementList CLOSE_BRACE                      { $$ = ElseStatementSemanticAction($3); }
+    ELSE statement_block                                            { $$ = ElseStatementSemanticAction($2); }
   | ELSE if_statement                                             { $$ = ElseIfStatementSemanticAction($2); }
   | %empty                                                        { $$ = NULL; }
   ;
@@ -252,6 +261,7 @@ factor:
 	| IDENTIFIER                                                    { $$ = IdentifierFactorSemanticAction($1);}
 	| TRUE                                                        { $$ = BooleanFactorSemanticAction(TRUE); }
 	| FALSE                                                       { $$ = BooleanFactorSemanticAction(FALSE); }
+	| functionStatement                                          { $$ = FunctionCallFactorSemanticAction($1); }
 	;
 
 constant: INTEGER													{ $$ = IntegerConstantSemanticAction($1); }

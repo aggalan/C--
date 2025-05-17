@@ -51,6 +51,7 @@ typedef struct Unit Unit;
 typedef struct ExternalDeclaration ExternalDeclaration;
 typedef struct ElseStatement ElseStatement;
 typedef struct UnaryChangeOperatorStatement UnaryChangeOperatorStatement;
+typedef struct StatementBlock StatementBlock;
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
@@ -58,7 +59,7 @@ typedef struct UnaryChangeOperatorStatement UnaryChangeOperatorStatement;
 struct FunctionDefinition {
     String identifier;
     StringList * parameters;
-    StatementList * body;
+    StatementBlock * body;
 };
 
 struct PrintStatement {
@@ -83,8 +84,15 @@ struct FunctionStatement {
 };
 
 struct ReturnStatement {
-    Expression * expression;
-    FunctionStatement * functionStatement;
+	union {
+		Expression * expression;
+		FunctionStatement * functionStatement;
+	};
+	enum {
+		RETURN_EXPRESSION,
+		RETURN_FUNCTION_STATEMENT,
+		RETURN_EMPTY
+	}type;
 };
 
 
@@ -114,19 +122,19 @@ struct MacroStatement {
 
 struct IfStatement {
 	Expression *condition;
-	StatementList *thenBranch;
+	StatementBlock *thenBranch;
 	ElseStatement *elseBranch;
 };
 
 struct WhileLoop {
 	Expression *condition;
-	StatementList *body;
+	StatementBlock *body;
 };
 
 
 struct Case {
 	int matchValue;
-	StatementList *body;
+	StatementBlock *body;
 };
 
 struct CaseList {
@@ -185,7 +193,7 @@ struct StatementList {
 struct ForLoop {
 	AssignmentStatement * assignment;
 	Constant * endValue;
-	StatementList *body;
+	StatementBlock *body;
 };
 
 enum ElseType {
@@ -194,7 +202,7 @@ enum ElseType {
 };
 
 struct ElseStatement {
-    StatementList *body;
+    StatementBlock *body;
     ElseType type;
     IfStatement * elseIfStatement;
 };
@@ -244,7 +252,8 @@ enum FactorType {
 	CONSTANT,
 	EXPRESSION,
 	FACTOR_IDENTIFIER,
-	BOOLEAN_FACTOR
+	BOOLEAN_FACTOR,
+	FUNCTION,
 };
 
 struct Constant {
@@ -299,8 +308,12 @@ struct Factor {
 		Expression * expression;
 		String identifier;
 		Bool boolean;
+		FunctionStatement * functionStatement;
 	};
 	FactorType type;
+};
+struct StatementBlock {
+	StatementList * statementList;
 };
 
 struct Unit {
@@ -308,7 +321,8 @@ struct Unit {
 	ExternalDeclaration *externalDeclaration;
 	enum {
 		SINGLE,
-		NODE
+		NODE,
+		NEW_LINE_UNIT
 	}type;
 };
 struct ExternalDeclaration {
