@@ -1,6 +1,6 @@
 INT I = 0
 
-ARRAY[] = {1, 2, 3, 4, 5}
+ ARRAY[] = {1, 2, 3, 4, 5}
 
 STRING SEX = "COLOMBIA"
 
@@ -10,17 +10,17 @@ STRING foo() {
     PRINT "FOO"
 }
 
-FOR I = 2 TO 5 {
+FOR int1 = 2 TO 5 {
     PRINT I
 }
 
-IF QUESO {
+IF boolQUESO {
 
 
     PRINT "QUESO"
 
     RETURN
 }
-IF (a < 1) {
+IF (intA < 1) {
     PRINT "JUNIOR"
 }

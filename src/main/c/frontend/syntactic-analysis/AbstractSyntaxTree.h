@@ -16,6 +16,7 @@ void shutdownAbstractSyntaxTreeModule();
 
 typedef enum Type Type;
 typedef enum MathExpressionType MathExpressionType;
+typedef enum MathOperatorType MathOperatorType;
 typedef enum FactorType FactorType;
 typedef enum OperatorType OperatorType;
 typedef enum ComparatorType ComparatorType;
@@ -24,6 +25,7 @@ typedef enum StatementType StatementType;
 typedef enum ElseType ElseType;
 typedef struct Constant Constant;
 typedef struct Factor Factor;
+typedef struct BoolFactor BoolFactor;
 typedef struct Program Program;
 typedef char * String;
 typedef int Bool;
@@ -39,9 +41,14 @@ typedef struct WhileLoop WhileLoop;
 typedef struct IfStatement IfStatement;
 typedef struct PrintStatement PrintStatement;
 typedef struct AssignmentStatement AssignmentStatement;
+typedef struct AssignmentMathStatement AssignmentMathStatement;
+typedef struct AssignmentStringStatement AssignmentStringStatement;
+typedef struct AssignmentBoolStatement AssignmentBoolStatement;
 typedef struct Expression Expression;
 typedef struct NotConditionalExpression NotConditionalExpression;
 typedef struct ParenthesizedConditionalExpression ParenthesizedConditionalExpression;
+typedef struct BoolExpression BoolExpression;
+typedef struct MathExpression MathExpression;
 typedef struct SortStatement SortStatement;
 typedef struct MacroStatement MacroStatement;
 typedef struct StringList StringList;
@@ -55,6 +62,7 @@ typedef struct UnaryChangeOperatorStatement UnaryChangeOperatorStatement;
 typedef struct StatementBlock StatementBlock;
 typedef struct VariableStatement VariableStatement;
 typedef struct ArrayStatement ArrayStatement;
+typedef struct ArrayAccess ArrayAccess;
 typedef struct IntList IntList;
 typedef struct StringNode StringNode;
 typedef struct IntNode IntNode;
@@ -75,6 +83,10 @@ enum Type {
 struct ArrayStatement {
 	String identifier;
 	IntList * elements;
+};
+struct ArrayAccess {
+	String identifier;
+	MathExpression * index;
 };
 
 struct IntNode {
@@ -171,13 +183,13 @@ struct MacroStatement {
 
 
 struct IfStatement {
-	Expression *condition;
+	BoolExpression *condition;
 	StatementBlock *thenBranch;
 	ElseStatement *elseBranch;
 };
 
 struct WhileLoop {
-	Expression *condition;
+	BoolExpression *condition;
 	StatementBlock *body;
 };
 
@@ -245,7 +257,29 @@ struct Statement {
 	};
 };
 struct AssignmentStatement {
-	Expression * expression;
+	enum {
+		MATH_ASSIGNMENT,
+		STRING_ASSIGNMENT,
+		BOOL_ASSIGNMENT,
+		ARRAY_ASSIGNMENT
+	}type;
+	union {
+		AssignmentMathStatement * mathAssignment;
+		AssignmentStringStatement * stringAssignment;
+		AssignmentBoolStatement * boolAssignment;
+		ArrayStatement * arrayAssignment;
+	};
+};
+struct AssignmentMathStatement {
+	MathExpression * mathExpression;
+	String identifier;
+};
+struct AssignmentBoolStatement {
+	BoolExpression * expression;
+	String identifier;
+};
+struct AssignmentStringStatement {
+	String expression;
 	String identifier;
 };
 
@@ -256,7 +290,7 @@ struct StatementList {
 };
 
 struct ForLoop {
-	AssignmentStatement * assignment;
+	AssignmentMathStatement * assignment;
 	Constant * endValue;
 	StatementBlock *body;
 };
@@ -290,12 +324,16 @@ struct Program {
 	} type;
 };
 
-enum MathExpressionType {
+enum MathOperatorType {
 	ADDITION,
 	DIVISION,
 	FACTOR,
 	MULTIPLICATION,
 	SUBTRACTION
+};
+enum MathExpressionType {
+	FACTOR_EXPRESSION,
+	OPERATOR_EXPRESSION,
 };
 
 struct AssignmentMathExpression {
@@ -320,61 +358,85 @@ enum FactorType {
 	FACTOR_IDENTIFIER,
 	BOOLEAN_FACTOR,
 	FUNCTION,
+	ARRAY_FACTOR
 };
 
 struct Constant {
 	int value;
 };
-struct Expression {
-	enum {
-		CONDITIONAL_EXPRESSION,
-		MATH_EXPRESSION,
-		STRING_EXPRESSION
-	} type;
+struct MathExpression {
+	MathExpressionType type;
+	union {
+			Factor * factor;
+			struct {
+				MathExpression * leftExpression;
+				MathExpression * rightExpression;
+				MathOperatorType mathType;
+			};
+	};
+
+};
+struct BoolExpression {
 	union {
 		struct {
-			union {
-				Factor * factor;
-				struct {
-					Expression * leftExpression;
-					Expression * rightExpression;
-				};
-			};
-			MathExpressionType mathType;
-		} math_expression;
-		String string_expression;
+			MathExpression * expression1;
+			MathExpression * expression2;
+			ComparatorType comparatorType;
+		}comparator_expression;
 		struct {
-			union {
-				struct {
-					Expression * condition1;
-					Expression * condition2;
-					OperatorType operatorType;
-				};
-				Expression * conditional_expression;
-				Expression * parenthesized_conditional_expression;
-				struct {
-					union {
-						struct {
-							Expression * math_expression1;
-							Expression * math_expression2;
-							ComparatorType comparatorType;
-						};
-					};
-				} bool_expression;
-			} ;
+			BoolExpression * expression1;
+			BoolExpression * expression2;
+			OperatorType operatorType;
+		}logical_expression;
+		BoolFactor * boolFactor;
+	};
+	enum {
+		COMPARATOR_EXPRESSION,
+		LOGICAL_EXPRESSION,
+		BOOL_FACTOR
+	} type;
+};
+struct BoolFactor {
+	union {
+		BoolExpression * expression;
+		Bool boolean;
+		String identifier;
+		FunctionStatement * functionStatement;
+		ArrayAccess * arrayAccess;
+	};
+	enum {
+		NOT_EXPRESSION,
+		PARENTHESIS_EXPRESSION,
+		BOOLEAN_ID,
+		BOOL_CONSTANT,
+		BOOL_FUNCTION,
+		BOOL_ARRAY
+	} type;
+};
 
-			ConditionalType type;
-		} conditional_expression;
+struct Expression {
+	enum {
+		BOOLEAN_EXPRESSION,
+		MATH_EXPRESSION,
+		STRING_EXPRESSION,
+		STRING_ARRAY_EXPRESSION,
+	} type;
+	union {
+		MathExpression * math_expression;
+		String string_expression;
+		BoolExpression * bool_expression;
+		ArrayAccess * array_access;
 };
 };
 
 struct Factor {
 	union {
 		Constant * constant;
-		Expression * expression;
+		MathExpression * expression;
 		String identifier;
 		Bool boolean;
 		FunctionStatement * functionStatement;
+		ArrayAccess * arrayAccess;
 	};
 	FactorType type;
 };
@@ -405,7 +467,7 @@ struct ExternalDeclaration {
  * Node recursive destructors.
  */
 void releaseConstant(Constant * constant);
-void releaseExpression(Expression * MathExpression);
+void releaseExpression(MathExpression * MathExpression);
 void releaseFactor(Factor * factor);
 void releaseProgram(Program * program);
 void releaseStatement(Statement *stmt);

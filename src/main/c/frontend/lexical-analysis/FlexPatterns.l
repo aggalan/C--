@@ -32,8 +32,8 @@
 <MULTILINE_COMMENT>[^*]+			{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 <MULTILINE_COMMENT>.				{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 
-\"                          { BEGIN(STRING); return BeginStringLexemeAction(createLexicalAnalyzerContext()); }
-<STRING>\"                  {  BEGIN(INITIAL); return EndStringLexemeAction(createLexicalAnalyzerContext()); }
+\"                          { BEGIN(STRING);  BeginStringLexemeAction(createLexicalAnalyzerContext()); }
+<STRING>\"                  {  BEGIN(INITIAL);  EndStringLexemeAction(createLexicalAnalyzerContext()); }
 <STRING>[^\\"\n]+           { return StringLexemeAction(createLexicalAnalyzerContext()); }
 
 "//"                                { BEGIN(SINGLE_LINE_COMMENT); BeginSingleLineCommentLexemeAction(createLexicalAnalyzerContext()); }
@@ -42,8 +42,7 @@
 <SINGLE_LINE_COMMENT>\n           { EndSingleLineCommentLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL);}
 
 \n[[:space:]]*			            { return NewLineLexemeAction(createLexicalAnalyzerContext()); }
-\n[[:space:]]*"{"                   { return BracketLexemeAction(createLexicalAnalyzerContext(), OPEN_BRACE); }
-\n[[:space:]]*"}"                   { return BracketLexemeAction(createLexicalAnalyzerContext(), CLOSE_BRACE); }
+"}"[[:space:]]*\n                  { return BracketLexemeAction(createLexicalAnalyzerContext(), CLOSE_BRACE); }
 
 "++"                                { return AddOneLexemeAction(createLexicalAnalyzerContext()); }
 "--"                                { return MinusOneLexemeAction(createLexicalAnalyzerContext()); }
@@ -96,6 +95,16 @@
 "RETURN"						    { return ReturnLexemeAction(createLexicalAnalyzerContext()); }
 "SORT"                              { return SortLexemeAction(createLexicalAnalyzerContext()); }
 "DEFAULT"                           { return DefaultLexemeAction(createLexicalAnalyzerContext()); }
+
+"int"[[:alnum:]]*		            { return TypedIdentifierLexemeAction(createLexicalAnalyzerContext(), INT_ID); }
+"string"[[:alnum:]]*	            { return TypedIdentifierLexemeAction(createLexicalAnalyzerContext(), STRING_ID); }
+"bool"[[:alnum:]]*	                { return TypedIdentifierLexemeAction(createLexicalAnalyzerContext(), BOOL_ID); }
+"arr_int"[[:alnum:]]*	            { return TypedIdentifierLexemeAction(createLexicalAnalyzerContext(), INT_ARRAY_ID); }
+"arr_string"[[:alnum:]]*	        { return TypedIdentifierLexemeAction(createLexicalAnalyzerContext(), STRING_ARRAY_ID); }
+"arr_bool"[[:alnum:]]*	        { return TypedIdentifierLexemeAction(createLexicalAnalyzerContext(), BOOL_ARRAY_ID); }
+"func_int"[[:alnum:]]*	            { return TypedIdentifierLexemeAction(createLexicalAnalyzerContext(), INT_FUNCTION_ID); }
+"func_string"[[:alnum:]]*	        { return TypedIdentifierLexemeAction(createLexicalAnalyzerContext(), STRING_FUNCTION_ID); }
+"func_bool"[[:alnum:]]*	        { return TypedIdentifierLexemeAction(createLexicalAnalyzerContext(), BOOL_FUNCTION_ID); }
 
 [[:alpha:]][[:alnum:]]*             { return IdentifierLexemeAction(createLexicalAnalyzerContext()); }
 

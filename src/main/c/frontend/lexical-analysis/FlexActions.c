@@ -82,16 +82,16 @@ void EndSingleLineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerCo
 }
 
 Token BeginStringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->token= STRING_START;
-	return STRING_START;
+	if (_logIgnoredLexemes) {
+		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	}
 
 }
 
 Token EndStringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->token= STRING_END;
-	return STRING_END;
+	if (_logIgnoredLexemes) {
+		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	}
 }
 
 void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
@@ -132,7 +132,7 @@ Token BracketLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token
 Token IdentifierLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	lexicalAnalyzerContext->semanticValue->string = lexicalAnalyzerContext->lexeme;
-	return IDENTIFIER;
+	return GENERIC_ID;
 }
 
 Token TypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
@@ -251,4 +251,9 @@ Token NewLineLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	lexicalAnalyzerContext->semanticValue->token = NEW_LINE;
 	return NEW_LINE;
+}
+Token TypedIdentifierLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = token;
+	return token;
 }
