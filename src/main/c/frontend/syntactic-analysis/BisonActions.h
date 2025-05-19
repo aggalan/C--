@@ -80,6 +80,7 @@ Statement * VariableStatementSemanticAction(VariableStatement * var);
 VariableStatement * VariableDeclarationSemanticAction(Type type, String identifier, Expression * expression);
 Statement * UnaryChangeOperatorStatementSemanticAction( UnaryChangeOperatorStatement * stmt);
 UnaryChangeOperatorStatement * UnaryChangeOperatorSemanticAction(String identifier, int type);
+UnaryChangeOperatorStatement * UnaryChangeArraySemanticAction(ArrayAccess * array_access, int type);
 Statement * ArrayStatementSemanticAction(ArrayStatement * array);
 ArrayStatement * ArraySemanticAction(String identifier, IntList * elements);
 
@@ -105,4 +106,6 @@ VariableStatement * VariableBoolDeclarationSemanticAction(String identifier, Boo
 VariableStatement * VariableIntDeclarationSemanticAction(String identifier, MathExpression * value);
 VariableStatement * VariableStringDeclarationSemanticAction(String identifier, String value);
 Expression * ArrayStringAccessSemanticAction(ArrayAccess * array_access);
+Factor * UnitIncrementOperatorFactorSemanticAction(UnaryChangeOperatorStatement * statement);
+
 #endif

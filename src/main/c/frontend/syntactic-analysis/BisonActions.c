@@ -456,13 +456,30 @@ Statement * UnaryChangeOperatorStatementSemanticAction(UnaryChangeOperatorStatem
 	statement->unaryChangeOperatorStatement = stmt;
 	return statement;
 }
+UnaryChangeOperatorStatement * UnaryChangeArraySemanticAction(ArrayAccess * array_access, int type) {
+    _logSyntacticAnalyzerAction(__FUNCTION__);
+    UnaryChangeOperatorStatement * statement = calloc(1, sizeof(UnaryChangeOperatorStatement));
+    statement->arrayAccess = array_access;
+    statement->operator_type = type;
+	statement->type= ARRAY;
+    return statement;
+}
 UnaryChangeOperatorStatement * UnaryChangeOperatorSemanticAction(String identifier, int type) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	UnaryChangeOperatorStatement * statement = calloc(1, sizeof(UnaryChangeOperatorStatement));
 	statement->identifier = identifier;
-	statement->type = type;
+	statement->operator_type = type;
+	statement->type = VARIABLE;
 	return statement;
 }
+Factor * UnitIncrementOperatorFactorSemanticAction(UnaryChangeOperatorStatement * statement) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Factor * factor = calloc(1, sizeof(Factor));
+	factor->type= UNARY_CHANGE_FACTOR;
+	factor->unaryChangeOperatorStatement = statement;
+	return factor;
+}
+
 ReturnStatement * ReturnEmptySemanticAction() {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	ReturnStatement * returnStatement = calloc(1, sizeof(ReturnStatement));

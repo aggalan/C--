@@ -2,7 +2,8 @@ IF (boola) {
     intA = 1
 } ELSE IF (inta == 0) {
     PRINT a
-     intI--
+    intB ++
+     intA = arr_int[intI--]
 } ELSE {
     PRINT "brbr patapim"
 }

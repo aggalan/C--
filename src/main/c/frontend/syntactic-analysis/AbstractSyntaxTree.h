@@ -307,13 +307,22 @@ struct ElseStatement {
 };
 
 struct UnaryChangeOperatorStatement {
-	String identifier;
+	enum {
+		VARIABLE,
+		ARRAY
+	} type;
+
+	union {
+		String identifier;
+		ArrayAccess * arrayAccess;
+	};
+
 	enum {
 		PRE_INCREMENT,
 		PRE_DECREMENT,
 		POST_INCREMENT,
 		POST_DECREMENT
-	} type;
+	} operator_type;
 };
 
 struct Program {
@@ -358,7 +367,8 @@ enum FactorType {
 	FACTOR_IDENTIFIER,
 	BOOLEAN_FACTOR,
 	FUNCTION,
-	ARRAY_FACTOR
+	ARRAY_FACTOR,
+	UNARY_CHANGE_FACTOR,
 };
 
 struct Constant {
@@ -437,6 +447,7 @@ struct Factor {
 		Bool boolean;
 		FunctionStatement * functionStatement;
 		ArrayAccess * arrayAccess;
+		UnaryChangeOperatorStatement * unaryChangeOperatorStatement;
 	};
 	FactorType type;
 };

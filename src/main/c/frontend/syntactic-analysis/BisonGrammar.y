@@ -178,6 +178,7 @@
 %type <else_statement> else_statement
 %type <variableStatement> variableStatement
 %type <unaryChangeOperatorStatement> unaryChangeOperatorStatement
+%type <unaryChangeOperatorStatement> unaryIncrementOperatorExpression
 %type <integerList> integerList
 %type <arrayStatement> arrayStatement
 %type <assignmentMathStatement> assignmentForLoopExpression
@@ -243,10 +244,10 @@ statement:
   ;
 
 unaryChangeOperatorStatement:
-    INT_ID ADD_ONE                                          { $$ = UnaryChangeOperatorSemanticAction($1, POST_INCREMENT); }
-    | INT_ID MINUS_ONE                                         { $$ = UnaryChangeOperatorSemanticAction($1, POST_DECREMENT); }
-    | ADD_ONE INT_ID                                          { $$ = UnaryChangeOperatorSemanticAction($2, PRE_INCREMENT); }
-    | MINUS_ONE INT_ID                                  { $$ = UnaryChangeOperatorSemanticAction($2, PRE_DECREMENT); }
+    INT_ID ADD_ONE NEW_LINE                                         { $$ = UnaryChangeOperatorSemanticAction($1, POST_INCREMENT); }
+    | INT_ID MINUS_ONE  NEW_LINE                                       { $$ = UnaryChangeOperatorSemanticAction($1, POST_DECREMENT); }
+    | ADD_ONE INT_ID  NEW_LINE                                        { $$ = UnaryChangeOperatorSemanticAction($2, PRE_INCREMENT); }
+    | MINUS_ONE INT_ID NEW_LINE                                 { $$ = UnaryChangeOperatorSemanticAction($2, PRE_DECREMENT); }
     ;
 
 returnStatement: RETURN expression  NEW_LINE                                 { $$ = ReturnSemanticAction($2); }
@@ -319,7 +320,19 @@ factor:
 	| INT_ID                                                    { $$ = IdentifierFactorSemanticAction($1);}
 	| intArrayAccess                                              { $$ = ArrayFactorSemanticAction($1); }
 	| intFunctionStatement                                          { $$ = FunctionCallFactorSemanticAction($1); }
+	| unaryIncrementOperatorExpression                          { $$ = UnitIncrementOperatorFactorSemanticAction($1); }
 	;
+
+unaryIncrementOperatorExpression:
+    ADD_ONE INT_ID                                          { $$ = UnaryChangeOperatorSemanticAction($2, PRE_INCREMENT); }
+    | MINUS_ONE INT_ID                                         { $$ = UnaryChangeOperatorSemanticAction($2, PRE_DECREMENT); }
+    | INT_ID ADD_ONE                                          { $$ = UnaryChangeOperatorSemanticAction($1, POST_INCREMENT); }
+    | INT_ID MINUS_ONE                                         { $$ = UnaryChangeOperatorSemanticAction($1, POST_DECREMENT); }
+    | intArrayAccess ADD_ONE                                          { $$ = UnaryChangeArraySemanticAction($1, POST_INCREMENT); }
+    | intArrayAccess MINUS_ONE                                         { $$ = UnaryChangeArraySemanticAction($1, POST_DECREMENT); }
+    | ADD_ONE intArrayAccess                                           { $$ = UnaryChangeArraySemanticAction($2, PRE_INCREMENT); }
+    | MINUS_ONE intArrayAccess                                          { $$ = UnaryChangeArraySemanticAction($2, PRE_DECREMENT); }
+    ;
 
 constant: INTEGER													{ $$ = IntegerConstantSemanticAction($1); }
 	;
