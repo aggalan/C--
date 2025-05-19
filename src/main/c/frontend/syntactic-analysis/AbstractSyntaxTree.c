@@ -235,7 +235,11 @@ void releaseWhileLoop(WhileLoop *loop) {
 }
 void releasePrintStatement(PrintStatement *stmt) {
     logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-    if (stmt) free(stmt);
+    if (stmt) {
+        free(stmt->identifier);
+        free(stmt);
+
+    }
 }
 void releaseSortStatement(SortStatement *stmt) {
     logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
