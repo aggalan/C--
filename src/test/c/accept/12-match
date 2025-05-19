@@ -1,9 +1,4 @@
 MATCH X {
 2 -> PRINT HOLA
-3 -> x = x + 2
-1 -> x = x + 1
-"NICO" -> x = x + 4
-"AGUS" -> x = x + 5
-"NICO" -> x = x + 6
-DEFAULT -> x = x + 3
+3 -> PRINT HOLA
 }

@@ -1,20 +1,20 @@
-IF (a) {
-    A = 1
-} ELSE IF (a == 0) {
+IF (boola) {
+    intA = 1
+} ELSE IF (inta == 0) {
     PRINT a
-    -- I
+     intI--
 } ELSE {
     PRINT "brbr patapim"
 }
 
-IF A {
+IF boolA {
     PRINT "A"
-} ELSE IF (a == 0) {
+} ELSE IF (intla == 0) {
     PRINT a
 } ELSE {
     PRINT "brbr patapim"
 }
 
-IF NICO {
+IF boolNICO {
     PRINT "NICO"
 }

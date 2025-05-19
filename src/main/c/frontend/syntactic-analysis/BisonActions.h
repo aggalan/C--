@@ -27,7 +27,7 @@ Statement *ForLoopStatementSemanticAction(ForLoop *loop);
 Statement *MatchStatementSemanticAction(MatchStatement *stmt);
 MatchStatement *MatchSemanticAction(String id, CaseList *cases);
 CaseList *SingleCaseListSemanticAction(Case *c);
-CaseList *AppendCaseListSemanticAction(CaseList *list, Case *c);
+CaseList *AppendCaseListSemanticAction(Case * c, CaseList *list);
 Case *MatchCaseSemanticAction(int value, Statement *body); //FIXME
 ForLoop *ForLoopSemanticAction(AssignmentMathStatement * assignment, Constant * end, StatementBlock* body);
 Statement *WhileLoopStatementSemanticAction(WhileLoop *loop);

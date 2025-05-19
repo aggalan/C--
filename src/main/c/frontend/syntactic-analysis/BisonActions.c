@@ -121,7 +121,7 @@ CaseList* SingleCaseListSemanticAction(Case* c) {
     return list;
 }
 
-CaseList* AppendCaseListSemanticAction(CaseList* list, Case* c) {
+CaseList* AppendCaseListSemanticAction(Case* c,CaseList* list) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
     CaseNode * node = calloc(1, sizeof(CaseNode));
     node->Case = c;

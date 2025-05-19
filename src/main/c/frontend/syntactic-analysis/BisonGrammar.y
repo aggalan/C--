@@ -215,7 +215,7 @@ externalDeclaration:
 
  //statement                                                        { $$ = SingleStatementListSemanticAction($1); }
 
-statementList:  statement statementList                             { $$ = AppendStatementListSemanticAction($2, $1); }
+statementList: statement statementList                             { $$ = AppendStatementListSemanticAction($2, $1); }
     | statement                                                                 { $$ = SingleStatementListSemanticAction($1); }
 	;
 
@@ -246,7 +246,7 @@ unaryChangeOperatorStatement:
     INT_ID ADD_ONE                                          { $$ = UnaryChangeOperatorSemanticAction($1, POST_INCREMENT); }
     | INT_ID MINUS_ONE                                         { $$ = UnaryChangeOperatorSemanticAction($1, POST_DECREMENT); }
     | ADD_ONE INT_ID                                          { $$ = UnaryChangeOperatorSemanticAction($2, PRE_INCREMENT); }
-    | MINUS_ONE INT_ID                                         { $$ = UnaryChangeOperatorSemanticAction($2, PRE_DECREMENT); }
+    | MINUS_ONE INT_ID                                  { $$ = UnaryChangeOperatorSemanticAction($2, PRE_DECREMENT); }
     ;
 
 returnStatement: RETURN expression  NEW_LINE                                 { $$ = ReturnSemanticAction($2); }
@@ -283,12 +283,12 @@ matchStatement: MATCH GENERIC_ID OPEN_BRACE matchCaseList CLOSE_BRACE   { $$ = M
     | MATCH GENERIC_ID OPEN_BRACE NEW_LINE matchCaseList CLOSE_BRACE { $$ = MatchSemanticAction($2, $5); }
    ;
 
-matchCaseList: matchCase                                           { $$ = SingleCaseListSemanticAction($1); }
-  | matchCase NEW_LINE matchCaseList                                         { $$ = AppendCaseListSemanticAction($3, $1); }
-  | matchCase NEW_LINE                                                  { $$ = SingleCaseListSemanticAction($1); }
+matchCaseList:
+    matchCase                                  { $$ = SingleCaseListSemanticAction($1); }
+  | matchCase NEW_LINE matchCaseList           { $$ = AppendCaseListSemanticAction($1, $3); }
   ;
 
-matchCase: INTEGER ARROW  statement                                 { $$ = MatchCaseSemanticAction($1, $3); }
+matchCase: INTEGER ARROW statement                                 { $$ = MatchCaseSemanticAction($1, $3); }
 | STRING  ARROW statement                                           { $$ = MatchCaseStringSemanticAction($1, $3); }
 | DEFAULT ARROW  statement
                                                                     { $$ = MatchDefaultCaseSemanticAction($3); }
