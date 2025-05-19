@@ -238,7 +238,6 @@ void releasePrintStatement(PrintStatement *stmt) {
     if (stmt) {
         free(stmt->identifier);
         free(stmt);
-
     }
 }
 void releaseSortStatement(SortStatement *stmt) {

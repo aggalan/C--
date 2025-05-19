@@ -383,9 +383,9 @@ Unit * SingleExternalDeclarationSemanticAction(ExternalDeclaration * externalDec
 Unit * AppendExternalDeclarationSemanticAction(Unit * unit, ExternalDeclaration * externalDeclaration) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Unit * newUnit = calloc(1, sizeof(Unit));
-	unit->externalDeclaration = externalDeclaration;
-	unit->units = unit;
-	unit->type = NODE;
+	newUnit->externalDeclaration = externalDeclaration;
+	newUnit->units = unit;  // Link to previous units
+	newUnit->type = NODE;
 	return newUnit;
 }
 ExternalDeclaration * FunctionDefinitionExternalDeclarationSemanticAction(FunctionDefinition * functionDefinition) {
