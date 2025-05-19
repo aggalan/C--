@@ -407,7 +407,6 @@ void releaseArrayAccess(ArrayAccess *access) {
     logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
     if (!access) return;
     releaseMathExpression(access->index);
-    free(access->identifier);
     free(access);
 }
 void releaseIntList(IntList *list) {
