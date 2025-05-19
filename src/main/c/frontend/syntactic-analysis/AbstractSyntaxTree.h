@@ -478,14 +478,45 @@ struct ExternalDeclaration {
  * Node recursive destructors.
  */
 void releaseConstant(Constant * constant);
-void releaseExpression(MathExpression * MathExpression);
+void releaseExpression(Expression * MathExpression);
 void releaseFactor(Factor * factor);
 void releaseProgram(Program * program);
 void releaseStatement(Statement *stmt);
 void releaseStatementList(StatementList *list);
 void releaseForLoop(ForLoop *loop);
 void releaseMatchStatement(MatchStatement *match);
-void releaseCase(Case *caseNode);
+void releaseCase(Case *c);
 void releaseCaseList(CaseList *caseList);
-
+/**
+ * Additional node recursive destructors.
+ */
+ void releaseMathExpression(MathExpression * mathExpression);
+void releaseIfStatement(IfStatement * ifStatement);
+void releaseElseStatement(ElseStatement * elseStatement);
+void releaseWhileLoop(WhileLoop * whileLoop);
+void releasePrintStatement(PrintStatement * printStatement);
+void releaseSortStatement(SortStatement * sortStatement);
+void releaseMacroStatement(MacroStatement * macroStatement);
+void releaseFunctionStatement(FunctionStatement * functionStatement);
+void releaseReturnStatement(ReturnStatement * returnStatement);
+void releaseAssignmentStatement(AssignmentStatement * assignmentStatement);
+void releaseAssignmentMathStatement(AssignmentMathStatement * assignmentMathStatement);
+void releaseAssignmentStringStatement(AssignmentStringStatement * assignmentStringStatement);
+void releaseAssignmentBoolStatement(AssignmentBoolStatement * assignmentBoolStatement);
+void releaseUnaryChangeOperatorStatement(UnaryChangeOperatorStatement * unaryChangeOperatorStatement);
+void releaseVariableStatement(VariableStatement * variableStatement);
+void releaseArrayStatement(ArrayStatement * arrayStatement);
+void releaseBoolExpression(BoolExpression * boolExpression);
+void releaseBoolFactor(BoolFactor * boolFactor);
+void releaseStringList(StringList * stringList);
+void releaseFunctionDefinition(FunctionDefinition * functionDefinition);
+void releaseStatementBlock(StatementBlock * statementBlock);
+void releaseArrayAccess(ArrayAccess * arrayAccess);
+void releaseIntList(IntList * intList);
+void releaseUnit(Unit * unit);
+void releaseExternalDeclaration(ExternalDeclaration * externalDeclaration);
+void releaseIntNode(IntNode * node);
+void releaseStringNode(StringNode * node);
+void releaseStatementNode(StatementNode * node);
+void releaseCaseNode(CaseNode * node);
 #endif

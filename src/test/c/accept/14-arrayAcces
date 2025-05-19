@@ -1,0 +1,5 @@
+numeros[]={7,5,2,4,6,4}
+
+FOR intI=0 TO 5 {
+      arr_intnumeros[intI++]--
+}

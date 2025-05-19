@@ -68,6 +68,39 @@
 %destructor { releaseConstant($$); } <constant>
 %destructor { releaseFactor($$); } <factor>
 %destructor { releaseProgram($$); } <program>
+%destructor { releaseMatchStatement($$); } <matchStatement>
+%destructor { releaseCase($$); } <matchCase>
+%destructor { releaseCaseList($$); } <caseList>
+%destructor { releaseStatement($$); } <statement>
+%destructor { releaseStatementList($$); } <statementList>
+%destructor { releaseExpression($$); } <expression>
+%destructor { releaseStatement($$); } <assignmentStatement>
+%destructor { releaseForLoop($$); } <forLoop>
+%destructor { releaseWhileLoop($$); } <whileLoop>
+%destructor { releaseIfStatement($$); } <ifStatement>
+%destructor { releasePrintStatement($$); } <printStatement>
+%destructor { releaseSortStatement($$); } <sortStatement>
+%destructor { releaseMacroStatement($$); } <macroStatement>
+%destructor { releaseStringList($$); } <stringList>
+%destructor { releaseReturnStatement($$); } <returnStatement>
+%destructor { releaseFunctionStatement($$); } <functionStatement>
+%destructor { releaseFunctionDefinition($$); } <functionDefinition>
+%destructor { releaseUnit($$); } <unit>
+%destructor { releaseExternalDeclaration($$); } <externalDeclaration>
+%destructor { releaseElseStatement($$); } <else_statement>
+%destructor { releaseVariableStatement($$); } <variableStatement>
+%destructor { releaseUnaryChangeOperatorStatement($$); } <unaryChangeOperatorStatement>
+%destructor { releaseArrayStatement($$); } <arrayStatement>
+%destructor { releaseIntList($$); } <integerList>
+%destructor { releaseStatementBlock($$); } <statement_block>
+%destructor { releaseArrayAccess($$); } <arrayAccess>
+%destructor { releaseAssignmentMathStatement($$); } <assignmentMathStatement>
+%destructor { releaseAssignmentBoolStatement($$); } <assignmentBoolStatement>
+%destructor { releaseAssignmentStringStatement($$); } <assignmentStringStatement>
+%destructor { releaseBoolFactor($$); } <boolFactor>
+%destructor { releaseBoolExpression($$); } <boolExpression>
+%destructor { releaseMathExpression($$); } <mathExpression>
+
 */
 
 /** Terminals. */
@@ -238,16 +271,21 @@ statement:
   | assignmentStatement                                             { $$ = AssignmentStatementSemanticAction($1);}
   | macro_statement                                                 { $$ = MacroStatementSemanticAction($1); }
   | unaryChangeOperatorStatement                                    { $$ = UnaryChangeOperatorStatementSemanticAction($1); }
+
   | returnStatement                                                 { $$ = ReturnStatementSemanticAction($1); }
   | functionStatement                                               { $$ = FunctionStatementSemanticAction($1); }
   | variableStatement                                               { $$ = VariableStatementSemanticAction($1); }
   ;
 
 unaryChangeOperatorStatement:
-    INT_ID ADD_ONE NEW_LINE                                         { $$ = UnaryChangeOperatorSemanticAction($1, POST_INCREMENT); }
-    | INT_ID MINUS_ONE  NEW_LINE                                       { $$ = UnaryChangeOperatorSemanticAction($1, POST_DECREMENT); }
-    | ADD_ONE INT_ID  NEW_LINE                                        { $$ = UnaryChangeOperatorSemanticAction($2, PRE_INCREMENT); }
-    | MINUS_ONE INT_ID NEW_LINE                                 { $$ = UnaryChangeOperatorSemanticAction($2, PRE_DECREMENT); }
+    INT_ID ADD_ONE                  NEW_LINE                                         { $$ = UnaryChangeOperatorSemanticAction($1, POST_INCREMENT); }
+    | INT_ID MINUS_ONE              NEW_LINE                                       { $$ = UnaryChangeOperatorSemanticAction($1, POST_DECREMENT); }
+    | ADD_ONE INT_ID                NEW_LINE                                        { $$ = UnaryChangeOperatorSemanticAction($2, PRE_INCREMENT); }
+    | MINUS_ONE INT_ID              NEW_LINE                                 { $$ = UnaryChangeOperatorSemanticAction($2, PRE_DECREMENT); }
+    | intArrayAccess ADD_ONE        NEW_LINE                                  { $$ = UnaryChangeArraySemanticAction($1, POST_INCREMENT); }
+    | intArrayAccess MINUS_ONE      NEW_LINE                                     { $$ = UnaryChangeArraySemanticAction($1, POST_DECREMENT); }
+    | ADD_ONE intArrayAccess        NEW_LINE                                    { $$ = UnaryChangeArraySemanticAction($2, PRE_INCREMENT); }
+    | MINUS_ONE intArrayAccess      NEW_LINE                                   { $$ = UnaryChangeArraySemanticAction($2, PRE_DECREMENT); }
     ;
 
 returnStatement: RETURN expression  NEW_LINE                                 { $$ = ReturnSemanticAction($2); }
