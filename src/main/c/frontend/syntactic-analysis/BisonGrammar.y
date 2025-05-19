@@ -284,12 +284,13 @@ matchStatement: MATCH GENERIC_ID OPEN_BRACE matchCaseList CLOSE_BRACE   { $$ = M
    ;
 
 matchCaseList:
-    matchCase                                  { $$ = SingleCaseListSemanticAction($1); }
-  | matchCase NEW_LINE matchCaseList           { $$ = AppendCaseListSemanticAction($1, $3); }
+    matchCase                                   { $$ = SingleCaseListSemanticAction($1); }
+  | matchCaseList matchCase                     { $$ = AppendCaseListSemanticAction($2, $1); }
+
   ;
 
 matchCase: INTEGER ARROW statement                                 { $$ = MatchCaseSemanticAction($1, $3); }
-| STRING  ARROW statement                                           { $$ = MatchCaseStringSemanticAction($1, $3); }
+| STRING ARROW statement                                           { $$ = MatchCaseStringSemanticAction($1, $3); }
 | DEFAULT ARROW  statement
                                                                     { $$ = MatchDefaultCaseSemanticAction($3); }
     ;
