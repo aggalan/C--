@@ -200,7 +200,7 @@ void releaseCaseNode(CaseNode *node) {
 void releaseMathExpression(MathExpression *expr) {
     logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
     if (!expr) return;
-    if (expr->type == FACTOR_EXPRESSION) {
+    if (expr->type == FACTOR) {
         releaseFactor(expr->factor);
     } else {
         releaseMathExpression(expr->leftExpression);
@@ -239,7 +239,7 @@ void releasePrintStatement(PrintStatement *stmt) {
 }
 void releaseSortStatement(SortStatement *stmt) {
     logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-    if (stmt) free(stmt);
+    if (stmt != NULL) free(stmt);
 }
 
 void releaseMacroStatement(MacroStatement *stmt) {
