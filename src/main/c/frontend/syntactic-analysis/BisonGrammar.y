@@ -236,6 +236,7 @@
 
 program: unit                                                       { $$ = ProgramSemanticAction(currentCompilerState(), $1); }
     | %empty                                                        { $$ = EmptyProgramSemanticAction(currentCompilerState()); }
+
     ;
 unit:
      NEW_LINE unit                                                          { $$ = NewLineUnitSemanticAction($2); }

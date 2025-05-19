@@ -502,7 +502,7 @@ StatementBlock * StatementBlockSemanticAction(StatementList * statementList) {
 Unit * NewLineUnitSemanticAction(Unit * unit) {
     _logSyntacticAnalyzerAction(__FUNCTION__);
     Unit * newUnit = calloc(1, sizeof(Unit));
-	unit->units = unit;
+	newUnit->units = unit;
     unit->type = NEW_LINE_UNIT;
     return newUnit;
 }
