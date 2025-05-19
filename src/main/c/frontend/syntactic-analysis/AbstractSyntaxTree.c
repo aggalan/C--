@@ -28,6 +28,7 @@ void releaseExpression(Expression * expression) {
                 releaseBoolExpression(expression->bool_expression);
                 break;
             case STRING_EXPRESSION:
+                if (expression->string_expression) free(expression->string_expression);
                 break;
             case STRING_ARRAY_EXPRESSION:
                 releaseArrayAccess(expression->array_access);
@@ -236,7 +237,8 @@ void releaseWhileLoop(WhileLoop *loop) {
 void releasePrintStatement(PrintStatement *stmt) {
     logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
     if (stmt) {
-        free(stmt->identifier);
+        if (stmt->identifier)
+            free(stmt->identifier);  // Free the string
         free(stmt);
     }
 }
@@ -256,6 +258,7 @@ void releaseMacroStatement(MacroStatement *stmt) {
 void releaseFunctionStatement(FunctionStatement *stmt) {
     logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
     if (!stmt) return;
+    if (stmt->identifier) free(stmt->identifier);
     releaseStringList(stmt->parameters);
     free(stmt);
 }
@@ -323,6 +326,7 @@ void releaseUnaryChangeOperatorStatement(UnaryChangeOperatorStatement *stmt) {
 void releaseVariableStatement(VariableStatement *stmt) {
     logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
     if (!stmt) return;
+    if (stmt->identifier) free(stmt->identifier);
     releaseExpression(stmt->expression);
     free(stmt);
 }
@@ -330,6 +334,7 @@ void releaseVariableStatement(VariableStatement *stmt) {
 void releaseArrayStatement(ArrayStatement *stmt) {
     logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
     if (!stmt) return;
+    if (stmt->identifier) free(stmt->identifier);
     releaseIntList(stmt->elements);
     free(stmt);
 }
@@ -445,6 +450,7 @@ void releaseStringNode(StringNode *node) {
     logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
     while (node) {
         StringNode *next = node->next;
+        if (node->string) free(node->string);
         free(node);
         node = next;
     }
