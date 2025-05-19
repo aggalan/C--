@@ -168,6 +168,7 @@ void releaseForLoop(ForLoop *loop){
 void releaseMatchStatement(MatchStatement *match){
     logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
     if (match != NULL) {
+        if (match->identifier) free(match->identifier);
         releaseCaseList(match->caseList);
         free(match);
     }
@@ -250,6 +251,7 @@ void releaseSortStatement(SortStatement *stmt) {
 void releaseMacroStatement(MacroStatement *stmt) {
     logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
     if (!stmt) return;
+    if (stmt->identifier) free(stmt->identifier);
     releaseStringList(stmt->parameters);
     releaseStatement(stmt->statement);
     free(stmt);
