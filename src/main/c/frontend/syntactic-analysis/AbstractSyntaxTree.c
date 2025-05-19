@@ -336,7 +336,7 @@ void releaseVariableStatement(VariableStatement *stmt) {
 void releaseArrayStatement(ArrayStatement *stmt) {
     logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
     if (!stmt) return;
-    if (stmt->identifier) free(stmt->identifier);
+    free(stmt->identifier);
     releaseIntList(stmt->elements);
     free(stmt);
 }
@@ -393,6 +393,7 @@ void releaseFunctionDefinition(FunctionDefinition *def) {
     if (!def) return;
     releaseStringList(def->parameters);
     releaseStatementBlock(def->body);
+    free(def->identifier);
     free(def);
 }
 
@@ -406,6 +407,7 @@ void releaseArrayAccess(ArrayAccess *access) {
     logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
     if (!access) return;
     releaseMathExpression(access->index);
+    free(access->identifier);
     free(access);
 }
 void releaseIntList(IntList *list) {
