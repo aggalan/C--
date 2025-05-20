@@ -246,8 +246,8 @@ struct Statement {
 		WhileLoop *whileLoop;
 		IfStatement *ifStatement;
         PrintStatement *printStatement;
-		SortStatement * sort_statement;
-		AssignmentStatement * assignment_statement;
+		SortStatement * sortStatement;
+		AssignmentStatement * assignmentStatement;
         MacroStatement *macroStatement;
         FunctionStatement * functionStatement;
         ReturnStatement * returnStatement;
@@ -392,12 +392,12 @@ struct BoolExpression {
 			MathExpression * expression1;
 			MathExpression * expression2;
 			ComparatorType comparatorType;
-		}comparator_expression;
+		}comparatorExpression;
 		struct {
 			BoolExpression * expression1;
 			BoolExpression * expression2;
 			OperatorType operatorType;
-		}logical_expression;
+		}logicalExpression;
 		BoolFactor * boolFactor;
 	};
 	enum {
@@ -432,10 +432,10 @@ struct Expression {
 		STRING_ARRAY_EXPRESSION,
 	} type;
 	union {
-		MathExpression * math_expression;
-		String string_expression;
-		BoolExpression * bool_expression;
-		ArrayAccess * array_access;
+		MathExpression * mathExpression;
+		String stringExpression;
+		BoolExpression * boolExpression;
+		ArrayAccess * arrayAccess;
 };
 };
 

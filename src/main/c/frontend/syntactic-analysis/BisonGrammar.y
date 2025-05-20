@@ -39,12 +39,12 @@
     FunctionDefinition * functionDefinition;
     Unit * unit;
     ExternalDeclaration * externalDeclaration;
-    ElseStatement * else_statement;
+    ElseStatement * elseStatement;
     VariableStatement * variableStatement;
     UnaryChangeOperatorStatement * unaryChangeOperatorStatement;
     ArrayStatement * arrayStatement;
     IntList * integerList;
-    StatementBlock * statement_block;
+    StatementBlock * statementBlock;
     ArrayAccess * arrayAccess;
     AssignmentMathStatement * assignmentMathStatement;
     AssignmentBoolStatement * assignmentBoolStatement;
@@ -87,12 +87,12 @@
 %destructor { releaseFunctionDefinition($$); } <functionDefinition>
 %destructor { releaseUnit($$); } <unit>
 %destructor { releaseExternalDeclaration($$); } <externalDeclaration>
-%destructor { releaseElseStatement($$); } <else_statement>
+%destructor { releaseElseStatement($$); } <elseStatement>
 %destructor { releaseVariableStatement($$); } <variableStatement>
 %destructor { releaseUnaryChangeOperatorStatement($$); } <unaryChangeOperatorStatement>
 %destructor { releaseArrayStatement($$); } <arrayStatement>
 %destructor { releaseIntList($$); } <integerList>
-%destructor { releaseStatementBlock($$); } <statement_block>
+%destructor { releaseStatementBlock($$); } <statementBlock>
 %destructor { releaseArrayAccess($$); } <arrayAccess>
 %destructor { releaseAssignmentMathStatement($$); } <assignmentMathStatement>
 %destructor { releaseAssignmentBoolStatement($$); } <assignmentBoolStatement>
@@ -187,18 +187,18 @@
 %type <caseList> matchCaseList
 %type <statement> statement
 %type <statementList> statementList
-%type <forLoop> for_loop
-%type <whileLoop> while_loop
-%type <ifStatement> if_statement
-%type <printStatement> print_statement
-%type <sortStatement> sort_statement
+%type <forLoop> forLoop
+%type <whileLoop> whileLoop
+%type <ifStatement> ifStatement
+%type <printStatement> printStatement
+%type <sortStatement> sortStatement
 %type <expression> expression
 %type <boolExpression> boolExpression
 %type <mathExpression> mathExpression
 %type <assignmentMathStatement> assignmentMathStatement
 %type <assignmentBoolStatement> assignmentBoolStatement
 %type <assignmentStringStatement> assignmentStringStatement
-%type <macroStatement> macro_statement
+%type <macroStatement> macroStatement
 %type <stringList> stringList
 %type <returnStatement> returnStatement
 %type <functionStatement> intFunctionStatement
@@ -208,7 +208,7 @@
 %type <functionDefinition> functionDefinition
 %type <unit> unit
 %type <externalDeclaration> externalDeclaration
-%type <else_statement> else_statement
+%type <elseStatement> elseStatement
 %type <variableStatement> variableStatement
 %type <unaryChangeOperatorStatement> unaryChangeOperatorStatement
 %type <unaryChangeOperatorStatement> unaryIncrementOperatorExpression
@@ -216,7 +216,7 @@
 %type <arrayStatement> arrayStatement
 %type <assignmentMathStatement> assignmentForLoopExpression
 
-%type <statement_block> statement_block
+%type <statementBlock> statementBlock
 /**
  * Precedence and associativity.
  *
@@ -256,21 +256,21 @@ statementList: statement statementList                             { $$ = Append
 
 
 functionDefinition:
-      INT GENERIC_ID OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS statement_block  { $$ = FunctionDefinitionSemanticAction(_INT, $2, $4, $6); }
-    | VOID GENERIC_ID OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS statement_block  { $$ = FunctionDefinitionSemanticAction(_VOID, $2, $4, $6); }
-    | STRING_TYPE GENERIC_ID OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS statement_block     { $$ = FunctionDefinitionSemanticAction(_STRING, $2, $4, $6); }
-    | BOOL GENERIC_ID OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS statement_block  { $$ = FunctionDefinitionSemanticAction(_STRING, $2, $4, $6); }
+      INT GENERIC_ID OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS statementBlock  { $$ = FunctionDefinitionSemanticAction(_INT, $2, $4, $6); }
+    | VOID GENERIC_ID OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS statementBlock  { $$ = FunctionDefinitionSemanticAction(_VOID, $2, $4, $6); }
+    | STRING_TYPE GENERIC_ID OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS statementBlock     { $$ = FunctionDefinitionSemanticAction(_STRING, $2, $4, $6); }
+    | BOOL GENERIC_ID OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS statementBlock  { $$ = FunctionDefinitionSemanticAction(_STRING, $2, $4, $6); }
     ;
 
 statement:
-    for_loop                                                        { $$ = ForLoopStatementSemanticAction($1); }
+    forLoop                                                        { $$ = ForLoopStatementSemanticAction($1); }
   | matchStatement                                                  { $$ = MatchStatementSemanticAction($1); }
-  | while_loop                                                      { $$ = WhileLoopStatementSemanticAction($1); }
-  | if_statement                                                    { $$ = IfStatementSemanticAction($1); }
-  | print_statement                                                 { $$ = PrintStatementSemanticAction($1);}
-  | sort_statement                                                  { $$ = SortStatementSemanticAction($1);}
+  | whileLoop                                                      { $$ = WhileLoopStatementSemanticAction($1); }
+  | ifStatement                                                    { $$ = IfStatementSemanticAction($1); }
+  | printStatement                                                 { $$ = PrintStatementSemanticAction($1);}
+  | sortStatement                                                  { $$ = SortStatementSemanticAction($1);}
   | assignmentStatement                                             { $$ = AssignmentStatementSemanticAction($1);}
-  | macro_statement                                                 { $$ = MacroStatementSemanticAction($1); }
+  | macroStatement                                                 { $$ = MacroStatementSemanticAction($1); }
   | unaryChangeOperatorStatement                                    { $$ = UnaryChangeOperatorStatementSemanticAction($1); }
 
   | returnStatement                                                 { $$ = ReturnStatementSemanticAction($1); }
@@ -309,15 +309,15 @@ functionStatement: boolFunctionStatement                                { $$ = $
     ;
 
 
-macro_statement: MACRO GENERIC_ID OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS ARROW statement
+macroStatement: MACRO GENERIC_ID OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS ARROW statement
                                                                         { $$ = MacroSemanticAction($2, $4, $7); }
  ;
 
-statement_block: OPEN_BRACE statementList CLOSE_BRACE           { $$ = StatementBlockSemanticAction($2); }
+statementBlock: OPEN_BRACE statementList CLOSE_BRACE           { $$ = StatementBlockSemanticAction($2); }
             | OPEN_BRACE NEW_LINE statementList CLOSE_BRACE     { $$ =  StatementBlockSemanticAction($3); }
   ;
 
-sort_statement: SORT INT_ARRAY_ID  NEW_LINE                                   { $$ = SortSemanticAction($2); }
+sortStatement: SORT INT_ARRAY_ID  NEW_LINE                                   { $$ = SortSemanticAction($2); }
 
 matchStatement: MATCH GENERIC_ID OPEN_BRACE matchCaseList CLOSE_BRACE   { $$ = MatchSemanticAction($2, $4); }
     | MATCH GENERIC_ID OPEN_BRACE NEW_LINE matchCaseList CLOSE_BRACE { $$ = MatchSemanticAction($2, $5); }
@@ -335,21 +335,21 @@ matchCase: INTEGER ARROW statement                                 { $$ = MatchC
                                                                     { $$ = MatchDefaultCaseSemanticAction($3); }
     ;
 
-for_loop: FOR assignmentForLoopExpression TO constant statement_block
+forLoop: FOR assignmentForLoopExpression TO constant statementBlock
                                                                     { $$ = ForLoopSemanticAction($2, $4, $5); }
 	;
 
-while_loop:
-    WHILE boolExpression statement_block
+whileLoop:
+    WHILE boolExpression statementBlock
                                                                     { $$ = WhileLoopSemanticAction($2, $3); }
     ;
 
-if_statement: IF boolExpression statement_block else_statement  { $$ = IfThenSemanticAction($2, $3,$4); }
+ifStatement: IF boolExpression statementBlock elseStatement  { $$ = IfThenSemanticAction($2, $3,$4); }
   ;
 
-else_statement:
-    ELSE statement_block                                            { $$ = ElseStatementSemanticAction($2); }
-  | ELSE if_statement                                             { $$ = ElseIfStatementSemanticAction($2); }
+elseStatement:
+    ELSE statementBlock                                            { $$ = ElseStatementSemanticAction($2); }
+  | ELSE ifStatement                                             { $$ = ElseIfStatementSemanticAction($2); }
   | %empty                                                        { $$ = NULL; }
   ;
 
@@ -457,7 +457,7 @@ integerList:
     | integerList COMMA INTEGER                                    { $$ = AppendArrayListSemanticAction($1, $3); }
     ;
 
-print_statement: PRINT GENERIC_ID  NEW_LINE                                 { $$ = PrintIdentifierSemanticAction($2); }
+printStatement: PRINT GENERIC_ID  NEW_LINE                                 { $$ = PrintIdentifierSemanticAction($2); }
     |    PRINT STRING  NEW_LINE                                             { $$ = PrintStringSemanticAction($2); }
     ;
 

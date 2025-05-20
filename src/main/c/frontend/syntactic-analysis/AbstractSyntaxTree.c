@@ -22,16 +22,16 @@ void releaseExpression(Expression * expression) {
     if (expression != NULL) {
         switch (expression->type) {
             case MATH_EXPRESSION:
-                releaseMathExpression(expression->math_expression);
+                releaseMathExpression(expression->mathExpression);
                 break;
             case BOOLEAN_EXPRESSION:
-                releaseBoolExpression(expression->bool_expression);
+                releaseBoolExpression(expression->boolExpression);
                 break;
             case STRING_EXPRESSION:
-                if (expression->string_expression) free(expression->string_expression);
+                if (expression->stringExpression) free(expression->stringExpression);
                 break;
             case STRING_ARRAY_EXPRESSION:
-                releaseArrayAccess(expression->array_access);
+                releaseArrayAccess(expression->arrayAccess);
                 break;
         }
         free(expression);
@@ -112,7 +112,7 @@ void releaseStatement(Statement *stmt){
                 releasePrintStatement(stmt->printStatement);
                 break;
             case STATEMENT_SORT:
-                releaseSortStatement(stmt->sort_statement);
+                releaseSortStatement(stmt->sortStatement);
                 break;
             case STATEMENT_MACRO:
                 releaseMacroStatement(stmt->macroStatement);
@@ -124,7 +124,7 @@ void releaseStatement(Statement *stmt){
                 releaseReturnStatement(stmt->returnStatement);
                 break;
             case STATEMENT_ASSIGNMENT:
-                releaseAssignmentStatement(stmt->assignment_statement);
+                releaseAssignmentStatement(stmt->assignmentStatement);
                 break;
             case STATEMENT_UNARY_CHANGE_OPERATOR:
                 releaseUnaryChangeOperatorStatement(stmt->unaryChangeOperatorStatement);
@@ -347,12 +347,12 @@ void releaseBoolExpression(BoolExpression *expr) {
     if (!expr) return;
     switch (expr->type) {
         case COMPARATOR_EXPRESSION:
-            releaseMathExpression(expr->comparator_expression.expression1);
-            releaseMathExpression(expr->comparator_expression.expression2);
+            releaseMathExpression(expr->comparatorExpression.expression1);
+            releaseMathExpression(expr->comparatorExpression.expression2);
             break;
         case LOGICAL_EXPRESSION:
-            releaseBoolExpression(expr->logical_expression.expression1);
-            releaseBoolExpression(expr->logical_expression.expression2);
+            releaseBoolExpression(expr->logicalExpression.expression1);
+            releaseBoolExpression(expr->logicalExpression.expression2);
             break;
         case BOOL_FACTOR:
             releaseBoolFactor(expr->boolFactor);
