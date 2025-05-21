@@ -58,7 +58,8 @@
     BoolExpression * boolExpression;
     MathExpression * mathExpression;
     MacroInvocationStatement * macroInvocationStatement;
-
+    ArrayAssignment * arrayAssignment;
+    BoolList * boolList;
 
 }
 
@@ -233,6 +234,9 @@
 %type <assignmentMathStatement> assignmentForLoopExpression
 %type <macroInvocationStatement> macroInvocationStatement
 %type <statementBlock> statementBlock
+%type <arrayAssignment> arrayAssignment
+%type <stringList> strings
+%type <boolList> boolList
 /**
  * Precedence and associativity.
  *
@@ -465,7 +469,8 @@ assignmentStatement:
     assignmentMathStatement                                          { $$ = AssignmentIntExpressionSemanticAction($1); }
     | assignmentBoolStatement                                         { $$ = AssignmentBoolExpressionSemanticAction($1); }
     | assignmentStringStatement                                       { $$ = AssignmentStringExpressionSemanticAction($1); }
-    | arrayStatement                                                 { $$ = AssignmentArrayExpressionSemanticAction($1); }
+    | arrayStatement                                                 { $$ = AssignmentArrayStatementSemanticAction($1); }
+    | arrayAssignment                                                { $$ = AssignmentArrayExpressionSemanticAction($1); }
     ;
 assignmentMathStatement: INT_ID ASSIGNMENT mathExpression  NEW_LINE             { $$ = AssignmentIntSemanticAction($1,$3);}
      ;
@@ -486,14 +491,34 @@ assignmentStringStatement: STRING_ID ASSIGNMENT stringExpression  NEW_LINE      
         ;
 
 
+arrayAssignment: intArrayAccess ASSIGNMENT mathExpression  NEW_LINE             { $$ = AssignmentIntArraySemanticAction($1,$3);}
+    | boolArrayAccess ASSIGNMENT boolExpression  NEW_LINE             { $$ = AssignmentBoolArraySemanticAction($1,$3);}
+    | stringArrayAccess ASSIGNMENT stringExpression  NEW_LINE            { $$ = AssignmentStringArraySemanticAction($1,$3);}
+    ;
+
 arrayStatement:
-    GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS ASSIGNMENT OPEN_BRACE integerList CLOSE_BRACE { $$ = ArraySemanticAction($1, $6); }
+    GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS ASSIGNMENT OPEN_BRACE integerList CLOSE_BRACE       { $$ = ArrayIntStatementSemanticAction($1, $6); }
+    | INT GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS ASSIGNMENT OPEN_BRACE integerList CLOSE_BRACE { $$ = ArrayIntStatementSemanticAction($2, $7); }
+    | INT GENERIC_ID OPEN_BRACKETS mathExpression CLOSE_BRACKETS                                { $$ = ArrayDeclarationSemanticAction($2, $4, _INT); }
+    | BOOL GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS ASSIGNMENT OPEN_BRACE boolList CLOSE_BRACE { $$ = ArrayBoolStatementSemanticAction($2, $7); }
+    | BOOL GENERIC_ID OPEN_BRACKETS mathExpression CLOSE_BRACKETS                                { $$ = ArrayDeclarationSemanticAction($2, $4, _BOOL); }
+    | STRING_TYPE GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS ASSIGNMENT OPEN_BRACE strings CLOSE_BRACE { $$ = ArrayStringStatementSemanticAction($2, $7); }
+    | STRING_TYPE GENERIC_ID OPEN_BRACKETS mathExpression CLOSE_BRACKETS                            { $$ = ArrayDeclarationSemanticAction($2, $4, _STRING); }
     ;
 
 integerList:
       INTEGER                                                      { $$ = SingleArrayListSemanticAction($1); }
     | integerList COMMA INTEGER                                    { $$ = AppendArrayListSemanticAction($1, $3); }
     ;
+boolList:
+      TRUE                                                        { $$ = SingleBoolArrayListSemanticAction($1); }
+    | boolList COMMA TRUE                                        { $$ = AppendBoolArrayListSemanticAction($1, $3); }
+    | FALSE                                                       { $$ = SingleBoolArrayListSemanticAction($1); }
+    | boolList COMMA FALSE                                      { $$ = AppendBoolArrayListSemanticAction($1, $3); }
+    ;
+strings:
+      STRING                                                     { $$ = SingleStringListSemanticAction($1); }
+    | strings COMMA STRING                                     { $$ = AppendStringListSemanticAction($1, $3); }
 
 printStatement: PRINT stringExpression  NEW_LINE                                 { $$ = PrintIdentifierSemanticAction($2); }
     | PRINT mathExpression  NEW_LINE                                        { $$ = PrintMathExpressionSemanticAction($2); }

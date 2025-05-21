@@ -550,11 +550,66 @@ IntList * AppendArrayListSemanticAction(IntList *list, int integer) {
     return list;
 }
 
-ArrayStatement * ArraySemanticAction(String identifier, IntList * elements) {
+ArrayStatement * ArrayIntStatementSemanticAction(String identifier, IntList * elements) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	ArrayStatement * array = calloc(1, sizeof(ArrayStatement));
 	array->identifier = identifier;
 	array->elements = elements;
+	array->type = INT_LIST;
+	return array;
+}
+ArrayStatement * ArrayStringStatementSemanticAction(String identifier, StringList * elements) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ArrayStatement * array = calloc(1, sizeof(ArrayStatement));
+	array->identifier = identifier;
+	array->stringElements = elements;
+	array->type = STRING_LIST;
+	return array;
+}
+ArrayStatement * ArrayBoolStatementSemanticAction(String identifier, BoolList * elements) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ArrayStatement * array = calloc(1, sizeof(ArrayStatement));
+	array->identifier = identifier;
+	array->boolElements = elements;
+	array->type = BOOL_LIST;
+	return array;
+}
+ArrayStatement * ArrayDeclarationSemanticAction(String identifier, MathExpression * size, Type type) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ArrayStatement * array = calloc(1, sizeof(ArrayStatement));
+	array->identifier = identifier;
+	array->mathExpression = size;
+	if (type == _INT) {
+		array->type = INT_SIZE;
+	} else if (type == _STRING) {
+		array->type = STRING_SIZE;
+	} else if (type == _BOOL) {
+		array->type = BOOL_SIZE;
+	}
+	return array;
+}
+ArrayAssignment * AssignmentIntArraySemanticAction(ArrayAccess * arrayAccess, MathExpression * mathExpression) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ArrayAssignment * array = calloc(1, sizeof(ArrayAssignment));
+	array->arrayAccess = arrayAccess;
+	array->mathExpression = mathExpression;
+	array->type = ARRAY_MATH_EXPRESSION;
+	return array;
+}
+ArrayAssignment * AssignmentStringArraySemanticAction(ArrayAccess * arrayAccess, StringExpression * stringExpression) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ArrayAssignment * array = calloc(1, sizeof(ArrayAssignment));
+	array->arrayAccess = arrayAccess;
+	array->stringExpression = stringExpression;
+	array->type = ARRAY_STRING_EXPRESSION;
+	return array;
+}
+ArrayAssignment * AssignmentBoolArraySemanticAction(ArrayAccess * arrayAccess, BoolExpression * boolExpression) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ArrayAssignment * array = calloc(1, sizeof(ArrayAssignment));
+	array->arrayAccess = arrayAccess;
+	array->boolExpression = boolExpression;
+	array->type = ARRAY_BOOL_EXPRESSION;
 	return array;
 }
 
@@ -644,10 +699,10 @@ AssignmentBoolStatement * AssignmentBoolSemanticAction(String id, BoolExpression
 	assignmentStatement->expression = boolExpression;
 	return assignmentStatement;
 }
-AssignmentStatement * AssignmentArrayExpressionSemanticAction(ArrayStatement * assignmentStatement) {
+AssignmentStatement * AssignmentArrayStatementSemanticAction(ArrayStatement * assignmentStatement) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	AssignmentStatement * statement = calloc(1, sizeof(AssignmentStatement));
-	statement->type = ARRAY_ASSIGNMENT;
+	statement->type = ARRAY_STATEMENT;
 	statement->arrayAssignment = assignmentStatement;
 	return statement;
 }
@@ -874,6 +929,31 @@ Factor * MacroInvocationFactorSemanticAction(MacroInvocationStatement * macroInv
 	factor->macroInvocationStatement = macroInvocationStatement;
 	factor->type = MACRO_INVOCATION;
 	return factor;
+}
+BoolList * SingleBoolArrayListSemanticAction(Bool boolean) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	BoolList* list = calloc(1, sizeof(BoolList));
+	list->booleans = calloc(1, sizeof(BoolNode ));
+	list->booleans->boolean = boolean;
+	list->last = list->booleans;
+	list->count = 1;
+	return list;
+}
+BoolList * AppendBoolArrayListSemanticAction(BoolList *list, Bool boolean) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	BoolNode * node = calloc(1, sizeof(BoolNode));
+	node->boolean = boolean;
+	list->last->next = node;
+	list->last = node;
+	list->count++;
+	return list;
+}
+AssignmentStatement * AssignmentArrayExpressionSemanticAction(ArrayAssignment * assignmentExpression) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	AssignmentStatement * statement = calloc(1, sizeof(AssignmentStatement));
+	statement->type = ARRAY_ASSIGNMENT;
+	statement->arrayAssignmentExpression = assignmentExpression;
+	return statement;
 }
 // ConditionalExpression *MathConditionalExpressionSemanticAction(MathExpression *math_expression) {
 // 	_logSyntacticAnalyzerAction(__FUNCTION__);

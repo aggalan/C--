@@ -1,9 +1,0 @@
-numeros[]={7,5,2,4,6,4}
-VOID main(){
-
-FOR i = 0 TO 5 {
-RETURN 2
-}
-   SORT arr_intnumeros DESC
-   PRINT "numeros"
-}

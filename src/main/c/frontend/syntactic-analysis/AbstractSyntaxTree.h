@@ -78,6 +78,9 @@ typedef struct IntNode IntNode;
 typedef struct StatementNode StatementNode;
 typedef struct CaseNode CaseNode;
 typedef struct MacroInvocationStatement MacroInvocationStatement;
+typedef struct BoolList  BoolList;
+typedef struct BoolNode BoolNode;
+typedef struct ArrayAssignment ArrayAssignment;
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
@@ -95,7 +98,21 @@ enum Type {
 
 struct ArrayStatement {
 	String identifier;
-	IntList * elements;
+	union {
+		IntList * elements;
+		StringList * stringElements;
+		BoolList * boolElements;
+        MathExpression * mathExpression;
+    };
+	enum {
+		INT_LIST,
+		STRING_LIST,
+		BOOL_LIST,
+		STRING_SIZE,
+		INT_SIZE,
+		BOOL_SIZE,
+	}type;
+
 };
 struct ArrayAccess {
 	String identifier;
@@ -105,6 +122,31 @@ struct ArrayAccess {
 struct IntNode {
     int integer;
     IntNode *next;
+};
+
+struct BoolNode {
+    Bool boolean;
+    BoolNode *next;
+};
+struct BoolList {
+	BoolNode * booleans;
+	BoolNode *last;
+    int count;
+};
+
+struct ArrayAssignment {
+    ArrayAccess * arrayAccess;
+	union {
+		MathExpression * mathExpression;
+		StringExpression * stringExpression;
+		BoolExpression * boolExpression;
+	};
+	enum {
+        ARRAY_MATH_EXPRESSION,
+        ARRAY_STRING_EXPRESSION,
+        ARRAY_BOOL_EXPRESSION
+    } type;
+
 };
 
 struct IntList {
@@ -362,13 +404,15 @@ struct AssignmentStatement {
 		MATH_ASSIGNMENT,
 		STRING_ASSIGNMENT,
 		BOOL_ASSIGNMENT,
-		ARRAY_ASSIGNMENT
+		ARRAY_ASSIGNMENT,
+		ARRAY_STATEMENT
 	}type;
 	union {
 		AssignmentMathStatement * mathAssignment;
 		AssignmentStringStatement * stringAssignment;
 		AssignmentBoolStatement * boolAssignment;
 		ArrayStatement * arrayAssignment;
+		ArrayAssignment * arrayAssignmentExpression;
 	};
 };
 struct AssignmentMathStatement {
@@ -631,5 +675,9 @@ void releaseArgumentDefNode(ArgumentDefNode * argumentDefNode);
 void releaseArgumentDefList(ArgumentDefList * argumentDefList);
 void releaseStringExpression(StringExpression * stringExpression);
 void releaseMacroInvocationStatement(MacroInvocationStatement * macroInvocationStatement);
+void releaseArrayAssignment( ArrayAssignment *stmt);
+void releaseBoolNode(BoolNode *node);
+void releaseBoolList(BoolList *list);
+void releaseArrayStatement(ArrayStatement *stmt);
 
 #endif

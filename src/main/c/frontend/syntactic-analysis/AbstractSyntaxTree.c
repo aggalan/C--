@@ -301,10 +301,25 @@ void releaseAssignmentStatement(AssignmentStatement *stmt) {
         case BOOL_ASSIGNMENT:
             releaseAssignmentBoolStatement(stmt->boolAssignment);
             break;
-        case ARRAY_ASSIGNMENT:
+        case ARRAY_STATEMENT:
             releaseArrayStatement(stmt->arrayAssignment);
             break;
+        case ARRAY_ASSIGNMENT:
+            releaseArrayAssignment(stmt->arrayAssignmentExpression);
     }
+    free(stmt);
+}
+void releaseArrayAssignment( ArrayAssignment *stmt) {
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)stmt);
+    if (!stmt) return;
+    if (stmt->type == ARRAY_MATH_EXPRESSION) {
+        free(stmt->mathExpression);
+    } else if (stmt->type == ARRAY_STRING_EXPRESSION ) {
+        releaseStringExpression(stmt->stringExpression);
+    } else if (stmt->type == ARRAY_BOOL_EXPRESSION) {
+        releaseBoolExpression(stmt->boolExpression);
+    }
+    releaseArrayAccess(stmt->arrayAccess);
     free(stmt);
 }
 void releaseAssignmentMathStatement(AssignmentMathStatement *stmt) {
@@ -352,9 +367,31 @@ void releaseVariableStatement(VariableStatement *stmt) {
 void releaseArrayStatement(ArrayStatement *stmt) {
     logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)stmt);
     if (!stmt) return;
+    if (stmt->type == INT_LIST) {
+        releaseIntList(stmt->elements);
+    } else if (stmt->type == STRING_LIST) {
+        releaseStringList(stmt->stringElements);
+    } else if (stmt->type == BOOL_LIST) {
+        releaseBoolList(stmt->boolElements);
+    } else if (stmt->type == INT_SIZE || stmt->type == STRING_SIZE || stmt->type == BOOL_SIZE) {
+        releaseMathExpression(stmt->mathExpression);
+    }
     free(stmt->identifier);
-    releaseIntList(stmt->elements);
     free(stmt);
+}
+void releaseBoolList(BoolList *list) {
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)list);
+    if (!list) return;
+    releaseBoolNode(list->booleans);
+    free(list);
+}
+void releaseBoolNode(BoolNode *node) {
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)node);
+    while (node) {
+        BoolNode *next = node->next;
+        free(node);
+        node = next;
+    }
 }
 
 

@@ -77,7 +77,10 @@ VariableStatement * VariableDeclarationSemanticAction(Type type, String identifi
 Statement * UnaryChangeOperatorStatementSemanticAction( UnaryChangeOperatorStatement * stmt);
 UnaryChangeOperatorStatement * UnaryChangeOperatorSemanticAction(String identifier, int type);
 UnaryChangeOperatorStatement * UnaryChangeArraySemanticAction(ArrayAccess * arrayAccess, int type);
-ArrayStatement * ArraySemanticAction(String identifier, IntList * elements);
+ArrayStatement * ArrayIntStatementSemanticAction(String identifier, IntList * elements);
+ArrayStatement * ArrayStringStatementSemanticAction(String identifier, StringList * elements);
+ArrayStatement * ArrayBoolStatementSemanticAction(String identifier, BoolList * elements);
+ArrayStatement * ArrayDeclarationSemanticAction(String identifier, MathExpression * size, Type type);
 Factor * MacroInvocationFactorSemanticAction(MacroInvocationStatement * macroInvocationStatement);
 IntList * SingleArrayListSemanticAction(int integer);
 IntList * AppendArrayListSemanticAction(IntList *list, int integer);
@@ -96,7 +99,8 @@ AssignmentStatement * AssignmentStringExpressionSemanticAction(AssignmentStringS
 AssignmentStringStatement * AssignmentStringSemanticAction(String id, StringExpression * expression);
 AssignmentStatement * AssignmentBoolExpressionSemanticAction(AssignmentBoolStatement * assignmentStatement);
 AssignmentBoolStatement * AssignmentBoolSemanticAction(String id, BoolExpression * boolExpression);
-AssignmentStatement * AssignmentArrayExpressionSemanticAction(ArrayStatement * assignmentStatement);
+AssignmentStatement * AssignmentArrayStatementSemanticAction(ArrayStatement * assignmentStatement);
+AssignmentStatement * AssignmentArrayExpressionSemanticAction(ArrayAssignment * assignmentStatement);
 VariableStatement * VariableBoolDeclarationSemanticAction(String identifier, BoolExpression * value);
 VariableStatement * VariableIntDeclarationSemanticAction(String identifier, MathExpression * value);
 VariableStatement * VariableStringDeclarationSemanticAction(String identifier, StringExpression * value);
@@ -119,4 +123,9 @@ StringExpression * FunctionCallStringExpressionSemanticAction(FunctionStatement 
 PrintStatement * PrintMathExpressionSemanticAction(MathExpression * mathExpression);
 Statement * MacroInvocationStatementSemanticAction(MacroInvocationStatement * macroInvocationStatement);
 MacroInvocationStatement * MacroInvocationSemanticAction(String identifier, ArgumentList * args);
+ArrayAssignment * AssignmentIntArraySemanticAction(ArrayAccess * arrayAccess, MathExpression * mathExpression);
+ArrayAssignment * AssignmentStringArraySemanticAction(ArrayAccess * arrayAccess, StringExpression * stringExpression);
+ArrayAssignment * AssignmentBoolArraySemanticAction(ArrayAccess * arrayAccess, BoolExpression * boolExpression);
+BoolList * SingleBoolArrayListSemanticAction(Bool boolean);
+BoolList * AppendBoolArrayListSemanticAction(BoolList *list, Bool boolean);
 #endif
