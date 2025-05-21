@@ -116,5 +116,6 @@ ArgumentDefList * SingleArgumentDefListSemanticAction(ArgumentDef * argumentDef)
 ArgumentDefList * AppendArgumentDefListSemanticAction(ArgumentDefList * list,ArgumentDef * argumentDef);
 ArgumentDef * ArgumentDefSemanticAction(String identifier, Type type);
 Expression * StringExpressionSemanticAction(StringExpression * expression);
+StringExpression * FunctionCallStringExpressionSemanticAction(FunctionStatement * functionStatement);
 
 #endif

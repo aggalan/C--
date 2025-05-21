@@ -212,7 +212,6 @@
 %type <functionStatement> stringFunctionStatement
 %type <functionStatement> functionStatement
 %type <functionDefinition> functionDefinition
-%type <functionStatement> functionExpression
 %type <functionStatement> boolFunctionExpression
 %type <functionStatement> intFunctionExpression
 %type <functionStatement> stringFunctionExpression
@@ -329,11 +328,6 @@ functionStatement: boolFunctionStatement                                { $$ = $
     stringFunctionExpression: STRING_FUNCTION_ID OPEN_PARENTHESIS argumentList CLOSE_PARENTHESIS
                                                                             { $$ = FunctionSemanticAction($1, $3); }
 
-functionExpression:
-    boolFunctionExpression                                             { $$ = $1; }
-    | intFunctionExpression                                              { $$ =  $1; }
-    | stringFunctionExpression                                           { $$ =  $1;}
-    ;
 
 macroStatement: MACRO GENERIC_ID OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS ARROW statement
                                                                         { $$ = MacroSemanticAction($2, $4, $7); }
@@ -384,7 +378,7 @@ factor:
 	| constant														{ $$ = ConstantFactorSemanticAction($1); }
 	| INT_ID                                                    { $$ = IdentifierFactorSemanticAction($1);}
 	| intArrayAccess                                              { $$ = ArrayFactorSemanticAction($1); }
-	| intFunctionStatement                                          { $$ = FunctionCallFactorSemanticAction($1); }
+	| intFunctionExpression                                          { $$ = FunctionCallFactorSemanticAction($1); }
 	| unaryIncrementOperatorExpression                          { $$ = UnitIncrementOperatorFactorSemanticAction($1); }
 	;
 
@@ -419,6 +413,7 @@ mathExpression:
 stringExpression: STRING                                            { $$ = FactorStringExpressionSemanticAction($1); }
     | stringArrayAccess                                             { $$ = ArrayStringAccessSemanticAction($1); }
     | STRING_ID                                                { $$ = IdentifierStringExpressionSemanticAction($1); }
+    | stringFunctionExpression                                      { $$ = FunctionCallStringExpressionSemanticAction($1); }
     ;
 
 boolExpression:
@@ -505,7 +500,6 @@ argumentList:
   argumentValue: mathExpression                                        { $$ = MathExpressionArgValueSemanticAction($1); }
     | boolExpression                                        { $$ = BoolExpressionArgValueSemanticAction($1); }
     | stringExpression                                        { $$ = StringExpressionArgValueSemanticAction($1); }
-    | functionExpression                                    { $$ = FunctionExpressionArgValueSemanticAction($1); }
     | BOOL_ARRAY_ID                                         { $$ = ArrayBoolSemanticAction($1); }
     | INT_ARRAY_ID                                          { $$ = ArrayIntSemanticAction($1); }
     | STRING_ARRAY_ID                                       { $$ = ArrayStringSemanticAction($1); }

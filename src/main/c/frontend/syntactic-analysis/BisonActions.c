@@ -838,6 +838,13 @@ Expression * StringExpressionSemanticAction(StringExpression * stringExpression)
 	return expression;
 }
 
+StringExpression * FunctionCallStringExpressionSemanticAction(FunctionStatement * functionStatement) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	StringExpression * expression = calloc(1, sizeof(StringExpression));
+	expression->functionStatement = functionStatement;
+	expression->type = STRING_EXPRESSION_FUNCTION;
+	return expression;
+}
 
 // ConditionalExpression *MathConditionalExpressionSemanticAction(MathExpression *math_expression) {
 // 	_logSyntacticAnalyzerAction(__FUNCTION__);

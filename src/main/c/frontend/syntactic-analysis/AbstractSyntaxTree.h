@@ -175,11 +175,13 @@ struct StringExpression {
 		String identifier;
 		String string;
 		ArrayAccess * arrayAccess;
+		FunctionStatement * functionStatement;
 	};
 	enum {
 		STRING_IDENTIFIER_EXPRESSION,
 		STRING_VALUE_EXPRESSION,
 		STRING_EXPRESSION_ARRAY,
+		STRING_EXPRESSION_FUNCTION,
 	}type;
 };
 
