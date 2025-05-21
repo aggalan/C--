@@ -506,7 +506,6 @@ argumentList:
 
   argumentValue: mathExpression                                        { $$ = MathExpressionArgValueSemanticAction($1); }
     | boolExpression                                        { $$ = BoolExpressionArgValueSemanticAction($1); }
-    | unaryIncrementOperatorExpression                        { $$ = UnaryIncrementOperatorExpressionArgValueSemanticAction($1); }
     | stringExpression                                        { $$ = StringExpressionArgValueSemanticAction($1); }
     | functionExpression                                    { $$ = FunctionExpressionArgValueSemanticAction($1); }
     | BOOL_ARRAY_ID                                         { $$ = ArrayBoolSemanticAction($1); }
