@@ -1,0 +1,28 @@
+// Definir variable
+
+INT n
+STRING msgs = “The operation was successful”
+STRING msgf = “The operation failed”
+BOOL status
+
+// Definir la función
+
+BOOL operation(INT number) {
+    number++
+    IF number/2 == 0 {
+        RETURN TRUE
+    }
+RETURN FALSE
+}
+
+// Definir donde arranca el programa
+
+VOID main() {
+    n = 0
+    status = operation(n)
+    IF status {
+       PRINT(msgs)
+    } ELSE {
+        PRINT(msgf)
+    }
+}
