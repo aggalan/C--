@@ -478,3 +478,86 @@ logDebugging(_logger, "Executing destructor: %s, ptr: %p", __FUNCTION__, (void*)
 
     }
 }
+
+
+
+void releaseArgumentValue(ArgumentValue * argumentValue) {
+    logDebugging(_logger, "Executing destructor: %s ptr: %p", __FUNCTION__, (void*)argumentValue);
+    if (argumentValue != NULL) {
+          switch (argumentValue->type) {
+            case ARGUMENT_MATH_EXPRESSION:
+                releaseMathExpression(argumentValue->mathExpression);
+                break;
+            case ARGUMENT_BOOL_EXPRESSION:
+                releaseBoolExpression(argumentValue->boolExpression);
+                break;
+            case ARGUMENT_STRING_EXPRESSION:
+                if (argumentValue->stringExpression) free(argumentValue->stringExpression);
+                break;
+            case ARGUMENT_FUNCTION_EXPRESSION:
+                releaseFunctionStatement(argumentValue->functionExpression);
+                break;
+            case ARGUMENT_BOOL_ARRAY_ID:
+            case ARGUMENT_STRING_ARRAY_ID:
+            case ARGUMENT_INT_ARRAY_ID:
+                free(argumentValue->identifier);
+                break;
+            case ARGUMENT_ARRAY_ACCESS:
+                releaseArrayAccess(argumentValue->arrayAccess);
+                break;
+            case ARGUMENT_UNARY_CHANGE_OPERATOR:
+                releaseUnaryChangeOperatorStatement(argumentValue->unaryChangeOperatorStatement);
+                break;
+    }
+        free(argumentValue);
+}
+}
+void releaseArgumentList(ArgumentList * argumentList){
+    logDebugging(_logger, "Executing destructor: %s ptr: %p", __FUNCTION__, (void*)argumentList);
+    if (argumentList != NULL) {
+        ArgumentNode *current = argumentList->arguments;
+        ArgumentNode *next;
+        while (current != NULL) {
+            next = current->next;
+            releaseArgumentNode(current);
+            current = next;
+        }
+        free(argumentList);
+    }
+}
+void releaseArgumentNode(ArgumentNode * argumentNode){
+    logDebugging(_logger, "Executing destructor: %s ptr: %p", __FUNCTION__, (void*)argumentNode);
+    if (argumentNode != NULL) {
+        releaseArgumentValue(argumentNode->argument);
+        free(argumentNode);
+    }
+}
+
+void releaseArgumentDef(ArgumentDef * argumentDef){
+    logDebugging(_logger, "Executing destructor: %s ptr: %p", __FUNCTION__, (void*)argumentDef);
+    if (argumentDef != NULL) {
+       free(argumentDef->identifier);
+       free(argumentDef);
+    }
+}
+void releaseArgumentDefNode(ArgumentDefNode * argumentDefNode){
+    logDebugging(_logger, "Executing destructor: %s ptr: %p", __FUNCTION__, (void*)argumentDefNode);
+    if (argumentDefNode != NULL) {
+        releaseArgumentDef(argumentDefNode->argumentDef);
+        free(argumentDefNode);
+    }
+}
+void releaseArgumentDefList(ArgumentDefList * argumentDefList)
+{
+    logDebugging(_logger, "Executing destructor: %s ptr: %p", __FUNCTION__, (void*)argumentDefList);
+    if (argumentDefList != NULL) {
+        ArgumentDefNode *current = argumentDefList->arguments;
+        ArgumentDefNode *next;
+        while (current != NULL) {
+            next = current->next;
+            releaseArgumentDefNode(current);
+            current = next;
+        }
+        free(argumentDefList);
+    }
+}
