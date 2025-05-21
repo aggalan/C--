@@ -1,0 +1,5 @@
+IF TRUE > "milanesa a caballo con fritas" {
+    PRINT "La comparación es correcta"
+} ELSE {
+    PRINT "La comparación es incorrecta"
+}
