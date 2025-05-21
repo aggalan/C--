@@ -1,10 +1,6 @@
 INT hola () {
     PRINT "HOLA"
 }
-
-IF true {
-    PRINT "HOLA"
-}
 BOOL nico(INT nico, STRING tutti) {
     PRINT "HOLA"
     IF false {
@@ -12,4 +8,3 @@ BOOL nico(INT nico, STRING tutti) {
     }
 }
 func_boolnico( arr_int[0]++, "HOLA")
-arr_int[inti]++

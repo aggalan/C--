@@ -1,0 +1,5 @@
+ FOR I = 2 TO 10 {
+    WHILE intI < 5 {
+        intI++
+    }
+ }

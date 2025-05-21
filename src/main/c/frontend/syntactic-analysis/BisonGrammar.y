@@ -469,7 +469,7 @@ assignmentStatement:
     ;
 assignmentMathStatement: INT_ID ASSIGNMENT mathExpression  NEW_LINE             { $$ = AssignmentIntSemanticAction($1,$3);}
      ;
-assignmentForLoopExpression: INT_ID ASSIGNMENT mathExpression                   { $$ = AssignmentIntSemanticAction($1,$3);}
+assignmentForLoopExpression: GENERIC_ID ASSIGNMENT mathExpression                   { $$ = AssignmentIntSemanticAction($1,$3);}
      ;
 
 assignmentBoolStatement: BOOL_ID ASSIGNMENT boolExpression  NEW_LINE             { $$ = AssignmentBoolSemanticAction($1,$3);}

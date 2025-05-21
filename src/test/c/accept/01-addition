@@ -10,7 +10,7 @@ STRING foo() {
     PRINT "FOO"
 }
 
-FOR int1 = 2 TO 5 {
+FOR i = 2 TO 5 {
     PRINT stringI
 }
 

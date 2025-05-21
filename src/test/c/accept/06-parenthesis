@@ -1,3 +1,3 @@
-FOR intMIN = 4 TO 22 {
+FOR MIN = 4 TO 22 {
     PRINT "MINGA"
     }

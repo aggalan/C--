@@ -1,4 +1,5 @@
 MATCH X {
     2 -> PRINT "HOLA"
     3 -> PRINT "HOLA"
+    4 -> PRINT "CHAU"
 }
