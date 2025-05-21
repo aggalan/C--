@@ -1,0 +1,5 @@
+IF true {
+    MACRO HOLA (A,B) -> intA * intB
+} ELSE {
+    RETURN 0
+}

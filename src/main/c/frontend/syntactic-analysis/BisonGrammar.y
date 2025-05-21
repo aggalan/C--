@@ -262,6 +262,8 @@ unit:
 externalDeclaration:
       functionDefinition                                            { $$ = FunctionDefinitionExternalDeclarationSemanticAction($1); }
     | statement                                                     { $$ = StatementExternalDeclarationSemanticAction($1); }
+    | macroStatement                                                 { $$ = MacroExternalDeclarationSemanticAction($1); }
+
     ;
 
 
@@ -285,7 +287,6 @@ statement:
   | printStatement                                                 { $$ = PrintStatementSemanticAction($1);}
   | sortStatement                                                  { $$ = SortStatementSemanticAction($1);}
   | assignmentStatement                                             { $$ = AssignmentStatementSemanticAction($1);}
-  | macroStatement                                                 { $$ = MacroStatementSemanticAction($1); }
   | unaryChangeOperatorStatement                                    { $$ = UnaryChangeOperatorStatementSemanticAction($1); }
   | returnStatement                                                 { $$ = ReturnStatementSemanticAction($1); }
   | functionStatement                                               { $$ = FunctionStatementSemanticAction($1); }
@@ -340,7 +341,7 @@ functionStatement: boolFunctionStatement                                { $$ = $
                                                                             { $$ = FunctionSemanticAction($1, $3); }
 
 
-macroStatement: MACRO GENERIC_ID OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS ARROW statement
+macroStatement: MACRO GENERIC_ID OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS ARROW  mathExpression NEW_LINE
                                                                         { $$ = MacroSemanticAction($2, $4, $7); }
  ;
 
