@@ -49,6 +49,14 @@ typedef struct NotConditionalExpression NotConditionalExpression;
 typedef struct ParenthesizedConditionalExpression ParenthesizedConditionalExpression;
 typedef struct BoolExpression BoolExpression;
 typedef struct MathExpression MathExpression;
+typedef struct StringExpression StringExpression;
+typedef struct Argument Argument;
+typedef struct ArgumentList ArgumentList;
+typedef struct ArgumentValue ArgumentValue;
+typedef struct ArgumentNode ArgumentNode;
+typedef struct ArgumentDef ArgumentDef;
+typedef struct ArgumentDefNode ArgumentDefNode;
+typedef struct ArgumentDefList ArgumentDefList;
 typedef struct SortStatement SortStatement;
 typedef struct MacroStatement MacroStatement;
 typedef struct StringList StringList;
@@ -77,7 +85,10 @@ enum Type {
 	_INT,
 	_STRING,
 	_BOOL,
-	_VOID
+	_VOID,
+	_INT_ARRAY,
+	_STRING_ARRAY,
+	_BOOL_ARRAY,
 };
 
 struct ArrayStatement {
@@ -109,7 +120,7 @@ struct VariableStatement {
 struct FunctionDefinition {
     String identifier;
 	Type type;
-    StringList * parameters;
+    ArgumentDefList * parameters;
     StatementBlock * body;
 };
 
@@ -131,7 +142,7 @@ enum ComparatorType {
 };
 
 struct FunctionStatement {
-    StringList * parameters;
+    ArgumentList * parameters;
     String identifier;
 };
 
@@ -159,9 +170,45 @@ enum ConditionalType {
 	OPERATOR,
 	CONDITIONAL_IDENTIFIER
 };
-struct StringNode {
-    String string;
-     StringNode *next;
+struct StringExpression {
+	union {
+		String identifier;
+		String string;
+		ArrayAccess * arrayAccess;
+	};
+	enum {
+		STRING_IDENTIFIER_EXPRESSION,
+		STRING_VALUE_EXPRESSION,
+		STRING_EXPRESSION_ARRAY,
+	}type;
+};
+
+struct ArgumentValue {
+	union {
+		String identifier;
+		MathExpression * mathExpression;
+		BoolExpression * boolExpression;
+		StringExpression * stringExpression;
+		ArrayAccess * arrayAccess;
+		FunctionStatement * functionExpression;
+		UnaryChangeOperatorStatement * unaryChangeOperatorStatement;
+	};
+	enum {
+		ARGUMENT_MATH_EXPRESSION,
+		ARGUMENT_BOOL_EXPRESSION,
+		ARGUMENT_STRING_EXPRESSION,
+		ARGUMENT_FUNCTION_EXPRESSION,
+		ARGUMENT_BOOL_ARRAY_ID,
+		ARGUMENT_STRING_ARRAY_ID,
+		ARGUMENT_INT_ARRAY_ID,
+		ARGUMENT_ARRAY_ACCESS,
+		ARGUMENT_UNARY_CHANGE_OPERATOR,
+	} type;
+};
+
+struct ArgumentNode {
+    ArgumentValue * argument ;
+	ArgumentNode *next;
 };
 
 struct StatementNode {
@@ -169,9 +216,42 @@ struct StatementNode {
     StatementNode *next;
 };
 
+struct ArgumentDef {
+	String identifier;
+	enum {
+		ARGUMENT_MATH,
+		ARGUMENT_BOOL,
+		ARGUMENT_STRING,
+		ARGUMENT_INT_ARRAY,
+		ARGUMENT_STRING_ARRAY,
+		ARGUMENT_BOOL_ARRAY,
+	} type;
+};
+
+struct ArgumentDefNode {
+	ArgumentDef * argumentDef;
+	 ArgumentDefNode *next;
+};
+struct ArgumentDefList {
+	ArgumentDefNode * arguments;
+	ArgumentDefNode *last;
+	int count;
+};
+
+
+struct StringNode {
+	String string;
+	StringNode *next;
+};
+
 struct StringList {
-    StringNode *strings;
-    StringNode *last;
+	StringNode *strings;
+	StringNode *last;
+};
+
+struct ArgumentList {
+    ArgumentNode *arguments;
+    ArgumentNode *last;
 	int count;
 };
 
@@ -429,13 +509,11 @@ struct Expression {
 		BOOLEAN_EXPRESSION,
 		MATH_EXPRESSION,
 		STRING_EXPRESSION,
-		STRING_ARRAY_EXPRESSION,
 	} type;
 	union {
 		MathExpression * mathExpression;
-		String stringExpression;
+		StringExpression * stringExpression;
 		BoolExpression * boolExpression;
-		ArrayAccess * arrayAccess;
 };
 };
 

@@ -283,11 +283,11 @@ AssignmentStringExpression * assignmentStringExpressionSemanticAction(String id,
 	return assignment_expression;
 }
 
-Expression * StringExpressionSemanticAction(String string) {
+StringExpression * FactorStringExpressionSemanticAction(String string) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Expression * expression = calloc(1, sizeof(Expression));
-	expression->stringExpression = string;
-	expression->type = STRING_EXPRESSION;
+	StringExpression * expression = calloc(1, sizeof(StringExpression));
+	expression->string = string;
+	expression->type = STRING_VALUE_EXPRESSION;
 	return expression;
 }
 Factor * ParenthesisFactorSemanticAction(MathExpression * expression) {
@@ -322,7 +322,7 @@ Statement * MacroStatementSemanticAction(MacroStatement * stmt) {
     return statement;
 }
 
-FunctionStatement * FunctionSemanticAction(String identifier, StringList * parameters) {
+FunctionStatement * FunctionSemanticAction(String identifier, ArgumentList * parameters) {
     _logSyntacticAnalyzerAction(__FUNCTION__);
     FunctionStatement * function = calloc(1, sizeof(FunctionStatement));
     function->identifier = identifier;
@@ -349,7 +349,7 @@ ReturnStatement * ReturnFunctionStatementSemanticAction(FunctionStatement * func
 
 
 
-FunctionDefinition  * FunctionDefinitionSemanticAction(Type type, String identifier, StringList * parameters, StatementBlock * body){
+FunctionDefinition  * FunctionDefinitionSemanticAction(Type type, String identifier, ArgumentDefList * parameters, StatementBlock * body){
     _logSyntacticAnalyzerAction(__FUNCTION__);
     FunctionDefinition * functionDefinition = calloc(1, sizeof(FunctionDefinition));
     functionDefinition->identifier = identifier;
@@ -531,7 +531,6 @@ StringList * SingleStringListSemanticAction(String str) {
     list->strings = calloc(1, sizeof(StringNode));
     list->strings->string = str;
     list->last = list->strings;
-    list->count = 1;
     return list;
 }
 StringList * AppendStringListSemanticAction(StringList *list, String str) {
@@ -540,7 +539,6 @@ StringList * AppendStringListSemanticAction(StringList *list, String str) {
     node->string = str;
     list->last->next = node;
     list->last = node;
-    list->count++;
     return list;
 }
 
@@ -691,7 +689,7 @@ VariableStatement * VariableIntDeclarationSemanticAction(String identifier, Math
 	variable->expression->type = MATH_EXPRESSION;
 	return variable;
 }
-VariableStatement * VariableStringDeclarationSemanticAction(String identifier, String value) {
+VariableStatement * VariableStringDeclarationSemanticAction(String identifier, StringExpression * value) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	VariableStatement * variable = calloc(1, sizeof(VariableStatement));
 	variable->identifier = identifier;
@@ -750,11 +748,18 @@ BoolFactor * IdentifierBoolFactorSemanticAction(String identifier) {
 	factor->type = BOOLEAN_ID;
 	return factor;
 }
-Expression * ArrayStringAccessSemanticAction(ArrayAccess * arrayAccess) {
+StringExpression * ArrayStringAccessSemanticAction(ArrayAccess * arrayAccess) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Expression * expression = calloc(1, sizeof(Expression));
+	StringExpression * expression = calloc(1, sizeof(StringExpression));
 	expression->arrayAccess = arrayAccess;
-	expression->type = STRING_ARRAY_EXPRESSION;
+	expression->type = STRING_EXPRESSION_ARRAY;
+	return expression;
+}
+StringExpression * IdentifierStringExpressionSemanticAction(String identifier) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	StringExpression * expression = calloc(1, sizeof(StringExpression));
+	expression->identifier = identifier;
+	expression->type = STRING_IDENTIFIER_EXPRESSION;
 	return expression;
 }
 BoolFactor * ParenthesisBoolExpressionSemanticAction(BoolExpression * conditionalExpression1) {
@@ -764,6 +769,117 @@ BoolFactor * ParenthesisBoolExpressionSemanticAction(BoolExpression * conditiona
 	factor->type = PARENTHESIS_EXPRESSION;
 	return factor;
 }
+ArgumentList * ArgumentValueSemanticAction(ArgumentValue * argumentValue) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ArgumentList * list = calloc(1, sizeof(ArgumentList));
+	list->arguments = calloc(1, sizeof(ArgumentNode));
+	list->arguments->argument = argumentValue;
+	list->last = list->arguments;
+	return list;
+}
+ArgumentList * AppendArgumentListSemanticAction(ArgumentList * list, ArgumentValue * argumentValue) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ArgumentNode * node = calloc(1, sizeof(ArgumentNode));
+	node->argument = argumentValue;
+	list->last->next = node;
+	list->last = node;
+	return list;
+}
+
+ArgumentValue * MathExpressionArgValueSemanticAction( MathExpression * expression) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ArgumentValue * argumentValue = calloc(1, sizeof(ArgumentValue));
+	argumentValue->mathExpression = expression;
+	argumentValue->type = ARGUMENT_MATH_EXPRESSION;
+	return argumentValue;
+}
+ArgumentValue * StringExpressionArgValueSemanticAction(StringExpression * expression) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ArgumentValue * argumentValue = calloc(1, sizeof(ArgumentValue));
+	argumentValue->stringExpression = expression;
+	argumentValue->type = ARGUMENT_STRING_EXPRESSION;
+	return argumentValue;
+}
+ArgumentValue * BoolExpressionArgValueSemanticAction( BoolExpression * expression) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ArgumentValue * argumentValue = calloc(1, sizeof(ArgumentValue));
+	argumentValue->boolExpression = expression;
+	argumentValue->type = ARGUMENT_BOOL_EXPRESSION;
+	return argumentValue;
+}
+ArgumentValue * ArrayAccessArgValueSemanticAction( ArrayAccess * arrayAccess) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ArgumentValue * argumentValue = calloc(1, sizeof(ArgumentValue));
+	argumentValue->arrayAccess = arrayAccess;
+	argumentValue->type = ARGUMENT_ARRAY_ACCESS;
+	return argumentValue;
+}
+ArgumentValue * FunctionExpressionArgValueSemanticAction( FunctionStatement * functionStatement) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ArgumentValue * argumentValue = calloc(1, sizeof(ArgumentValue));
+	argumentValue->functionExpression = functionStatement;
+	argumentValue->type = ARGUMENT_FUNCTION_EXPRESSION;
+	return argumentValue;
+}
+ArgumentValue * ArrayBoolSemanticAction(String identifier) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ArgumentValue * argumentValue = calloc(1, sizeof(ArgumentValue));
+	argumentValue->identifier = identifier;
+	argumentValue->type = ARGUMENT_BOOL_ARRAY_ID;
+	return argumentValue;
+}
+ArgumentValue * ArrayIntSemanticAction(String identifier) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ArgumentValue * argumentValue = calloc(1, sizeof(ArgumentValue));
+	argumentValue->identifier = identifier;
+	argumentValue->type = ARGUMENT_INT_ARRAY_ID;
+	return argumentValue;
+}
+ArgumentValue * ArrayStringSemanticAction(String identifier) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ArgumentValue * argumentValue = calloc(1, sizeof(ArgumentValue));
+	argumentValue->identifier = identifier;
+	argumentValue->type = ARGUMENT_STRING_ARRAY_ID;
+	return argumentValue;
+}
+ArgumentDefList * SingleArgumentDefListSemanticAction(ArgumentDef * argumentDef) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ArgumentDefList * list = calloc(1, sizeof(ArgumentDefList));
+	list->arguments = calloc(1, sizeof(ArgumentDefNode));
+	list->arguments->argumentDef = argumentDef;
+	list->last = list->arguments;
+	return list;
+}
+ArgumentDefList * AppendArgumentDefListSemanticAction(ArgumentDefList * list,ArgumentDef * argumentDef) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ArgumentDefNode * node = calloc(1, sizeof(ArgumentDefNode));
+	node->argumentDef = argumentDef;
+	list->last->next = node;
+	list->last = node;
+	return list;
+}
+ArgumentDef * ArgumentDefSemanticAction(String identifier, Type type) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ArgumentDef * argumentValue = calloc(1, sizeof(ArgumentDef));
+	argumentValue->identifier = identifier;
+	argumentValue->type = type;
+	return argumentValue;
+}
+Expression * StringExpressionSemanticAction(StringExpression * stringExpression) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * expression = calloc(1, sizeof(Expression));
+	expression->stringExpression = stringExpression;
+	expression->type = STRING_EXPRESSION;
+	return expression;
+}
+ArgumentValue * UnaryIncrementOperatorExpressionArgValueSemanticAction(UnaryChangeOperatorStatement * statement) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ArgumentValue * argumentValue = calloc(1, sizeof(ArgumentValue));
+	argumentValue->unaryChangeOperatorStatement = statement;
+	argumentValue->type = ARGUMENT_UNARY_CHANGE_OPERATOR;
+	return argumentValue;
+}
+
 
 // ConditionalExpression *MathConditionalExpressionSemanticAction(MathExpression *math_expression) {
 // 	_logSyntacticAnalyzerAction(__FUNCTION__);
