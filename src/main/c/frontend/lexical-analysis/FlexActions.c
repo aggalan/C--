@@ -291,7 +291,7 @@ Token NewLineLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 }
 Token TypedIdentifierLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->token = token;
+	lexicalAnalyzerContext->semanticValue->string = strdup(lexicalAnalyzerContext->lexeme);
     destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return token;
 }

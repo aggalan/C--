@@ -1,3 +1,24 @@
 IF 3 < 10 {
     SORT arr_intTutti
 }
+func_bool()
+
+VOID foo(){
+    PRINT "FOO"
+    IF boolA {
+        PRINT "A"
+    } ELSE IF (intla == 0) {
+        PRINT a
+    } ELSE {
+        PRINT "brbr patapim"
+    }
+    WHILE intvar <= intnar {
+        PRINT "Hello"
+        PRINT "Goodbye"
+        IF intnar > intvar {
+            PRINT tito
+        }
+        PRINT JUAN
+        intnar ++
+    }
+}
