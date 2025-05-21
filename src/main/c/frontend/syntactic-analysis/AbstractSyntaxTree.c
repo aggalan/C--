@@ -198,7 +198,7 @@ void releaseCaseNode(CaseNode *node) {
 void releaseMathExpression(MathExpression *expr) {
     logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__, (void*)expr);
     if (!expr) return;
-    if (expr->type == FACTOR) {
+    if (expr->type == FACTOR_EXPRESSION) {
         releaseFactor(expr->factor);
     } else {
         releaseMathExpression(expr->leftExpression);
@@ -259,7 +259,7 @@ void releaseFunctionStatement(FunctionStatement *stmt) {
     logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)stmt);
     if (!stmt) return;
     if (stmt->identifier) free(stmt->identifier);
-    releaseStringList(stmt->parameters);
+    releaseArgumentList(stmt->parameters);
     free(stmt);
 }
 
@@ -400,7 +400,7 @@ void releaseStringList(StringList *list) {
 void releaseFunctionDefinition(FunctionDefinition *def) {
     logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)def);
     if (!def) return;
-    releaseStringList(def->parameters);
+    releaseArgumentDefList(def->parameters);
     releaseStatementBlock(def->body);
     free(def->identifier);
     free(def);
