@@ -11,6 +11,17 @@
 
 **Aclaracion:**
 Salvo en la declaracion, tanto las variables como las funciones deben especificar el tipo de variable / funcion
+Para que lo reconozca como un identificador del tipo adecuado, hay que usar los siguientes prefijos:
+- `int` para variables enteras
+- `bool` para variables boolean
+- `string` para variables de tipo string
+- `arr_int` para arrays de enteros
+- `arr_string` para arrays de strings
+- `arr_bool` para arrays de bool
+- `func_int` para funciones que devuelven enteros
+-  `func_string` para funcione sque devuelven strings
+- `func_bool` para funciones que devuelven bool
+- `macro_` para macros
 
 
 A base compiler example, developed with Flex and Bison.
