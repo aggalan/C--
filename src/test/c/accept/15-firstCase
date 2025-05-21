@@ -1,0 +1,28 @@
+// Definir variable
+
+INT n
+STRING msgs = "The operation was successful"
+STRING msgf = "The operation failed"
+BOOL status
+
+// Definir la función
+
+BOOL operation(INT number) {
+    intnumber++
+    IF intnumber/2 == 0 {
+        RETURN TRUE
+    }
+RETURN FALSE
+}
+
+// Definir donde arranca el programa
+
+VOID main() {
+    intn = 0
+    boolstatus = func_booloperation(intn)
+    IF boolstatus {
+       PRINT(stringmsgs)
+    } ELSE {
+        PRINT(stringmsgf)
+    }
+}

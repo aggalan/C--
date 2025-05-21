@@ -1,0 +1,9 @@
+numeros[]={7,5,2,4,6,4}
+VOID main() {
+    FOR inti = 0 TO 5 {
+        arr_intnumeros[inti]++
+    }
+    // add ASC
+    SORT arr_intnumeros
+//    PRINT(numeros)
+}
