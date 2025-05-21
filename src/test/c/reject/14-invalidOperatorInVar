@@ -1,0 +1,5 @@
+STRING str = "hello" + "world"
+
+INT num = 3 AND 4
+
+BOOL status = 3 OR 4

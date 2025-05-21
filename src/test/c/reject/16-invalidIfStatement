@@ -1,0 +1,5 @@
+IF TRUE ELSE {
+    PRINT "La comparación es correcta"
+} ELSE {
+    PRINT "La comparación es incorrecta"
+}
