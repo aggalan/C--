@@ -2,7 +2,16 @@
 
 [![✗](https://github.com/agustin-golmar/Flex-Bison-Compiler/actions/workflows/pipeline.yaml/badge.svg?branch=production)](https://github.com/agustin-golmar/Flex-Bison-Compiler/actions/workflows/pipeline.yaml)
 
-# Flex-Bison-Compiler
+# Flex-Bison-Compiler G-83 (C--)
+
+**Integrantes:**
+- aggalan@itba.edu.ar - 64098
+- nkoron@itba.edu.ar - 64094
+- nbellavitisalzate@itba.edu.ar - 64001
+
+**Aclaracion:**
+Salvo en la declaracion, tanto las variables como las funciones deben especificar el tipo de variable / funcion
+
 
 A base compiler example, developed with Flex and Bison.
 
