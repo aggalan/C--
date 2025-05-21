@@ -105,7 +105,7 @@
 "func_int"[[:alnum:]]*	            { return TypedIdentifierLexemeAction(createLexicalAnalyzerContext(), INT_FUNCTION_ID); }
 "func_string"[[:alnum:]]*	        { return TypedIdentifierLexemeAction(createLexicalAnalyzerContext(), STRING_FUNCTION_ID); }
 "func_bool"[[:alnum:]]*	        { return TypedIdentifierLexemeAction(createLexicalAnalyzerContext(), BOOL_FUNCTION_ID); }
-
+"macro_"[[:alnum:]]*	            { return TypedIdentifierLexemeAction(createLexicalAnalyzerContext(), MACRO_ID); }
 [[:alpha:]][[:alnum:]]*             { return IdentifierLexemeAction(createLexicalAnalyzerContext()); }
 
 [[:digit:]]+						{ return IntegerLexemeAction(createLexicalAnalyzerContext()); }

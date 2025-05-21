@@ -8,7 +8,7 @@ IF true {
 BOOL nico(INT nico, STRING tutti) {
     PRINT "HOLA"
     IF false {
-        PRINT tutti
+        PRINT "tutti"
     }
 }
 func_boolnico( arr_int[0]++, "HOLA")

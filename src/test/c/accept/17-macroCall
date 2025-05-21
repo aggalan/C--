@@ -1,0 +1,1 @@
+INT a = macro_max(1, 2)

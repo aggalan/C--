@@ -11,7 +11,7 @@ STRING foo() {
 }
 
 FOR int1 = 2 TO 5 {
-    PRINT I
+    PRINT stringI
 }
 
 IF boolQUESO {

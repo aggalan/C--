@@ -61,6 +61,9 @@ void releaseFactor(Factor * factor) {
             case UNARY_CHANGE_FACTOR:
                 releaseUnaryChangeOperatorStatement(factor->unaryChangeOperatorStatement);
                 break;
+            case MACRO_INVOCATION:
+                releaseMacroInvocationStatement(factor->macroInvocationStatement);
+                break;
 		}
 		free(factor);
 	}
@@ -131,7 +134,9 @@ void releaseStatement(Statement *stmt){
             case STATEMENT_ARRAY:
                 releaseArrayStatement(stmt->arrayStatement);
                 break;
-
+            case STATEMENT_MACRO_INVOCATION:
+                releaseMacroInvocationStatement(stmt->macroInvocationStatement);
+                break;
         }
         free(stmt);
     }
@@ -235,8 +240,11 @@ void releaseWhileLoop(WhileLoop *loop) {
 void releasePrintStatement(PrintStatement *stmt) {
     logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__, (void*)stmt);
     if (stmt) {
-        if (stmt->identifier)
-            free(stmt->identifier);
+        if (stmt->type == PRINT_IDENTIFIER) {
+            releaseStringExpression(stmt->identifier);
+        } else if (stmt->type == PRINT_MATH_EXPRESSION) {
+            releaseMathExpression(stmt->mathExpression);
+        }
         free(stmt);
     }
 }
@@ -329,7 +337,7 @@ void releaseAssignmentBoolStatement(AssignmentBoolStatement *stmt) {
 void releaseUnaryChangeOperatorStatement(UnaryChangeOperatorStatement *stmt) {
     logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)stmt);
     if (!stmt) return;
-    if (stmt->identifier) free(stmt->identifier);
+    if(stmt->type == VARIABLE) free(stmt->identifier);
     if (stmt->type == ARRAY) {releaseArrayAccess(stmt->arrayAccess);}
     free(stmt);
 }
@@ -496,7 +504,7 @@ void releaseArgumentValue(ArgumentValue * argumentValue) {
                 releaseBoolExpression(argumentValue->boolExpression);
                 break;
             case ARGUMENT_STRING_EXPRESSION:
-                if (argumentValue->stringExpression) free(argumentValue->stringExpression);
+                releaseStringExpression(argumentValue->stringExpression);
                 break;
             case ARGUMENT_FUNCTION_EXPRESSION:
                 releaseFunctionStatement(argumentValue->functionExpression);
@@ -563,5 +571,35 @@ void releaseArgumentDefList(ArgumentDefList * argumentDefList)
             current = next;
         }
         free(argumentDefList);
+    }
+}
+
+void releaseStringExpression(StringExpression * stringExpression){
+    logDebugging(_logger, "Executing destructor: %s ptr: %p", __FUNCTION__, (void*)stringExpression);
+    if (stringExpression != NULL) {
+       switch (stringExpression->type) {
+            case STRING_IDENTIFIER_EXPRESSION:
+                if (stringExpression->identifier) free(stringExpression->identifier);
+                break;
+            case STRING_VALUE_EXPRESSION:
+                if (stringExpression->string) free(stringExpression->string);
+                break;
+            case STRING_EXPRESSION_ARRAY:
+                releaseArrayAccess(stringExpression->arrayAccess);
+                break;
+            case STRING_EXPRESSION_FUNCTION:
+                releaseFunctionStatement(stringExpression->functionStatement);
+                break;
+        }
+        free(stringExpression);
+    }
+}
+
+void releaseMacroInvocationStatement(MacroInvocationStatement * macroInvocationStatement){
+    logDebugging(_logger, "Executing destructor: %s ptr: %p", __FUNCTION__, (void*)macroInvocationStatement);
+    if (macroInvocationStatement != NULL) {
+        if (macroInvocationStatement->identifier) free(macroInvocationStatement->identifier);
+        releaseArgumentList(macroInvocationStatement->arguments);
+        free(macroInvocationStatement);
     }
 }

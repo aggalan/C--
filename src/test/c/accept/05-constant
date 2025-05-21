@@ -6,9 +6,9 @@ WHILE intvar <= intnar {
     PRINT "Hello"
     PRINT "Goodbye"
     IF intnar > intvar {
-        PRINT tito
+        PRINT "tito"
     }
-    PRINT JUAN
+    PRINT "JUAN"
 }
 INT var = 1
 INT nar = 2

@@ -199,12 +199,14 @@ PrintStatement * PrintIdentifierSemanticAction(StringExpression * semanticAction
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	PrintStatement * print = calloc(1, sizeof(PrintStatement));
 	print->identifier = semanticAction;
+	print->type = PRINT_IDENTIFIER;
 	return print;
 }
 PrintStatement * PrintMathExpressionSemanticAction(MathExpression * mathExpression){
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	PrintStatement * print = calloc(1, sizeof(PrintStatement));
 	print->mathExpression = mathExpression;
+	print->type = PRINT_MATH_EXPRESSION;
 	return print;
 }
 
@@ -847,6 +849,31 @@ StringExpression * FunctionCallStringExpressionSemanticAction(FunctionStatement 
 	return expression;
 }
 
+Statement * MacroInvocationStatementSemanticAction(MacroInvocationStatement * macroInvocationStatement){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Statement * statement = calloc(1, sizeof(Statement));
+	statement->type = STATEMENT_MACRO_INVOCATION;
+	statement->macroInvocationStatement = macroInvocationStatement;
+	return statement;
+
+
+}
+MacroInvocationStatement * MacroInvocationSemanticAction(String identifier, ArgumentList * args){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	MacroInvocationStatement * macroInvocationStatement = calloc(1, sizeof(MacroInvocationStatement));
+	macroInvocationStatement->identifier = identifier;
+	macroInvocationStatement->arguments = args;
+	return macroInvocationStatement;
+}
+
+
+Factor * MacroInvocationFactorSemanticAction(MacroInvocationStatement * macroInvocationStatement){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Factor * factor = calloc(1, sizeof(Factor));
+	factor->macroInvocationStatement = macroInvocationStatement;
+	factor->type = MACRO_INVOCATION;
+	return factor;
+}
 // ConditionalExpression *MathConditionalExpressionSemanticAction(MathExpression *math_expression) {
 // 	_logSyntacticAnalyzerAction(__FUNCTION__);
 // 	ConditionalExpression * condition = calloc(1, sizeof(ConditionalExpression));

@@ -5,5 +5,5 @@ VOID main() {
     }
     // add ASC
     SORT arr_intnumeros
-//    PRINT(numeros)
+//    PRINT "numeros"
 }

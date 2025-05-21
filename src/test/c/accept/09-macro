@@ -1,1 +1,1 @@
-MACRO HOLA (A,B) -> PRINT A
+MACRO HOLA (A,B) -> PRINT "A"

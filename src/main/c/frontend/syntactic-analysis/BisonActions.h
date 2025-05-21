@@ -79,7 +79,7 @@ Statement * UnaryChangeOperatorStatementSemanticAction( UnaryChangeOperatorState
 UnaryChangeOperatorStatement * UnaryChangeOperatorSemanticAction(String identifier, int type);
 UnaryChangeOperatorStatement * UnaryChangeArraySemanticAction(ArrayAccess * arrayAccess, int type);
 ArrayStatement * ArraySemanticAction(String identifier, IntList * elements);
-
+Factor * MacroInvocationFactorSemanticAction(MacroInvocationStatement * macroInvocationStatement);
 IntList * SingleArrayListSemanticAction(int integer);
 IntList * AppendArrayListSemanticAction(IntList *list, int integer);
 Case * MatchDefaultCaseSemanticAction(Statement * body);
@@ -118,5 +118,6 @@ ArgumentDef * ArgumentDefSemanticAction(String identifier, Type type);
 Expression * StringExpressionSemanticAction(StringExpression * expression);
 StringExpression * FunctionCallStringExpressionSemanticAction(FunctionStatement * functionStatement);
 PrintStatement * PrintMathExpressionSemanticAction(MathExpression * mathExpression);
-
+Statement * MacroInvocationStatementSemanticAction(MacroInvocationStatement * macroInvocationStatement);
+MacroInvocationStatement * MacroInvocationSemanticAction(String identifier, ArgumentList * args);
 #endif

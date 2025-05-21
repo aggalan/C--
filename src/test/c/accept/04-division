@@ -8,7 +8,7 @@ VOID foo(){
     IF boolA {
         PRINT "A"
     } ELSE IF (intla == 0) {
-        PRINT a
+        PRINT "a"
     } ELSE {
         PRINT "brbr patapim"
     }
@@ -16,9 +16,9 @@ VOID foo(){
         PRINT "Hello"
         PRINT "Goodbye"
         IF intnar > intvar {
-            PRINT tito
+            PRINT inttito
         }
-        PRINT JUAN
+        PRINT stringJUAN
         intnar ++
     }
 }

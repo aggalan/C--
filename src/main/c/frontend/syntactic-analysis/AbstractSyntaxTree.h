@@ -76,6 +76,7 @@ typedef struct StringNode StringNode;
 typedef struct IntNode IntNode;
 typedef struct StatementNode StatementNode;
 typedef struct CaseNode CaseNode;
+typedef struct MacroInvocationStatement MacroInvocationStatement;
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
@@ -189,7 +190,7 @@ struct StringExpression {
 		STRING_IDENTIFIER_EXPRESSION,
 		STRING_VALUE_EXPRESSION,
 		STRING_EXPRESSION_ARRAY,
-		STRING_EXPRESSION_FUNCTION,
+		STRING_EXPRESSION_FUNCTION
 	}type;
 };
 
@@ -325,6 +326,7 @@ enum StatementType {
 	STATEMENT_UNARY_CHANGE_OPERATOR,
 	STATEMENT_VARIABLE,
 	STATEMENT_ARRAY,
+	STATEMENT_MACRO_INVOCATION
 } ;
 
 struct Statement {
@@ -344,6 +346,7 @@ struct Statement {
 		VariableStatement * variableStatement;
 		UnaryChangeOperatorStatement * unaryChangeOperatorStatement;
 		ArrayStatement * arrayStatement;
+		MacroInvocationStatement * macroInvocationStatement;
 	};
 };
 struct AssignmentStatement {
@@ -459,6 +462,7 @@ enum FactorType {
 	FUNCTION,
 	ARRAY_FACTOR,
 	UNARY_CHANGE_FACTOR,
+	MACRO_INVOCATION
 };
 
 struct Constant {
@@ -536,6 +540,7 @@ struct Factor {
 		FunctionStatement * functionStatement;
 		ArrayAccess * arrayAccess;
 		UnaryChangeOperatorStatement * unaryChangeOperatorStatement;
+		MacroInvocationStatement * macroInvocationStatement;
 	};
 	FactorType type;
 };
@@ -561,7 +566,10 @@ struct ExternalDeclaration {
 	} type;
 };
 
-
+struct MacroInvocationStatement {
+	String identifier;
+	ArgumentList * arguments;
+};
 /**
  * Node recursive destructors.
  */
@@ -613,7 +621,7 @@ void releaseArgumentNode(ArgumentNode * argumentNode);
 void releaseArgumentDef(ArgumentDef * argumentDef);
 void releaseArgumentDefNode(ArgumentDefNode * argumentDefNode);
 void releaseArgumentDefList(ArgumentDefList * argumentDefList);
-
-
+void releaseStringExpression(StringExpression * stringExpression);
+void releaseMacroInvocationStatement(MacroInvocationStatement * macroInvocationStatement);
 
 #endif

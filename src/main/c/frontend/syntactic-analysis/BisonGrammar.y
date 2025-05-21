@@ -57,6 +57,7 @@
     BoolFactor * boolFactor;
     BoolExpression * boolExpression;
     MathExpression * mathExpression;
+    MacroInvocationStatement * macroInvocationStatement;
 
 
 }
@@ -137,7 +138,6 @@
 %token <token> NEW_LINE
 %token <boolean> TRUE
 %token <boolean> FALSE
-
 %token <token> ADD_ONE
 %token <token> MINUS_ONE
 
@@ -228,7 +228,7 @@
 %type <integerList> integerList
 %type <arrayStatement> arrayStatement
 %type <assignmentMathStatement> assignmentForLoopExpression
-
+%type <macroInvocationStatement> macroInvocationStatement
 %type <statementBlock> statementBlock
 /**
  * Precedence and associativity.
@@ -287,7 +287,15 @@ statement:
   | returnStatement                                                 { $$ = ReturnStatementSemanticAction($1); }
   | functionStatement                                               { $$ = FunctionStatementSemanticAction($1); }
   | variableStatement                                               { $$ = VariableStatementSemanticAction($1); }
+  | macroInvocationStatement                                          { $$ = MacroInvocationStatementSemanticAction($1); }
   ;
+
+
+macroInvocationStatement: MACRO_ID OPEN_PARENTHESIS argumentList CLOSE_PARENTHESIS                        { $$ = MacroInvocationSemanticAction($1, $3); }
+    ;
+
+
+
 
 unaryChangeOperatorStatement:
     INT_ID ADD_ONE                  NEW_LINE                                         { $$ = UnaryChangeOperatorSemanticAction($1, POST_INCREMENT); }
@@ -380,6 +388,7 @@ factor:
 	| intArrayAccess                                              { $$ = ArrayFactorSemanticAction($1); }
 	| intFunctionExpression                                          { $$ = FunctionCallFactorSemanticAction($1); }
 	| unaryIncrementOperatorExpression                          { $$ = UnitIncrementOperatorFactorSemanticAction($1); }
+	| macroInvocationStatement                                          { $$ = MacroInvocationFactorSemanticAction($1); }
 	;
 
 unaryIncrementOperatorExpression:
