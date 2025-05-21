@@ -619,7 +619,7 @@ AssignmentStatement * AssignmentStringExpressionSemanticAction(AssignmentStringS
 	statement->stringAssignment = assignmentStatement;
 	return statement;
 }
-AssignmentStringStatement * AssignmentStringSemanticAction(String id, String expression) {
+AssignmentStringStatement * AssignmentStringSemanticAction(String id, StringExpression * expression) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	AssignmentStringStatement * assignmentStatement = calloc(1, sizeof(AssignmentStringStatement));
 	assignmentStatement->identifier = id;

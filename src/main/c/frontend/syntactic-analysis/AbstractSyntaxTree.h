@@ -361,7 +361,7 @@ struct AssignmentBoolStatement {
 	String identifier;
 };
 struct AssignmentStringStatement {
-	String expression;
+	StringExpression * expression;
 	String identifier;
 };
 

@@ -461,7 +461,7 @@ assignmentForLoopExpression: INT_ID ASSIGNMENT mathExpression                   
 
 assignmentBoolStatement: BOOL_ID ASSIGNMENT boolExpression  NEW_LINE             { $$ = AssignmentBoolSemanticAction($1,$3);}
      ;
-assignmentStringStatement: STRING_ID ASSIGNMENT STRING   NEW_LINE            { $$ = AssignmentStringSemanticAction($1,$3);}
+assignmentStringStatement: STRING_ID ASSIGNMENT stringExpression  NEW_LINE            { $$ = AssignmentStringSemanticAction($1,$3);}
 
     variableStatement:
           BOOL GENERIC_ID ASSIGNMENT boolExpression   NEW_LINE            { $$ = VariableBoolDeclarationSemanticAction( $2, $4); }

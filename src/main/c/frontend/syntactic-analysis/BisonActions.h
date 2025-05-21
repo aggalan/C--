@@ -94,7 +94,7 @@ Expression * BooleanExpressionSemanticAction(BoolExpression * boolExpression);
 AssignmentStatement * AssignmentIntExpressionSemanticAction(AssignmentMathStatement * assignmentStatement);
 AssignmentMathStatement * AssignmentIntSemanticAction(String id, MathExpression * mathExpression);
 AssignmentStatement * AssignmentStringExpressionSemanticAction(AssignmentStringStatement * assignmentStatement);
-AssignmentStringStatement * AssignmentStringSemanticAction(String id, String expression);
+AssignmentStringStatement * AssignmentStringSemanticAction(String id, StringExpression * expression);
 AssignmentStatement * AssignmentBoolExpressionSemanticAction(AssignmentBoolStatement * assignmentStatement);
 AssignmentBoolStatement * AssignmentBoolSemanticAction(String id, BoolExpression * boolExpression);
 AssignmentStatement * AssignmentArrayExpressionSemanticAction(ArrayStatement * assignmentStatement);
