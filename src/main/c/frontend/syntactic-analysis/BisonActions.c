@@ -214,7 +214,7 @@ BoolExpression * ConditionalExpressionSemanticAction(BoolExpression * conditiona
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	BoolExpression * condition = calloc(1, sizeof(BoolExpression));
 	condition->logicalExpression.expression1 = conditionalExpression1;
-	condition->logicalExpression.expression1 = conditionalExpression2;
+	condition->logicalExpression.expression2 = conditionalExpression2;
 	condition->logicalExpression.operatorType = type;
 	condition->type= LOGICAL_EXPRESSION;
 	return condition;

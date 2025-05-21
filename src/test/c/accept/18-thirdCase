@@ -1,9 +1,4 @@
-INT value = 3
-INT value2 = 4
 
-INT value3 = 5
 IF (intvalue3 == 5 AND intvalue > intvalue2) {
-    intvalue3 = 6
-} ELSE {
-    intvalue3 = 7
+    RETURN 5
 }
