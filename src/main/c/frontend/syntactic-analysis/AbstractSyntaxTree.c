@@ -18,7 +18,7 @@ void shutdownAbstractSyntaxTreeModule() {
 
 
 void releaseExpression(Expression * expression) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger, "Executing destructor: %s ptr: %p", __FUNCTION__, (void*)expression);
     if (expression != NULL) {
         switch (expression->type) {
             case MATH_EXPRESSION:
@@ -36,11 +36,8 @@ void releaseExpression(Expression * expression) {
 }
 
 
-
-
-
 void releaseFactor(Factor * factor) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__, (void*)factor);
 	if (factor != NULL) {
 		switch (factor->type) {
 			case CONSTANT:
@@ -50,6 +47,7 @@ void releaseFactor(Factor * factor) {
                 releaseMathExpression(factor->expression);
 				break;
             case FACTOR_IDENTIFIER:
+                free(factor->identifier);
                 break;
             case BOOLEAN_FACTOR:
                 break;
@@ -68,7 +66,7 @@ void releaseFactor(Factor * factor) {
 }
 
 void releaseProgram(Program * program) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__, (void*)program);
 	if (program != NULL) {
         switch (program->type) {
             case EMPTY:
@@ -81,13 +79,13 @@ void releaseProgram(Program * program) {
 }
 
 void releaseConstant(Constant * constant){
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__, (void*)constant);
     if (constant != NULL) {
         free(constant);
     }
 }
 void releaseStatement(Statement *stmt){
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger, "Executing destructor: %s, ptr: %p", __FUNCTION__, (void*)stmt);
     if (stmt != NULL) {
         switch (stmt->type) {
             case STATEMENT_MATH_EXPRESSION:
@@ -132,6 +130,7 @@ void releaseStatement(Statement *stmt){
             case STATEMENT_ARRAY:
                 releaseArrayStatement(stmt->arrayStatement);
                 break;
+
         }
         free(stmt);
     }
@@ -140,7 +139,7 @@ void releaseStatement(Statement *stmt){
 
 
 void releaseStatementList(StatementList *list){
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__, (void*)list);
     if (list != NULL) {
         StatementNode *current = list->statements;
         StatementNode *next;
@@ -153,7 +152,7 @@ void releaseStatementList(StatementList *list){
     }
 }
 void releaseForLoop(ForLoop *loop){
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__, (void*)loop);
     if (loop != NULL) {
         releaseAssignmentMathStatement(loop->assignment);
         releaseConstant(loop->endValue);
@@ -163,7 +162,7 @@ void releaseForLoop(ForLoop *loop){
 }
 
 void releaseMatchStatement(MatchStatement *match){
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__, (void*)match);
     if (match != NULL) {
         if (match->identifier) free(match->identifier);
         releaseCaseList(match->caseList);
@@ -172,7 +171,7 @@ void releaseMatchStatement(MatchStatement *match){
 }
 
 void releaseCase(Case *c) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__, (void*)c);
     if (c) {
         releaseStatement(c->body);
         free(c);
@@ -180,14 +179,14 @@ void releaseCase(Case *c) {
 }
 
 void releaseCaseList(CaseList * caseList) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__, (void*)caseList);
     if (!caseList) return;
     releaseCaseNode(caseList->cases);
     free(caseList);
 }
 
 void releaseCaseNode(CaseNode *node) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__, (void*)node);
     while (node) {
         CaseNode *next = node->next;
         releaseCase(node->Case);
@@ -197,7 +196,7 @@ void releaseCaseNode(CaseNode *node) {
 }
 
 void releaseMathExpression(MathExpression *expr) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__, (void*)expr);
     if (!expr) return;
     if (expr->type == FACTOR) {
         releaseFactor(expr->factor);
@@ -208,7 +207,7 @@ void releaseMathExpression(MathExpression *expr) {
     free(expr);
 }
 void releaseIfStatement(IfStatement *stmt) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__, (void*)stmt);
     if (!stmt) return;
     releaseBoolExpression(stmt->condition);
     releaseStatementBlock(stmt->thenBranch);
@@ -217,7 +216,7 @@ void releaseIfStatement(IfStatement *stmt) {
 }
 
 void releaseElseStatement(ElseStatement *stmt) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__, (void*)stmt);
     if (!stmt) return;
     releaseStatementBlock(stmt->body);
     if (stmt->type == ELSE_IF_STATEMENT)
@@ -226,27 +225,29 @@ void releaseElseStatement(ElseStatement *stmt) {
 }
 
 void releaseWhileLoop(WhileLoop *loop) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__, (void*)loop);
     if (!loop) return;
     releaseBoolExpression(loop->condition);
     releaseStatementBlock(loop->body);
     free(loop);
 }
 void releasePrintStatement(PrintStatement *stmt) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__, (void*)stmt);
     if (stmt) {
         if (stmt->identifier)
-            free(stmt->identifier);  // Free the string
+            free(stmt->identifier);
         free(stmt);
     }
 }
 void releaseSortStatement(SortStatement *stmt) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-    if (stmt != NULL) free(stmt);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__, (void*)stmt);
+    if (stmt == NULL)  return;
+    if (stmt->identifier) free(stmt->identifier);
+    free(stmt);
 }
 
 void releaseMacroStatement(MacroStatement *stmt) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__, (void*)stmt);
     if (!stmt) return;
     if (stmt->identifier) free(stmt->identifier);
     releaseStringList(stmt->parameters);
@@ -255,7 +256,7 @@ void releaseMacroStatement(MacroStatement *stmt) {
 }
 
 void releaseFunctionStatement(FunctionStatement *stmt) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)stmt);
     if (!stmt) return;
     if (stmt->identifier) free(stmt->identifier);
     releaseStringList(stmt->parameters);
@@ -264,7 +265,7 @@ void releaseFunctionStatement(FunctionStatement *stmt) {
 
 
 void releaseReturnStatement(ReturnStatement *stmt) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)stmt);
     if (!stmt) return;
     switch (stmt->type) {
         case RETURN_EXPRESSION:
@@ -279,7 +280,7 @@ void releaseReturnStatement(ReturnStatement *stmt) {
     free(stmt);
 }
 void releaseAssignmentStatement(AssignmentStatement *stmt) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)stmt);
     if (!stmt) return;
     switch (stmt->type) {
         case MATH_ASSIGNMENT:
@@ -298,32 +299,38 @@ void releaseAssignmentStatement(AssignmentStatement *stmt) {
     free(stmt);
 }
 void releaseAssignmentMathStatement(AssignmentMathStatement *stmt) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)stmt);
     if (!stmt) return;
+    if (stmt->identifier) free(stmt->identifier);
     releaseMathExpression(stmt->mathExpression);
     free(stmt);
 }
 
 void releaseAssignmentStringStatement(AssignmentStringStatement *stmt) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-    if (stmt) free(stmt);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)stmt);
+    if (!stmt) return;
+    if (stmt->identifier) free(stmt->identifier);
+    if (stmt->expression) free(stmt->expression);
+    free(stmt);
+
 }
 void releaseAssignmentBoolStatement(AssignmentBoolStatement *stmt) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)stmt);
     if (!stmt) return;
     releaseBoolExpression(stmt->expression);
+    if(stmt->identifier)free(stmt->identifier);
     free(stmt);
 }
 
 void releaseUnaryChangeOperatorStatement(UnaryChangeOperatorStatement *stmt) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)stmt);
     if (!stmt) return;
-    if (stmt->type == ARRAY)
-        releaseArrayAccess(stmt->arrayAccess);
+    if (stmt->identifier) free(stmt->identifier);
+    if (stmt->type == ARRAY) {releaseArrayAccess(stmt->arrayAccess);}
     free(stmt);
 }
 void releaseVariableStatement(VariableStatement *stmt) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)stmt);
     if (!stmt) return;
     if (stmt->identifier) free(stmt->identifier);
     releaseExpression(stmt->expression);
@@ -331,7 +338,7 @@ void releaseVariableStatement(VariableStatement *stmt) {
 }
 
 void releaseArrayStatement(ArrayStatement *stmt) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)stmt);
     if (!stmt) return;
     free(stmt->identifier);
     releaseIntList(stmt->elements);
@@ -340,7 +347,7 @@ void releaseArrayStatement(ArrayStatement *stmt) {
 
 
 void releaseBoolExpression(BoolExpression *expr) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)expr);
     if (!expr) return;
     switch (expr->type) {
         case COMPARATOR_EXPRESSION:
@@ -359,10 +366,12 @@ void releaseBoolExpression(BoolExpression *expr) {
 }
 
 void releaseBoolFactor(BoolFactor *factor) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)factor);
     if (!factor) return;
     switch (factor->type) {
         case NOT_EXPRESSION:
+            releaseBoolExpression(factor->expression);
+            break;
         case PARENTHESIS_EXPRESSION:
             releaseBoolExpression(factor->expression);
             break;
@@ -372,6 +381,9 @@ void releaseBoolFactor(BoolFactor *factor) {
         case BOOL_ARRAY:
             releaseArrayAccess(factor->arrayAccess);
             break;
+        case BOOLEAN_ID:
+            if (factor->identifier) free(factor->identifier);
+            break;
         default:
             break;
     }
@@ -379,14 +391,14 @@ void releaseBoolFactor(BoolFactor *factor) {
 }
 
 void releaseStringList(StringList *list) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)list);
     if (!list) return;
     releaseStringNode(list->strings);
     free(list);
 }
 
 void releaseFunctionDefinition(FunctionDefinition *def) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)def);
     if (!def) return;
     releaseStringList(def->parameters);
     releaseStatementBlock(def->body);
@@ -395,19 +407,20 @@ void releaseFunctionDefinition(FunctionDefinition *def) {
 }
 
 void releaseStatementBlock(StatementBlock *block) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger, "Executing destructor: %s ptr: %p", __FUNCTION__,  (void*)block);
     if (!block) return;
     releaseStatementList(block->statementList);
     free(block);
 }
 void releaseArrayAccess(ArrayAccess *access) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-    if (!access) return;
+    logDebugging(_logger, "Executing destructor: %s, ptr: %p", __FUNCTION__, (void*)access);
+    if (access == NULL) return;
+    if (access->identifier) free(access->identifier);
     releaseMathExpression(access->index);
     free(access);
 }
 void releaseIntList(IntList *list) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)list);
     if (!list) return;
     releaseIntNode(list->integers);
     free(list);
@@ -415,7 +428,7 @@ void releaseIntList(IntList *list) {
 
 
 void releaseUnit(Unit *unit) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)unit);
     while (unit) {
         Unit *next = unit->units;
         releaseExternalDeclaration(unit->externalDeclaration);
@@ -424,7 +437,7 @@ void releaseUnit(Unit *unit) {
     }
 }
 void releaseExternalDeclaration(ExternalDeclaration *decl) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)decl);
     if (!decl) return;
     switch (decl->type) {
         case FUNCTION_DEFINITION:
@@ -438,7 +451,7 @@ void releaseExternalDeclaration(ExternalDeclaration *decl) {
 }
 
 void releaseIntNode(IntNode *node) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)node);
     while (node) {
         IntNode *next = node->next;
         free(node);
@@ -447,7 +460,7 @@ void releaseIntNode(IntNode *node) {
 }
 
 void releaseStringNode(StringNode *node) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)node);
     while (node) {
         StringNode *next = node->next;
         if (node->string) free(node->string);
@@ -458,9 +471,10 @@ void releaseStringNode(StringNode *node) {
 
 
 void releaseStatementNode(StatementNode *node) {
-    logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-    if (node != NULL) {
+logDebugging(_logger, "Executing destructor: %s, ptr: %p", __FUNCTION__, (void*)node);
+    if (node) {
         releaseStatement(node->statement);
         free(node);
+
     }
 }

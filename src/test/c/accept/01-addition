@@ -1,8 +1,8 @@
 INT I = 0
 
- ARRAY[] = {1, 2, 3, 4, 5}
+ARRAY[] = {1, 2, 3, 4, 5}
 
-STRING SEX = "COLOMBIA"
+STRING s = "COLOMBIA"
 
 BOOL QUESO = TRUE
 

@@ -262,7 +262,6 @@ externalDeclaration:
     | statement                                                     { $$ = StatementExternalDeclarationSemanticAction($1); }
     ;
 
- //statement                                                        { $$ = SingleStatementListSemanticAction($1); }
 
 statementList: statement statementList                             { $$ = AppendStatementListSemanticAction($2, $1); }
     | statement                                                                 { $$ = SingleStatementListSemanticAction($1); }
@@ -286,7 +285,6 @@ statement:
   | assignmentStatement                                             { $$ = AssignmentStatementSemanticAction($1);}
   | macroStatement                                                 { $$ = MacroStatementSemanticAction($1); }
   | unaryChangeOperatorStatement                                    { $$ = UnaryChangeOperatorStatementSemanticAction($1); }
-
   | returnStatement                                                 { $$ = ReturnStatementSemanticAction($1); }
   | functionStatement                                               { $$ = FunctionStatementSemanticAction($1); }
   | variableStatement                                               { $$ = VariableStatementSemanticAction($1); }
