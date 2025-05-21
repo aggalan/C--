@@ -30,9 +30,6 @@ void releaseExpression(Expression * expression) {
             case STRING_EXPRESSION:
                 if (expression->stringExpression) free(expression->stringExpression);
                 break;
-            case STRING_ARRAY_EXPRESSION:
-                releaseArrayAccess(expression->arrayAccess);
-                break;
         }
         free(expression);
     }

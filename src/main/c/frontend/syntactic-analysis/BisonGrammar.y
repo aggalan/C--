@@ -49,6 +49,11 @@
     AssignmentMathStatement * assignmentMathStatement;
     AssignmentBoolStatement * assignmentBoolStatement;
     AssignmentStringStatement * assignmentStringStatement;
+    ArgumentList * argumentList;
+    ArgumentDefList * argumentDefList;
+    ArgumentDef * argumentDef;
+    ArgumentValue * argumentValue;
+    StringExpression * stringExpression;
     BoolFactor * boolFactor;
     BoolExpression * boolExpression;
     MathExpression * mathExpression;
@@ -195,6 +200,7 @@
 %type <expression> expression
 %type <boolExpression> boolExpression
 %type <mathExpression> mathExpression
+%type <stringExpression> stringExpression
 %type <assignmentMathStatement> assignmentMathStatement
 %type <assignmentBoolStatement> assignmentBoolStatement
 %type <assignmentStringStatement> assignmentStringStatement
@@ -206,6 +212,14 @@
 %type <functionStatement> stringFunctionStatement
 %type <functionStatement> functionStatement
 %type <functionDefinition> functionDefinition
+%type <functionStatement> functionExpression
+%type <functionStatement> boolFunctionExpression
+%type <functionStatement> intFunctionExpression
+%type <functionStatement> stringFunctionExpression
+%type <argumentList> argumentList
+%type <argumentDefList> argumentDefList
+%type <argumentDef> argumentDef
+%type <argumentValue> argumentValue
 %type <unit> unit
 %type <externalDeclaration> externalDeclaration
 %type <elseStatement> elseStatement
@@ -256,10 +270,10 @@ statementList: statement statementList                             { $$ = Append
 
 
 functionDefinition:
-      INT GENERIC_ID OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS statementBlock  { $$ = FunctionDefinitionSemanticAction(_INT, $2, $4, $6); }
-    | VOID GENERIC_ID OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS statementBlock  { $$ = FunctionDefinitionSemanticAction(_VOID, $2, $4, $6); }
-    | STRING_TYPE GENERIC_ID OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS statementBlock     { $$ = FunctionDefinitionSemanticAction(_STRING, $2, $4, $6); }
-    | BOOL GENERIC_ID OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS statementBlock  { $$ = FunctionDefinitionSemanticAction(_STRING, $2, $4, $6); }
+      INT GENERIC_ID OPEN_PARENTHESIS argumentDefList CLOSE_PARENTHESIS statementBlock  { $$ = FunctionDefinitionSemanticAction(_INT, $2, $4, $6); }
+    | VOID GENERIC_ID OPEN_PARENTHESIS argumentDefList CLOSE_PARENTHESIS statementBlock  { $$ = FunctionDefinitionSemanticAction(_VOID, $2, $4, $6); }
+    | STRING_TYPE GENERIC_ID OPEN_PARENTHESIS argumentDefList CLOSE_PARENTHESIS statementBlock     { $$ = FunctionDefinitionSemanticAction(_STRING, $2, $4, $6); }
+    | BOOL GENERIC_ID OPEN_PARENTHESIS argumentDefList CLOSE_PARENTHESIS statementBlock  { $$ = FunctionDefinitionSemanticAction(_STRING, $2, $4, $6); }
     ;
 
 statement:
@@ -293,13 +307,13 @@ returnStatement: RETURN expression  NEW_LINE                                 { $
     | RETURN NEW_LINE                                     { $$ = ReturnEmptySemanticAction(); }
     ;
 
-boolFunctionStatement: BOOL_FUNCTION_ID OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS NEW_LINE
+boolFunctionStatement: BOOL_FUNCTION_ID OPEN_PARENTHESIS argumentList CLOSE_PARENTHESIS NEW_LINE
                                                                         { $$ = FunctionSemanticAction($1, $3); }
                      ;
-intFunctionStatement: INT_FUNCTION_ID OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS NEW_LINE
+intFunctionStatement: INT_FUNCTION_ID OPEN_PARENTHESIS argumentList CLOSE_PARENTHESIS NEW_LINE
                                                                         { $$ = FunctionSemanticAction($1, $3); }
                      ;
-stringFunctionStatement: STRING_FUNCTION_ID OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS NEW_LINE
+stringFunctionStatement: STRING_FUNCTION_ID OPEN_PARENTHESIS argumentList CLOSE_PARENTHESIS NEW_LINE
                                                                         { $$ = FunctionSemanticAction($1, $3); }
                      ;
 
@@ -308,6 +322,20 @@ functionStatement: boolFunctionStatement                                { $$ = $
     | stringFunctionStatement                                           { $$ = $1 ;}
     ;
 
+    boolFunctionExpression: BOOL_FUNCTION_ID OPEN_PARENTHESIS argumentList CLOSE_PARENTHESIS
+                                                                            { $$ = FunctionSemanticAction($1, $3); }
+                         ;
+    intFunctionExpression: INT_FUNCTION_ID OPEN_PARENTHESIS argumentList CLOSE_PARENTHESIS
+                                                                            { $$ = FunctionSemanticAction($1, $3); }
+                         ;
+    stringFunctionExpression: STRING_FUNCTION_ID OPEN_PARENTHESIS argumentList CLOSE_PARENTHESIS
+                                                                            { $$ = FunctionSemanticAction($1, $3); }
+
+functionExpression:
+    boolFunctionExpression                                             { $$ = $1; }
+    | intFunctionExpression                                              { $$ =  $1; }
+    | stringFunctionExpression                                           { $$ =  $1;}
+    ;
 
 macroStatement: MACRO GENERIC_ID OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS ARROW statement
                                                                         { $$ = MacroSemanticAction($2, $4, $7); }
@@ -379,8 +407,7 @@ constant: INTEGER													{ $$ = IntegerConstantSemanticAction($1); }
 expression:
       mathExpression                                                { $$ = MathExpressionSemanticAction($1); }
     | boolExpression                                                { $$ = BooleanExpressionSemanticAction($1); }
-    | STRING                                                        { $$ = StringExpressionSemanticAction($1); }
-    | stringArrayAccess                                             { $$ = ArrayStringAccessSemanticAction($1); }
+   | stringExpression                                              { $$ = StringExpressionSemanticAction($1); }
     ;
 
 mathExpression:
@@ -389,6 +416,11 @@ mathExpression:
     | mathExpression[left] MUL mathExpression[right]				        { $$ = ArithmeticExpressionSemanticAction($left, $right, MULTIPLICATION); }
     | mathExpression[left] SUB mathExpression[right]			            { $$ = ArithmeticExpressionSemanticAction($left, $right, SUBTRACTION); }
     | factor												                { $$ = FactorExpressionSemanticAction($1); }
+    ;
+
+stringExpression: STRING                                            { $$ = FactorStringExpressionSemanticAction($1); }
+    | stringArrayAccess                                             { $$ = ArrayStringAccessSemanticAction($1); }
+    | STRING_ID                                                { $$ = IdentifierStringExpressionSemanticAction($1); }
     ;
 
 boolExpression:
@@ -441,7 +473,7 @@ assignmentStringStatement: STRING_ID ASSIGNMENT STRING   NEW_LINE            { $
     variableStatement:
           BOOL GENERIC_ID ASSIGNMENT boolExpression   NEW_LINE            { $$ = VariableBoolDeclarationSemanticAction( $2, $4); }
         | INT GENERIC_ID ASSIGNMENT mathExpression   NEW_LINE                      { $$ = VariableIntDeclarationSemanticAction( $2, $4); }
-        | STRING_TYPE GENERIC_ID ASSIGNMENT STRING    NEW_LINE                    { $$ = VariableStringDeclarationSemanticAction( $2, $4); }
+        | STRING_TYPE GENERIC_ID ASSIGNMENT stringExpression  NEW_LINE                    { $$ = VariableStringDeclarationSemanticAction( $2, $4); }
         | BOOL GENERIC_ID NEW_LINE                                      { $$ = VariableDeclarationSemanticAction(_BOOL, $2, NULL); }
         | INT GENERIC_ID  NEW_LINE                                      { $$ = VariableDeclarationSemanticAction(_INT, $2, NULL); }
         | STRING_TYPE GENERIC_ID NEW_LINE                                    { $$ = VariableDeclarationSemanticAction(_STRING, $2, NULL); }
@@ -461,10 +493,38 @@ printStatement: PRINT GENERIC_ID  NEW_LINE                                 { $$ 
     |    PRINT STRING  NEW_LINE                                             { $$ = PrintStringSemanticAction($2); }
     ;
 
-stringList:
-    GENERIC_ID                                       { $$ = SingleStringListSemanticAction($1); }
-  | stringList COMMA GENERIC_ID                            { $$ = AppendStringListSemanticAction($1, $3); }
+argumentList:
+    argumentValue                                       { $$ = ArgumentValueSemanticAction($1); }
+  | argumentList COMMA argumentValue                            { $$ = AppendArgumentListSemanticAction($1, $3); }
   | %empty                                                        { $$ = NULL; }
   ;
+
+  stringList:
+      GENERIC_ID                                       { $$ = SingleStringListSemanticAction($1); }
+    | stringList COMMA GENERIC_ID                            { $$ = AppendStringListSemanticAction($1, $3); }
+
+
+  argumentValue: mathExpression                                        { $$ = MathExpressionArgValueSemanticAction($1); }
+    | boolExpression                                        { $$ = BoolExpressionArgValueSemanticAction($1); }
+    | stringExpression                                        { $$ = StringExpressionArgValueSemanticAction($1); }
+    | functionExpression                                    { $$ = FunctionExpressionArgValueSemanticAction($1); }
+    | BOOL_ARRAY_ID                                         { $$ = ArrayBoolSemanticAction($1); }
+    | INT_ARRAY_ID                                          { $$ = ArrayIntSemanticAction($1); }
+    | STRING_ARRAY_ID                                       { $$ = ArrayStringSemanticAction($1); }
+    ;
+
+argumentDefList:
+    argumentDef                                       { $$ = SingleArgumentDefListSemanticAction($1); }
+  | argumentDefList COMMA argumentDef                            { $$ = AppendArgumentDefListSemanticAction($1, $3); }
+  | %empty                                                        { $$ = NULL; }
+  ;
+argumentDef:
+    INT GENERIC_ID                                                       { $$ = ArgumentDefSemanticAction($2, _INT); }
+    | BOOL GENERIC_ID                                                    { $$ = ArgumentDefSemanticAction($2, _BOOL); }
+    | STRING_TYPE GENERIC_ID                                             { $$ = ArgumentDefSemanticAction($2, _STRING); }
+    | INT GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS GENERIC_ID             { $$ = ArgumentDefSemanticAction($2, _INT_ARRAY); }
+    | BOOL GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS GENERIC_ID            { $$ = ArgumentDefSemanticAction($2, _BOOL_ARRAY); }
+    | STRING_TYPE GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS GENERIC_ID     { $$ = ArgumentDefSemanticAction($2, _STRING_ARRAY); }
+    ;
 
 %%

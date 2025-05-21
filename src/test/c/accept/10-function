@@ -5,9 +5,10 @@ INT hola () {
 IF true {
     PRINT "HOLA"
 }
-BOOL nico() {
+BOOL nico(INT nico, STRING tutti) {
     PRINT "HOLA"
     IF false {
         PRINT tutti
     }
 }
+func_boolnico( arr_bool[0], "HOLA")
