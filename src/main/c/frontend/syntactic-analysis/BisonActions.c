@@ -195,18 +195,19 @@ MatchStatement *MatchSemanticAction(String id, CaseList *cases) {
 	match->caseList = cases;
 	return match;
 }
-PrintStatement * PrintIdentifierSemanticAction(String id){
+PrintStatement * PrintIdentifierSemanticAction(StringExpression * semanticAction) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	PrintStatement * print = calloc(1, sizeof(PrintStatement));
-	print->identifier = id;
+	print->identifier = semanticAction;
 	return print;
 }
-PrintStatement * PrintStringSemanticAction(String str){
+PrintStatement * PrintMathExpressionSemanticAction(MathExpression * mathExpression){
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	PrintStatement * print = calloc(1, sizeof(PrintStatement));
-	print->identifier = str;
+	print->mathExpression = mathExpression;
 	return print;
 }
+
 BoolExpression * ConditionalExpressionSemanticAction(BoolExpression * conditionalExpression1, BoolExpression * conditionalExpression2, OperatorType type) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	BoolExpression * condition = calloc(1, sizeof(BoolExpression));

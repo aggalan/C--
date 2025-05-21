@@ -482,8 +482,8 @@ integerList:
     | integerList COMMA INTEGER                                    { $$ = AppendArrayListSemanticAction($1, $3); }
     ;
 
-printStatement: PRINT GENERIC_ID  NEW_LINE                                 { $$ = PrintIdentifierSemanticAction($2); }
-    |    PRINT STRING  NEW_LINE                                             { $$ = PrintStringSemanticAction($2); }
+printStatement: PRINT stringExpression  NEW_LINE                                 { $$ = PrintIdentifierSemanticAction($2); }
+    | PRINT mathExpression  NEW_LINE                                        { $$ = PrintMathExpressionSemanticAction($2); }
     ;
 
 argumentList:

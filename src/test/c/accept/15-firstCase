@@ -21,8 +21,8 @@ VOID main() {
     intn = 0
     boolstatus = func_booloperation(intn)
     IF boolstatus {
-       PRINT(stringmsgs)
+       PRINT stringmsgs
     } ELSE {
-        PRINT(stringmsgf)
+        PRINT stringmsgf
     }
 }

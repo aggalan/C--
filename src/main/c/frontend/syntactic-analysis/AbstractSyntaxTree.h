@@ -125,7 +125,15 @@ struct FunctionDefinition {
 };
 
 struct PrintStatement {
-	String identifier;
+	union {
+		StringExpression * identifier;
+		MathExpression * mathExpression;
+	};
+	enum {
+		PRINT_IDENTIFIER,
+		PRINT_MATH_EXPRESSION,
+	} type;
+
 };
 
 struct SortStatement {

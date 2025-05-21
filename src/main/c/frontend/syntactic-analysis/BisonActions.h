@@ -35,7 +35,7 @@ WhileLoop *WhileLoopSemanticAction(BoolExpression *condition, StatementBlock *bo
 Statement *IfStatementSemanticAction(IfStatement *stmt);
 IfStatement *IfThenSemanticAction(BoolExpression *condition, StatementBlock *thenBranch,ElseStatement *elseBranch);
 IfStatement *IfElseSemanticAction(BoolExpression *condition, StatementBlock *thenBranch, ElseStatement *elseBranch);
-PrintStatement * PrintIdentifierSemanticAction(String id);
+PrintStatement * PrintIdentifierSemanticAction(StringExpression * stringExpression);
 PrintStatement * PrintStringSemanticAction(String str);
 BoolExpression * ConditionalExpressionSemanticAction(BoolExpression * conditionalExpression1, BoolExpression * conditionalExpression2, OperatorType type);
 BoolExpression * BooleanSemanticAction(MathExpression * mathExpression1, MathExpression * mathExpression2, ComparatorType type );
@@ -117,5 +117,6 @@ ArgumentDefList * AppendArgumentDefListSemanticAction(ArgumentDefList * list,Arg
 ArgumentDef * ArgumentDefSemanticAction(String identifier, Type type);
 Expression * StringExpressionSemanticAction(StringExpression * expression);
 StringExpression * FunctionCallStringExpressionSemanticAction(FunctionStatement * functionStatement);
+PrintStatement * PrintMathExpressionSemanticAction(MathExpression * mathExpression);
 
 #endif
