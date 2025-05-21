@@ -1,5 +1,6 @@
 numeros[]={7,5,2,4,6,4}
 INT numeros[6]
+arr_intnumeros[3] = inta + 2
 VOID main(){
 
 FOR i = 0 TO 5 {

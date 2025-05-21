@@ -313,7 +313,7 @@ void releaseArrayAssignment( ArrayAssignment *stmt) {
     logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)stmt);
     if (!stmt) return;
     if (stmt->type == ARRAY_MATH_EXPRESSION) {
-        free(stmt->mathExpression);
+        releaseMathExpression(stmt->mathExpression);
     } else if (stmt->type == ARRAY_STRING_EXPRESSION ) {
         releaseStringExpression(stmt->stringExpression);
     } else if (stmt->type == ARRAY_BOOL_EXPRESSION) {
