@@ -872,6 +872,14 @@ Expression * StringExpressionSemanticAction(StringExpression * stringExpression)
 	expression->type = STRING_EXPRESSION;
 	return expression;
 }
+ArgumentValue * UnaryIncrementOperatorExpressionArgValueSemanticAction(UnaryChangeOperatorStatement * statement) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ArgumentValue * argumentValue = calloc(1, sizeof(ArgumentValue));
+	argumentValue->unaryChangeOperatorStatement = statement;
+	argumentValue->type = ARGUMENT_UNARY_CHANGE_OPERATOR;
+	return argumentValue;
+}
+
 
 // ConditionalExpression *MathConditionalExpressionSemanticAction(MathExpression *math_expression) {
 // 	_logSyntacticAnalyzerAction(__FUNCTION__);

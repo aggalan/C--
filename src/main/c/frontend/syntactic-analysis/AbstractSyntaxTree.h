@@ -191,6 +191,7 @@ struct ArgumentValue {
 		StringExpression * stringExpression;
 		ArrayAccess * arrayAccess;
 		FunctionStatement * functionExpression;
+		UnaryChangeOperatorStatement * unaryChangeOperatorStatement;
 	};
 	enum {
 		ARGUMENT_MATH_EXPRESSION,
@@ -200,7 +201,8 @@ struct ArgumentValue {
 		ARGUMENT_BOOL_ARRAY_ID,
 		ARGUMENT_STRING_ARRAY_ID,
 		ARGUMENT_INT_ARRAY_ID,
-		ARGUMENT_ARRAY_ACCESS
+		ARGUMENT_ARRAY_ACCESS,
+		ARGUMENT_UNARY_CHANGE_OPERATOR,
 	} type;
 };
 

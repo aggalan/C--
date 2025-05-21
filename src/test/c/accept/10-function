@@ -11,4 +11,5 @@ BOOL nico(INT nico, STRING tutti) {
         PRINT tutti
     }
 }
-func_boolnico( arr_bool[0], "HOLA")
+func_boolnico( arr_int[0]++, "HOLA")
+arr_int[inti]++
