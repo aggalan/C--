@@ -298,13 +298,6 @@ Factor * ParenthesisFactorSemanticAction(MathExpression * expression) {
 	return factor;
 }
 
-Factor * BooleanFactorSemanticAction(Bool value) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Factor * factor = calloc(1, sizeof(Factor));
-	factor->boolean = value;
-	factor->type = BOOLEAN_FACTOR;
-	return factor;
-}
 MacroStatement * MacroSemanticAction(String identifier, StringList *args, Statement * body) {
     _logSyntacticAnalyzerAction(__FUNCTION__);
     MacroStatement * macro = calloc(1, sizeof(MacroStatement));
@@ -335,14 +328,6 @@ ReturnStatement * ReturnSemanticAction(Expression * expression){
     ReturnStatement * returnStatement = calloc(1, sizeof(ReturnStatement));
     returnStatement->expression = expression;
 	returnStatement->type = RETURN_EXPRESSION;
-    return returnStatement;
-
-}
-ReturnStatement * ReturnFunctionStatementSemanticAction(FunctionStatement * functionStatement){
-    _logSyntacticAnalyzerAction(__FUNCTION__);
-    ReturnStatement * returnStatement = calloc(1, sizeof(ReturnStatement));
-    returnStatement->functionStatement = functionStatement;
-	returnStatement->type = RETURN_FUNCTION_STATEMENT;
     return returnStatement;
 
 }
@@ -561,13 +546,6 @@ IntList * AppendArrayListSemanticAction(IntList *list, int integer) {
     return list;
 }
 
-Statement * ArrayStatementSemanticAction(ArrayStatement * array) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Statement * statement = calloc(1, sizeof(Statement));
-	statement->type = STATEMENT_ARRAY;
-	statement->arrayStatement = array;
-	return statement;
-}
 ArrayStatement * ArraySemanticAction(String identifier, IntList * elements) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	ArrayStatement * array = calloc(1, sizeof(ArrayStatement));
@@ -762,13 +740,6 @@ StringExpression * IdentifierStringExpressionSemanticAction(String identifier) {
 	expression->type = STRING_IDENTIFIER_EXPRESSION;
 	return expression;
 }
-BoolFactor * ParenthesisBoolExpressionSemanticAction(BoolExpression * conditionalExpression1) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	BoolFactor * factor = calloc(1, sizeof(BoolFactor));
-	factor->expression = conditionalExpression1;
-	factor->type = PARENTHESIS_EXPRESSION;
-	return factor;
-}
 ArgumentList * ArgumentValueSemanticAction(ArgumentValue * argumentValue) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	ArgumentList * list = calloc(1, sizeof(ArgumentList));
@@ -807,13 +778,7 @@ ArgumentValue * BoolExpressionArgValueSemanticAction( BoolExpression * expressio
 	argumentValue->type = ARGUMENT_BOOL_EXPRESSION;
 	return argumentValue;
 }
-ArgumentValue * ArrayAccessArgValueSemanticAction( ArrayAccess * arrayAccess) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	ArgumentValue * argumentValue = calloc(1, sizeof(ArgumentValue));
-	argumentValue->arrayAccess = arrayAccess;
-	argumentValue->type = ARGUMENT_ARRAY_ACCESS;
-	return argumentValue;
-}
+
 ArgumentValue * FunctionExpressionArgValueSemanticAction( FunctionStatement * functionStatement) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	ArgumentValue * argumentValue = calloc(1, sizeof(ArgumentValue));
@@ -871,13 +836,6 @@ Expression * StringExpressionSemanticAction(StringExpression * stringExpression)
 	expression->stringExpression = stringExpression;
 	expression->type = STRING_EXPRESSION;
 	return expression;
-}
-ArgumentValue * UnaryIncrementOperatorExpressionArgValueSemanticAction(UnaryChangeOperatorStatement * statement) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	ArgumentValue * argumentValue = calloc(1, sizeof(ArgumentValue));
-	argumentValue->unaryChangeOperatorStatement = statement;
-	argumentValue->type = ARGUMENT_UNARY_CHANGE_OPERATOR;
-	return argumentValue;
 }
 
 

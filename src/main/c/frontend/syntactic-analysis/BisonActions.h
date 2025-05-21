@@ -35,7 +35,6 @@ WhileLoop *WhileLoopSemanticAction(BoolExpression *condition, StatementBlock *bo
 Statement *IfStatementSemanticAction(IfStatement *stmt);
 IfStatement *IfThenSemanticAction(BoolExpression *condition, StatementBlock *thenBranch,ElseStatement *elseBranch);
 IfStatement *IfElseSemanticAction(BoolExpression *condition, StatementBlock *thenBranch, ElseStatement *elseBranch);
-MatchStatement *MatchSemanticAction(String id, CaseList *cases);
 PrintStatement * PrintIdentifierSemanticAction(String id);
 PrintStatement * PrintStringSemanticAction(String str);
 BoolExpression * ConditionalExpressionSemanticAction(BoolExpression * conditionalExpression1, BoolExpression * conditionalExpression2, OperatorType type);
@@ -58,16 +57,13 @@ StringList * SingleStringListSemanticAction(String str);
 StringList * AppendStringListSemanticAction(StringList *list, String str);
 Statement *  AssignmentStatementSemanticAction(AssignmentStatement * assignmentStatement);
 Factor * ParenthesisFactorSemanticAction(MathExpression * expression);
-BoolFactor * ParenthesisBoolExpressionSemanticAction(BoolExpression * conditionalExpression1);
 StringExpression * FactorStringExpressionSemanticAction(String expression);
 StringExpression * IdentifierStringExpressionSemanticAction(String identifier);
-Factor * BooleanFactorSemanticAction(Bool value);
 FunctionStatement * FunctionSemanticAction(String identifier, ArgumentList * parameters);
 Statement * ReturnStatementSemanticAction(ReturnStatement * stmt);
 Statement * FunctionStatementSemanticAction(FunctionStatement * stmt);
 FunctionDefinition * FunctionDefinitionSemanticAction(Type type,String identifier, ArgumentDefList * parameters, StatementBlock * body);
 ReturnStatement * ReturnSemanticAction(Expression * expression);
-ReturnStatement * ReturnFunctionStatementSemanticAction(FunctionStatement * functionStatement);
 Factor * FunctionCallFactorSemanticAction(FunctionStatement * functionStatement);
 Unit * SingleExternalDeclarationSemanticAction(ExternalDeclaration * externalDeclaration);
 Unit * AppendExternalDeclarationSemanticAction(Unit * unit, ExternalDeclaration * externalDeclaration);
@@ -82,7 +78,6 @@ VariableStatement * VariableDeclarationSemanticAction(Type type, String identifi
 Statement * UnaryChangeOperatorStatementSemanticAction( UnaryChangeOperatorStatement * stmt);
 UnaryChangeOperatorStatement * UnaryChangeOperatorSemanticAction(String identifier, int type);
 UnaryChangeOperatorStatement * UnaryChangeArraySemanticAction(ArrayAccess * arrayAccess, int type);
-Statement * ArrayStatementSemanticAction(ArrayStatement * array);
 ArrayStatement * ArraySemanticAction(String identifier, IntList * elements);
 
 IntList * SingleArrayListSemanticAction(int integer);
@@ -113,7 +108,6 @@ ArgumentList * AppendArgumentListSemanticAction(ArgumentList * list, ArgumentVal
 ArgumentValue * MathExpressionArgValueSemanticAction(MathExpression * expression);
 ArgumentValue * StringExpressionArgValueSemanticAction(StringExpression * expression);
 ArgumentValue * BoolExpressionArgValueSemanticAction(BoolExpression * expression);
-ArgumentValue * ArrayAccessArgValueSemanticAction( ArrayAccess * arrayAccess);
 ArgumentValue * FunctionExpressionArgValueSemanticAction( FunctionStatement * functionStatement);
 ArgumentValue * ArrayBoolSemanticAction(String identifier);
 ArgumentValue * ArrayIntSemanticAction(String identifier);
@@ -122,6 +116,5 @@ ArgumentDefList * SingleArgumentDefListSemanticAction(ArgumentDef * argumentDef)
 ArgumentDefList * AppendArgumentDefListSemanticAction(ArgumentDefList * list,ArgumentDef * argumentDef);
 ArgumentDef * ArgumentDefSemanticAction(String identifier, Type type);
 Expression * StringExpressionSemanticAction(StringExpression * expression);
-ArgumentValue * UnaryIncrementOperatorExpressionArgValueSemanticAction(UnaryChangeOperatorStatement * statement);
 
 #endif
