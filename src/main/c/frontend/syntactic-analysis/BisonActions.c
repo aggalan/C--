@@ -302,7 +302,7 @@ Factor * ParenthesisFactorSemanticAction(MathExpression * expression) {
 	return factor;
 }
 
-MacroStatement * MacroSemanticAction(String identifier, StringList *args, Statement * body) {
+MacroStatement * MacroSemanticAction(String identifier, StringList *args, MathExpression * body) {
     _logSyntacticAnalyzerAction(__FUNCTION__);
     MacroStatement * macro = calloc(1, sizeof(MacroStatement));
     macro->identifier = identifier;
@@ -955,6 +955,16 @@ AssignmentStatement * AssignmentArrayExpressionSemanticAction(ArrayAssignment * 
 	statement->arrayAssignmentExpression = assignmentExpression;
 	return statement;
 }
+
+ExternalDeclaration * MacroExternalDeclarationSemanticAction(MacroStatement * macroStatement){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ExternalDeclaration * externalDeclaration = calloc(1, sizeof(ExternalDeclaration));
+	externalDeclaration->macroStatement = macroStatement;
+	externalDeclaration->type = MACRO_STATEMENT;
+	return externalDeclaration;
+}
+
+
 // ConditionalExpression *MathConditionalExpressionSemanticAction(MathExpression *math_expression) {
 // 	_logSyntacticAnalyzerAction(__FUNCTION__);
 // 	ConditionalExpression * condition = calloc(1, sizeof(ConditionalExpression));

@@ -1,1 +1,7 @@
-MACRO HOLA (A,B) -> PRINT "A"
+MACRO HOLA (A,B) -> intA * intB
+
+IF (intA == 5 AND intB > intA) {
+    RETURN macro_HOLA(intA,intB)
+} ELSE {
+    RETURN 0
+}

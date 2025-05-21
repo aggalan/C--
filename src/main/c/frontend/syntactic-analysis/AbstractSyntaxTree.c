@@ -260,7 +260,7 @@ void releaseMacroStatement(MacroStatement *stmt) {
     if (!stmt) return;
     if (stmt->identifier) free(stmt->identifier);
     releaseStringList(stmt->parameters);
-    releaseStatement(stmt->statement);
+    releaseMathExpression(stmt->statement);
     free(stmt);
 }
 
@@ -494,6 +494,9 @@ void releaseExternalDeclaration(ExternalDeclaration *decl) {
             break;
         case STATEMENT:
             releaseStatement(decl->statement);
+            break;
+        case MACRO_STATEMENT:
+            releaseMacroStatement(decl->macroStatement);
             break;
     }
     free(decl);

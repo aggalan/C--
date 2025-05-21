@@ -51,7 +51,7 @@ Factor * IdentifierFactorSemanticAction(String identifier);
 BoolFactor * FunctionCallBoolFactorSemanticAction(FunctionStatement * functionStatement);
 BoolFactor * ArrayBoolFactorSemanticAction(ArrayAccess * arrayAccess);
 Statement  * MacroStatementSemanticAction(MacroStatement * stmt);
-MacroStatement * MacroSemanticAction(String identifier, StringList *args, Statement * body);
+MacroStatement * MacroSemanticAction(String identifier, StringList *args, MathExpression * body);
 StringList * SingleStringListSemanticAction(String str);
 StringList * AppendStringListSemanticAction(StringList *list, String str);
 Statement *  AssignmentStatementSemanticAction(AssignmentStatement * assignmentStatement);
@@ -123,6 +123,7 @@ StringExpression * FunctionCallStringExpressionSemanticAction(FunctionStatement 
 PrintStatement * PrintMathExpressionSemanticAction(MathExpression * mathExpression);
 Statement * MacroInvocationStatementSemanticAction(MacroInvocationStatement * macroInvocationStatement);
 MacroInvocationStatement * MacroInvocationSemanticAction(String identifier, ArgumentList * args);
+ExternalDeclaration * MacroExternalDeclarationSemanticAction(MacroStatement * macroStatement);
 ArrayAssignment * AssignmentIntArraySemanticAction(ArrayAccess * arrayAccess, MathExpression * mathExpression);
 ArrayAssignment * AssignmentStringArraySemanticAction(ArrayAccess * arrayAccess, StringExpression * stringExpression);
 ArrayAssignment * AssignmentBoolArraySemanticAction(ArrayAccess * arrayAccess, BoolExpression * boolExpression);

@@ -319,7 +319,7 @@ struct ArgumentList {
 struct MacroStatement {
 	String identifier;
 	StringList * parameters;
-	Statement *  statement;
+	MathExpression *  statement;
 };
 
 
@@ -612,9 +612,11 @@ struct Unit {
 struct ExternalDeclaration {
 	FunctionDefinition * functionDefinition;
 	Statement * statement;
+	MacroStatement * macroStatement;
 	enum {
 		FUNCTION_DEFINITION,
-		STATEMENT
+		STATEMENT,
+		MACRO_STATEMENT,
 	} type;
 };
 
