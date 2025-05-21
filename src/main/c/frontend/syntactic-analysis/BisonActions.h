@@ -36,7 +36,6 @@ Statement *IfStatementSemanticAction(IfStatement *stmt);
 IfStatement *IfThenSemanticAction(BoolExpression *condition, StatementBlock *thenBranch,ElseStatement *elseBranch);
 IfStatement *IfElseSemanticAction(BoolExpression *condition, StatementBlock *thenBranch, ElseStatement *elseBranch);
 PrintStatement * PrintIdentifierSemanticAction(StringExpression * stringExpression);
-PrintStatement * PrintStringSemanticAction(String str);
 BoolExpression * ConditionalExpressionSemanticAction(BoolExpression * conditionalExpression1, BoolExpression * conditionalExpression2, OperatorType type);
 BoolExpression * BooleanSemanticAction(MathExpression * mathExpression1, MathExpression * mathExpression2, ComparatorType type );
 BoolExpression * BoolFactorExpressionSemanticAction(BoolFactor * boolFactor);
