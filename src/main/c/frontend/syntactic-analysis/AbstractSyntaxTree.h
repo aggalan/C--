@@ -597,4 +597,13 @@ void releaseIntNode(IntNode * node);
 void releaseStringNode(StringNode * node);
 void releaseStatementNode(StatementNode * node);
 void releaseCaseNode(CaseNode * node);
+void releaseArgumentValue(ArgumentValue * argumentValue);
+void releaseArgumentList(ArgumentList * argumentList);
+void releaseArgumentNode(ArgumentNode * argumentNode);
+void releaseArgumentDef(ArgumentDef * argumentDef);
+void releaseArgumentDefNode(ArgumentDefNode * argumentDefNode);
+void releaseArgumentDefList(ArgumentDefList * argumentDefList);
+
+
+
 #endif

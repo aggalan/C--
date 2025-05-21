@@ -54,7 +54,7 @@ MathExpression * FactorExpressionSemanticAction(Factor * factor) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	MathExpression * expression = calloc(1, sizeof(MathExpression));
 	expression->factor = factor;
-	expression->type = FACTOR;
+	expression->type = FACTOR_EXPRESSION;
 	return expression;
 }
 
