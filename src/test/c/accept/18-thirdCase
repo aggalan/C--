@@ -1,4 +1,25 @@
 
+// Definir variable
+INT n
+STRING msgOne = "This is number 1"
+STRING msgTwo = "This is number 2"
+STRING msgElse = "This is not 1 or 2"
+// Definir donde arranca el programa
+
+VOID main() {
+    intn = 0
+    MATCH n {
+        1 -> PRINT stringmsgOne
+        2 -> PRINT stringmsgTwo
+        DEFAULT -> PRINT stringmsgElse
+        }
+    intn++
+    IF intn > 0 AND intn < 2 {
+       PRINT "Hello"
+    }
+    RETURN
+}
+//Este caso el programa imprimirá “This is not one or two” y después “Hello”
 IF (intvalue3 == 5 AND intvalue > intvalue2) {
     RETURN 5
 }
