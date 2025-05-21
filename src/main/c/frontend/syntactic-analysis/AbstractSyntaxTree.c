@@ -28,6 +28,7 @@ void releaseExpression(Expression * expression) {
                 releaseBoolExpression(expression->boolExpression);
                 break;
             case STRING_EXPRESSION:
+                if (expression->stringExpression->string) free(expression->stringExpression->string);
                 if (expression->stringExpression) free(expression->stringExpression);
                 break;
         }
@@ -310,7 +311,10 @@ void releaseAssignmentStringStatement(AssignmentStringStatement *stmt) {
     logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)stmt);
     if (!stmt) return;
     if (stmt->identifier) free(stmt->identifier);
-    if (stmt->expression) free(stmt->expression);
+    if (stmt->expression){
+     logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__,(void*)stmt->expression);
+
+    }
     free(stmt);
 
 }
