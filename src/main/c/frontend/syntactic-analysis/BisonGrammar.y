@@ -448,7 +448,7 @@ boolFactor:
     | TRUE                                                        { $$ = BooleanConstantSemanticAction(TRUE); }
     | FALSE                                                       { $$ = BooleanConstantSemanticAction(FALSE); }
     | BOOL_ID                                                  { $$ = IdentifierBoolFactorSemanticAction($1);}
-    | boolFunctionStatement                                          { $$ = FunctionCallBoolFactorSemanticAction($1); }
+    | boolFunctionExpression                                          { $$ = FunctionCallBoolFactorSemanticAction($1); }
     | NOT boolExpression                                                { $$ = NotExpressionSemanticAction($2); }
     | boolArrayAccess                                               { $$ = ArrayBoolFactorSemanticAction($1); }
     ;
