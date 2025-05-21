@@ -14,6 +14,7 @@ void shutdownAbstractSyntaxTreeModule();
  * This typedefs allows self-referencing types.
  */
 
+typedef enum Order Order;
 typedef enum Type Type;
 typedef enum MathExpressionType MathExpressionType;
 typedef enum MathOperatorType MathOperatorType;
@@ -136,10 +137,17 @@ struct PrintStatement {
 	} type;
 
 };
+enum Order {
+	ORDER_ASC,
+	ORDER_DESC
+};
 
 struct SortStatement {
 	String identifier;
+	Order order;
 };
+
+
 
 enum ComparatorType {
 	EQUAL,

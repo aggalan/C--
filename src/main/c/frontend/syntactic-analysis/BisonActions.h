@@ -46,7 +46,7 @@ BoolFactor * IdentifierBoolFactorSemanticAction(String identifier);
 
 Statement * PrintStatementSemanticAction(PrintStatement * stmt);
 Statement * SortStatementSemanticAction(SortStatement * identifier);
-SortStatement * SortSemanticAction(String identifier);
+SortStatement * SortSemanticAction(String identifier, Order order);
 Factor * IdentifierFactorSemanticAction(String identifier);
 BoolFactor * FunctionCallBoolFactorSemanticAction(FunctionStatement * functionStatement);
 BoolFactor * ArrayBoolFactorSemanticAction(ArrayAccess * arrayAccess);

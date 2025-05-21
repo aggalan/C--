@@ -4,6 +4,6 @@ VOID main(){
 FOR inti = 0 TO 5 {
 RETURN 2
 }
-   SORT arr_intnumeros
+   SORT arr_intnumeros DESC
    PRINT "numeros"
 }

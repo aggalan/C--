@@ -256,10 +256,11 @@ Statement * SortStatementSemanticAction(SortStatement * sortStatement) {
 	return statement;
 }
 
-SortStatement * SortSemanticAction(String identifier) {
+SortStatement * SortSemanticAction(String identifier, Order order) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	SortStatement * statement = calloc(1, sizeof(SortStatement));
 	statement->identifier = identifier;
+	statement->order = order;
 	return statement;
 }
 Factor * IdentifierFactorSemanticAction(String identifier) {

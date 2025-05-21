@@ -4,6 +4,6 @@ VOID main() {
         arr_intnumeros[inti]++
     }
     // add ASC
-    SORT arr_intnumeros
+    SORT arr_intnumeros ASC
 //    PRINT "numeros"
 }

@@ -94,6 +94,8 @@
 "MACRO"                             { return MacroLexemeAction(createLexicalAnalyzerContext()); }
 "RETURN"						    { return ReturnLexemeAction(createLexicalAnalyzerContext()); }
 "SORT"                              { return SortLexemeAction(createLexicalAnalyzerContext()); }
+"ASC"                               { return AscLexemeAction(createLexicalAnalyzerContext()); }
+"DESC"                              { return DescLexemeAction(createLexicalAnalyzerContext()); }
 "DEFAULT"                           { return DefaultLexemeAction(createLexicalAnalyzerContext()); }
 
 "int"[[:alnum:]]*		            { return TypedIdentifierLexemeAction(createLexicalAnalyzerContext(), INT_ID); }

@@ -1,5 +1,5 @@
 IF 3 < 10 {
-    SORT arr_intTutti
+    SORT arr_intTutti ASC
 }
 func_bool()
 

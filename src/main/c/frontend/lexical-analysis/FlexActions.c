@@ -295,3 +295,16 @@ Token TypedIdentifierLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContex
     destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return token;
 }
+
+Token AscLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = ASC;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return ASC;
+}
+Token DescLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = DESC;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return DESC;
+}

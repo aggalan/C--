@@ -140,6 +140,9 @@
 %token <boolean> FALSE
 %token <token> ADD_ONE
 %token <token> MINUS_ONE
+%token <token> ASC
+%token <token> DESC
+
 
 %token <token> GTE
 %token <token> LTE
@@ -345,7 +348,8 @@ statementBlock: OPEN_BRACE statementList CLOSE_BRACE           { $$ = StatementB
             | OPEN_BRACE NEW_LINE statementList CLOSE_BRACE     { $$ =  StatementBlockSemanticAction($3); }
   ;
 
-sortStatement: SORT INT_ARRAY_ID  NEW_LINE                                   { $$ = SortSemanticAction($2); }
+sortStatement: SORT INT_ARRAY_ID ASC  NEW_LINE                      { $$ = SortSemanticAction($2, ORDER_ASC); }
+            | SORT INT_ARRAY_ID DESC NEW_LINE                     { $$ = SortSemanticAction($2, ORDER_DESC); }
 
 matchStatement: MATCH GENERIC_ID OPEN_BRACE matchCaseList CLOSE_BRACE   { $$ = MatchSemanticAction($2, $4); }
     | MATCH GENERIC_ID OPEN_BRACE NEW_LINE matchCaseList CLOSE_BRACE { $$ = MatchSemanticAction($2, $5); }

@@ -67,4 +67,6 @@ Token BooleanLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token
 
 Token NewLineLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token TypedIdentifierLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
+Token AscLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token DescLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 #endif
