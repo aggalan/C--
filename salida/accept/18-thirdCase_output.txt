@@ -1,0 +1,59 @@
+#include <stdlib.h>
+
+#include <stdio.h>
+
+typedef enum {
+    ORDER_ASCENDING,
+    ORDER_DESCENDING
+} Order;
+
+int compareAsc(const void *a, const void *b) {
+    int intA = *(const int*)a;
+    int intB = *(const int*)b;
+    return (intA > intB) - (intA < intB);
+}
+
+int compareDesc(const void *a, const void *b) {
+    int intA = *(const int*)a;
+    int intB = *(const int*)b;
+    return (intB > intA) - (intB < intA);
+}
+
+void sortArray(int *array, int length, Order order) {
+    if (array == NULL || length <= 0) return;
+    if (order == ORDER_ASCENDING) {
+        qsort(array, length, sizeof(int), compareAsc);
+    } else {
+        qsort(array, length, sizeof(int), compareDesc);
+    }
+}
+
+
+int n;
+const char *msgOne = "This is number 1";
+const char *msgTwo = "This is number 2";
+const char *msgElse = "This is not 1 or 2";
+
+void main() {
+return;
+if ((intn > 0 && intn < 2)) {
+printf("%s\n", "Hello");
+}
+intn++;
+switch(n) {
+    case 1:    
+printf("%s\n", stringmsgOne);
+        break;
+    case 2:    
+printf("%s\n", stringmsgTwo);
+        break;
+    case 0:    
+printf("%s\n", stringmsgElse);
+        break;
+}
+intn = 0;
+}
+
+if (((intvalue3 == 5 && intvalue > intvalue2))) {
+return 5;
+}

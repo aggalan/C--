@@ -1,5 +1,7 @@
 #include "Environment.h"
-
+#include <stdlib.h>
+#include <stdarg.h>
+#include <stdio.h>
 /* PUBLIC FUNCTIONS */
 
 const boolean getBooleanOrDefault(const char * name, const boolean defaultValue) {
@@ -23,4 +25,9 @@ const char * getStringOrDefault(const char * name, const char * defaultValue) {
 	else {
 		return value;
 	}
+}
+
+
+const char* getOutputPath(void) {
+	return getStringOrDefault("OUTPUT_PATH", "./salida/salida.txt");
 }

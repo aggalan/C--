@@ -1,5 +1,6 @@
 INT I = 0
 
+
 ARRAY[] = {1, 2, 3, 4, 5}
 
 STRING s = "COLOMBIA"

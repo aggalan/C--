@@ -1,4 +1,4 @@
-g#! /bin/bash
+#! /bin/bash
 
 set -u
 
@@ -10,33 +10,42 @@ RED='\033[0;31m'
 OFF='\033[0m'
 STATUS=0
 
+mkdir -p salida/accept
+mkdir -p salida/reject
+
 echo "Compiler should accept..."
 echo ""
 
-for test in $(ls src/test/c/accept/); do
-	cat "src/test/c/accept/$test" | build/Compiler >/dev/null 2>&1
-	RESULT="$?"
-	if [ "$RESULT" == "0" ]; then
-		echo -e "    $test, ${GREEN}and it does${OFF} (status $RESULT)"
-	else
-		STATUS=1
-		echo -e "    $test, ${RED}but it rejects${OFF} (status $RESULT)"
-	fi
+for test in src/test/c/accept/*; do
+    testname=$(basename "$test")
+    export OUTPUT_PATH="salida/accept/${testname%.*}_output.txt"
+
+    cat "$test" | build/Compiler >/dev/null 2>&1
+    RESULT="$?"
+    if [ "$RESULT" == "0" ]; then
+        echo -e "    $testname, ${GREEN}and it does${OFF} (status $RESULT)"
+    else
+        STATUS=1
+        echo -e "    $testname, ${RED}but it rejects${OFF} (status $RESULT)"
+    fi
 done
 echo ""
 
 echo "Compiler should reject..."
 echo ""
 
-for test in $(ls src/test/c/reject/); do
-	cat "src/test/c/reject/$test" | build/Compiler >/dev/null 2>&1
-	RESULT="$?"
-	if [ "$RESULT" != "0" ]; then
-		echo -e "    $test, ${GREEN}and it does${OFF} (status $RESULT)"
-	else
-		STATUS=1
-		echo -e "    $test, ${RED}but it accepts${OFF} (status $RESULT)"
-	fi
+for test in src/test/c/reject/*; do
+    testname=$(basename "$test")
+    export OUTPUT_PATH="salida/reject/${testname%.*}_output.txt"
+
+    cat "$test" | build/Compiler >/dev/null 2>&1
+    RESULT="$?"
+    if [ "$RESULT" != "0" ]; then
+        echo -e "    $testname, ${GREEN}and it does${OFF} (status $RESULT)"
+    else
+        STATUS=1
+        echo -e "    $testname, ${RED}but it accepts${OFF} (status $RESULT)"
+    fi
 done
 echo ""
 

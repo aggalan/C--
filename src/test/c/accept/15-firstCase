@@ -1,5 +1,3 @@
-// Definir variable
-
 INT n
 STRING msgs = "The operation was successful"
 STRING msgf = "The operation failed"
@@ -17,7 +15,7 @@ RETURN FALSE
 
 // Definir donde arranca el programa
 
-VOID main() {
+VOID main(INT T) {
     intn = 0
     boolstatus = func_booloperation(intn)
     IF boolstatus {
