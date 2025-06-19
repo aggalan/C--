@@ -21,7 +21,7 @@ const int main(const int count, const char ** arguments) {
 	initializeSyntacticAnalyzerModule();
 	initializeAbstractSyntaxTreeModule();
 	// initializeCalculatorModule();
-	// initializeGeneratorModule();
+	 initializeGeneratorModule();
 
 	// Logs the arguments of the application.
 	for (int k = 0; k < count; ++k) {
@@ -45,7 +45,7 @@ const int main(const int count, const char ** arguments) {
 		// ComputationResult computationResult = computeExpression((*program->unit->e)->mathExpression)  ;
 		// if (computationResult.succeed) {
 		// 	compilerState.value = computationResult.value;
-		// 	generate(&compilerState);
+		 	generate(&compilerState);
 		// }
 		// else {
 		// 	logError(logger, "The computation phase rejects the input program.");
@@ -63,7 +63,7 @@ const int main(const int count, const char ** arguments) {
 	}
 
 	logDebugging(logger, "Releasing modules resources...");
-	// shutdownGeneratorModule();
+	 shutdownGeneratorModule();
 	// shutdownCalculatorModule();
 	shutdownAbstractSyntaxTreeModule();
 	shutdownSyntacticAnalyzerModule();

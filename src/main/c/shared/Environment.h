@@ -11,7 +11,7 @@
  * is undefined.
  */
 const boolean getBooleanOrDefault(const char * name, const boolean defaultValue);
-
+const char* getOutputPath(void);
 /**
  * Gets the value of an environment variable by name, or returns a default
  * value if the variable is undefined.

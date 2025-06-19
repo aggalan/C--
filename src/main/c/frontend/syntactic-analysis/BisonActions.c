@@ -535,7 +535,7 @@ Unit * NewLineUnitSemanticAction(Unit * unit) {
     _logSyntacticAnalyzerAction(__FUNCTION__);
     Unit * newUnit = calloc(1, sizeof(Unit));
 	newUnit->units = unit;
-    unit->type = NEW_LINE_UNIT;
+    newUnit->type = NEW_LINE_UNIT;
     return newUnit;
 }
 

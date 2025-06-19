@@ -1,0 +1,48 @@
+#include <stdlib.h>
+
+#include <stdio.h>
+
+typedef enum {
+    ORDER_ASCENDING,
+    ORDER_DESCENDING
+} Order;
+
+int compareAsc(const void *a, const void *b) {
+    int intA = *(const int*)a;
+    int intB = *(const int*)b;
+    return (intA > intB) - (intA < intB);
+}
+
+int compareDesc(const void *a, const void *b) {
+    int intA = *(const int*)a;
+    int intB = *(const int*)b;
+    return (intB > intA) - (intB < intA);
+}
+
+void sortArray(int *array, int length, Order order) {
+    if (array == NULL || length <= 0) return;
+    if (order == ORDER_ASCENDING) {
+        qsort(array, length, sizeof(int), compareAsc);
+    } else {
+        qsort(array, length, sizeof(int), compareDesc);
+    }
+}
+
+int I = 0;
+int ARRAY[] = {1, 2, 3, 4, 5};
+const char *s = "COLOMBIA";
+bool QUESO = 1;
+char * foo() {
+printf("%s\n", "FOO");
+}
+
+for (i = 2; i <= 5; i++) {
+printf("%s\n", stringI);
+}
+if (boolQUESO) {
+return;
+printf("%s\n", "QUESO");
+}
+if ((intA < (1 + 2))) {
+printf("%s\n", "JUNIOR");
+}

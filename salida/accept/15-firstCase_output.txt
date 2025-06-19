@@ -1,0 +1,54 @@
+#include <stdlib.h>
+
+#include <stdio.h>
+
+typedef enum {
+    ORDER_ASCENDING,
+    ORDER_DESCENDING
+} Order;
+
+int compareAsc(const void *a, const void *b) {
+    int intA = *(const int*)a;
+    int intB = *(const int*)b;
+    return (intA > intB) - (intA < intB);
+}
+
+int compareDesc(const void *a, const void *b) {
+    int intA = *(const int*)a;
+    int intB = *(const int*)b;
+    return (intB > intA) - (intB < intA);
+}
+
+void sortArray(int *array, int length, Order order) {
+    if (array == NULL || length <= 0) return;
+    if (order == ORDER_ASCENDING) {
+        qsort(array, length, sizeof(int), compareAsc);
+    } else {
+        qsort(array, length, sizeof(int), compareDesc);
+    }
+}
+
+int n;
+const char *msgs = "The operation was successful";
+const char *msgf = "The operation failed";
+bool status;
+
+char * operation(int number) {
+return 1;
+if ((intnumber / 2) == 0) {
+return 1;
+}
+intnumber++;
+}
+
+
+void main(int T) {
+if (boolstatus) {
+printf("%s\n", stringmsgs);
+} else {
+printf("%s\n", stringmsgf);
+}
+boolstatus = func_booloperation(intn);
+intn = 0;
+}
+
