@@ -1,10 +1,13 @@
-INT hola () {
-    PRINT "HOLA"
+INT hola( INT a, INT b ) {
+    INT c = a + b
+    PRINT c
+    RETURN c
 }
-BOOL nico(INT nico, STRING tutti) {
-    PRINT "HOLA"
-    IF false {
-        PRINT "tutti"
-    }
+
+INT main() {
+    INT e = 5
+    INT f = 10
+    INT result = hola(e, f)
+    PRINT result
+    RETURN 0
 }
-func_boolnico( arr_int[0]++, "HOLA")

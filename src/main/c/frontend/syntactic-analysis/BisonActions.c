@@ -32,7 +32,7 @@ static void _logSyntacticAnalyzerAction(const char * functionName) {
 	logDebugging(_logger, "%s", functionName);
 }
 
-Type * createTypeArray(Type type, ArgumentDefList * parameters);
+Type * createTypeArray(Type type, const ArgumentDefList * parameters);
 
 /* PUBLIC FUNCTIONS */
 
@@ -339,12 +339,19 @@ ReturnStatement * ReturnSemanticAction(Expression * expression){
 
 }
 
-Type * createTypeArray(Type type, ArgumentDefList * parameters) {
+Type * createTypeArray(const Type type, const ArgumentDefList * parameters) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Type * typeArray = calloc(1, sizeof(Type));
+	Type * typeArray;
+	if (parameters == NULL) {
+		typeArray = calloc(1, sizeof(Type));
+		typeArray[0] = type;
+		return typeArray;
+	}
+	typeArray = calloc(parameters->count + 1, sizeof(Type));
 	typeArray[0] = type;
 	ArgumentDefNode * parametersNode = parameters->arguments;
-	for (int i=0; i< parameters->count; i++) {
+	int i=0;
+	while (parametersNode != NULL) {
 		switch (parametersNode->argumentDef->type) {
 			case ARGUMENT_MATH:
 				typeArray[i+1] = _INT;
@@ -366,18 +373,21 @@ Type * createTypeArray(Type type, ArgumentDefList * parameters) {
 				break;
 		}
 		parametersNode = parametersNode->next;
+		i++;
 	}
 	return typeArray;
 }
 
-FunctionDefinition  * FunctionDefinitionSemanticAction(Type type, String identifier, ArgumentDefList * parameters, StatementBlock * body){
+FunctionDefinition  * FunctionDefinitionSemanticAction(const Type type, String identifier, ArgumentDefList * parameters, StatementBlock * body){
     _logSyntacticAnalyzerAction(__FUNCTION__);
     FunctionDefinition * functionDefinition = calloc(1, sizeof(FunctionDefinition));
     functionDefinition->identifier = identifier;
     functionDefinition->parameters = parameters;
 	functionDefinition->type = type;
     functionDefinition->body = body;
-	addSymbol(currentCompilerState()->symbolTable, identifier, createTypeArray(type, parameters), parameters->count + 1);
+	Type * typeArray = createTypeArray(type, parameters);
+	addSymbol(currentCompilerState()->symbolTable, identifier, typeArray, parameters == NULL ? 1 : parameters->count + 1);
+	free(typeArray);
     return functionDefinition;
 }
 Statement * ReturnStatementSemanticAction(ReturnStatement * stmt){
@@ -915,6 +925,8 @@ ArgumentDefList * SingleArgumentDefListSemanticAction(ArgumentDef * argumentDef)
 	ArgumentDefList * list = calloc(1, sizeof(ArgumentDefList));
 	list->arguments = calloc(1, sizeof(ArgumentDefNode));
 	list->arguments->argumentDef = argumentDef;
+	list->arguments->next = NULL;
+	list->count=1;
 	list->last = list->arguments;
 	return list;
 }
@@ -922,7 +934,9 @@ ArgumentDefList * AppendArgumentDefListSemanticAction(ArgumentDefList * list,Arg
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	ArgumentDefNode * node = calloc(1, sizeof(ArgumentDefNode));
 	node->argumentDef = argumentDef;
+	node->next= NULL;
 	list->last->next = node;
+	list->count++;
 	list->last = node;
 	return list;
 }

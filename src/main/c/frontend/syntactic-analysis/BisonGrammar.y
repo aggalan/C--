@@ -528,7 +528,7 @@ printStatement: PRINT stringExpression  NEW_LINE                                
 
 argumentList:
     argumentValue                                       { $$ = ArgumentValueSemanticAction($1); }
-  | argumentList COMMA argumentValue                            { $$ = AppendArgumentListSemanticAction($1, $3); }
+  | argumentValue COMMA argumentList                            { $$ = AppendArgumentListSemanticAction($3, $1); }
   | %empty                                                        { $$ = NULL; }
   ;
 
