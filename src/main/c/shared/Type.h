@@ -6,6 +6,15 @@ typedef enum {
 	true = 1
 } boolean;
 
+typedef enum {
+	_INT,
+	_STRING,
+	_BOOL,
+	_VOID,
+	_INT_ARRAY,
+	_STRING_ARRAY,
+	_BOOL_ARRAY,
+}Type ;
 typedef int Token;
 
 #endif

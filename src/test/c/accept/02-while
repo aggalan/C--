@@ -1,8 +1,10 @@
+INT tito = 0
 WHILE 1 <= 2 {
     PRINT "Hello"
     PRINT "Goodbye"
     IF 2 > 3 {
-    PRINT inttito
+    PRINT tito
     }
     PRINT "JUAn"
+    tito = tito + 1
 }

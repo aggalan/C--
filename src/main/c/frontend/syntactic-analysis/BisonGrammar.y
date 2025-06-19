@@ -129,6 +129,7 @@
 %token <string> BOOL_FUNCTION_ID
 %token <string> INT_FUNCTION_ID
 %token <string> STRING_FUNCTION_ID
+%token <string> VOID_FUNCTION_ID
 %token <string> BOOL_ARRAY_ID
 %token <string> INT_ARRAY_ID
 %token <string> STRING_ARRAY_ID

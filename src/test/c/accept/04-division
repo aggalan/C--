@@ -1,24 +1,16 @@
+STRING Tutti[] = {"a", "b", "c", "d", "e"}
 IF 3 < 10 {
-    SORT arr_intTutti ASC
+    Tutti[0] = "f"
+    Tutti[1] = "g"
+    Tutti[2] = "h"
+    Tutti[3] = "i"
+    Tutti[4] = "j"
+    PRINT Tutti[0]
+    PRINT Tutti[1]
+    PRINT Tutti[2]
+    PRINT Tutti[3]
+    PRINT Tutti[4]
+} ELSE {
+    PRINT "No se pudo modificar el array"
 }
-func_bool()
 
-VOID foo(){
-    PRINT "FOO"
-    IF boolA {
-        PRINT "A"
-    } ELSE IF (intla == 0) {
-        PRINT "a"
-    } ELSE {
-        PRINT "brbr patapim"
-    }
-    WHILE intvar <= intnar {
-        PRINT "Hello"
-        PRINT "Goodbye"
-        IF intnar > intvar {
-            PRINT inttito
-        }
-        PRINT stringJUAN
-        intnar ++
-    }
-}

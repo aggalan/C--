@@ -1,6 +1,7 @@
 #include "BisonActions.h"
 
 #include "BisonParser.h"
+#include "../../backend/domain-specific/Calculator.h"
 
 /* MODULE INTERNAL STATE */
 
@@ -30,6 +31,8 @@ static void _logSyntacticAnalyzerAction(const char * functionName);
 static void _logSyntacticAnalyzerAction(const char * functionName) {
 	logDebugging(_logger, "%s", functionName);
 }
+
+Type * createTypeArray(Type type, ArgumentDefList * parameters);
 
 /* PUBLIC FUNCTIONS */
 
@@ -336,7 +339,36 @@ ReturnStatement * ReturnSemanticAction(Expression * expression){
 
 }
 
-
+Type * createTypeArray(Type type, ArgumentDefList * parameters) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Type * typeArray = calloc(1, sizeof(Type));
+	typeArray[0] = type;
+	ArgumentDefNode * parametersNode = parameters->arguments;
+	for (int i=0; i< parameters->count; i++) {
+		switch (parametersNode->argumentDef->type) {
+			case ARGUMENT_MATH:
+				typeArray[i+1] = _INT;
+				break;
+			case ARGUMENT_STRING:
+				typeArray[i+1] = _STRING;
+				break;
+			case ARGUMENT_BOOL:
+				typeArray[i+1] = _BOOL;
+				break;
+			case ARGUMENT_INT_ARRAY:
+				typeArray[i+1] = _INT_ARRAY;
+				break;
+			case ARGUMENT_STRING_ARRAY:
+				typeArray[i+1] = _STRING_ARRAY;
+				break;
+			case ARGUMENT_BOOL_ARRAY:
+				typeArray[i+1] = _BOOL_ARRAY;
+				break;
+		}
+		parametersNode = parametersNode->next;
+	}
+	return typeArray;
+}
 
 FunctionDefinition  * FunctionDefinitionSemanticAction(Type type, String identifier, ArgumentDefList * parameters, StatementBlock * body){
     _logSyntacticAnalyzerAction(__FUNCTION__);
@@ -345,6 +377,7 @@ FunctionDefinition  * FunctionDefinitionSemanticAction(Type type, String identif
     functionDefinition->parameters = parameters;
 	functionDefinition->type = type;
     functionDefinition->body = body;
+	addSymbol(currentCompilerState()->symbolTable, identifier, createTypeArray(type, parameters), parameters->count + 1);
     return functionDefinition;
 }
 Statement * ReturnStatementSemanticAction(ReturnStatement * stmt){
@@ -511,6 +544,7 @@ VariableStatement * VariableDeclarationSemanticAction(Type type, String identifi
 	variable->identifier = identifier;
 	variable->type = type;
 	variable->expression = expression;
+	addSymbol(currentCompilerState()->symbolTable, identifier, &type, 1);
 	return variable;
 }
 
@@ -540,7 +574,7 @@ IntList * SingleArrayListSemanticAction(int integer) {
 	list->count = 1;
 	return list;
 }
-IntList * AppendArrayListSemanticAction(IntList *list, int integer) {
+IntList * AppendArrayListSemanticAction(IntList *list, const int integer) {
     _logSyntacticAnalyzerAction(__FUNCTION__);
     IntNode * node = calloc(1, sizeof(IntNode));
     node->integer = integer;
@@ -556,6 +590,7 @@ ArrayStatement * ArrayIntStatementSemanticAction(String identifier, IntList * el
 	array->identifier = identifier;
 	array->elements = elements;
 	array->type = INT_LIST;
+	addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){_INT_ARRAY}, 1); //TODO: checkear lo del _int_array
 	return array;
 }
 ArrayStatement * ArrayStringStatementSemanticAction(String identifier, StringList * elements) {
@@ -564,6 +599,7 @@ ArrayStatement * ArrayStringStatementSemanticAction(String identifier, StringLis
 	array->identifier = identifier;
 	array->stringElements = elements;
 	array->type = STRING_LIST;
+	addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){_STRING_ARRAY}, 1); //TODO: checkear lo del _string_array
 	return array;
 }
 ArrayStatement * ArrayBoolStatementSemanticAction(String identifier, BoolList * elements) {
@@ -572,19 +608,23 @@ ArrayStatement * ArrayBoolStatementSemanticAction(String identifier, BoolList * 
 	array->identifier = identifier;
 	array->boolElements = elements;
 	array->type = BOOL_LIST;
+	addSymbol(currentCompilerState()->symbolTable, identifier,(Type[]){_BOOL_ARRAY}, 1); //TODO: checkear lo del _bool_array
 	return array;
 }
-ArrayStatement * ArrayDeclarationSemanticAction(String identifier, MathExpression * size, Type type) {
+ArrayStatement * ArrayDeclarationSemanticAction(String identifier, MathExpression * size, const Type type) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	ArrayStatement * array = calloc(1, sizeof(ArrayStatement));
 	array->identifier = identifier;
 	array->mathExpression = size;
 	if (type == _INT) {
 		array->type = INT_SIZE;
+		addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){_INT_ARRAY}, 1);
 	} else if (type == _STRING) {
 		array->type = STRING_SIZE;
+		addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){_STRING_ARRAY}, 1);
 	} else if (type == _BOOL) {
 		array->type = BOOL_SIZE;
+		addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){_BOOL_ARRAY}, 1);
 	}
 	return array;
 }
@@ -714,6 +754,8 @@ VariableStatement * VariableBoolDeclarationSemanticAction(String identifier, Boo
 	variable->expression = calloc(1, sizeof(Expression));
 	variable->expression->boolExpression = value;
 	variable->expression->type = BOOLEAN_EXPRESSION;
+	addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){_BOOL}, 1); // TODO: Checkear tema de memoria
+
 	return variable;
 }
 VariableStatement * VariableIntDeclarationSemanticAction(String identifier, MathExpression * value) {
@@ -724,6 +766,7 @@ VariableStatement * VariableIntDeclarationSemanticAction(String identifier, Math
 	variable->expression = calloc(1, sizeof(Expression));
 	variable->expression->mathExpression = value;
 	variable->expression->type = MATH_EXPRESSION;
+	addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){_INT}, 1); // TODO: Checkear tema de memoria
 	return variable;
 }
 VariableStatement * VariableStringDeclarationSemanticAction(String identifier, StringExpression * value) {
@@ -734,6 +777,7 @@ VariableStatement * VariableStringDeclarationSemanticAction(String identifier, S
 	variable->expression = calloc(1, sizeof(Expression));
 	variable->expression->stringExpression = value;
 	variable->expression->type = STRING_EXPRESSION;
+	addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){_STRING}, 1); // TODO: Checkear tema de memoria
 	return variable;
 }
 BoolFactor * FunctionCallBoolFactorSemanticAction(FunctionStatement * functionStatement) {
@@ -887,6 +931,7 @@ ArgumentDef * ArgumentDefSemanticAction(String identifier, Type type) {
 	ArgumentDef * argumentValue = calloc(1, sizeof(ArgumentDef));
 	argumentValue->identifier = identifier;
 	argumentValue->type = type;
+	addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){type}, 1);
 	return argumentValue;
 }
 Expression * StringExpressionSemanticAction(StringExpression * stringExpression) {

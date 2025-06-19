@@ -2,7 +2,7 @@
 #define COMPILER_STATE_HEADER
 
 #include "Type.h"
-
+#include "SymbolTable.h"
 /**
  * The general status of a compilation.
 */
@@ -23,7 +23,7 @@ typedef struct {
 	boolean succeed;
 
 	// TODO: Add an stack to handle nested scopes.
-	// TODO: Add a symbol table.
+	SymbolTable * symbolTable;
 	// TODO: Add configuration.
 	// TODO: ...
 

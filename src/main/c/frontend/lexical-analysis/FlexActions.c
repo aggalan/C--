@@ -1,5 +1,7 @@
 #include "FlexActions.h"
 
+#include "../syntactic-analysis/SyntacticAnalyzer.h"
+
 /* MODULE INTERNAL STATE */
 
 static Logger * _logger = NULL;
@@ -147,8 +149,49 @@ Token BracketLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token
 Token IdentifierLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	lexicalAnalyzerContext->semanticValue->string = strdup(lexicalAnalyzerContext->lexeme);
-    destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
-	return GENERIC_ID;
+	Symbol * symbol = findSymbol( currentCompilerState()->symbolTable, lexicalAnalyzerContext->semanticValue->string);
+	Token id = GENERIC_ID;
+	if (symbol != NULL) {
+		if ( symbol->typeCount > 1) {
+			switch (symbol->types[0]) {
+				case _INT:
+					id = INT_FUNCTION_ID;
+					break;
+				case _STRING:
+					id= STRING_FUNCTION_ID;
+					break;
+				case _BOOL:
+					id = BOOL_FUNCTION_ID;
+					break;
+				case _VOID:
+					id = VOID_FUNCTION_ID;
+					break;
+			}
+		} else {
+			switch ( symbol->types[0]) {
+				case _INT:
+					id = INT_ID;
+				break;
+				case _STRING:
+					id = STRING_ID;
+				break;
+				case _BOOL:
+					id = BOOL_ID;
+				break;
+				case _INT_ARRAY:
+					id = INT_ARRAY_ID;
+				break;
+				case _STRING_ARRAY:
+					id = STRING_ARRAY_ID;
+				break;
+				case _BOOL_ARRAY:
+					id = BOOL_ARRAY_ID;
+				break;
+			}
+		}
+	}
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return id;
 }
 
 Token TypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {

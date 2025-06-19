@@ -6,21 +6,17 @@ STRING s = "COLOMBIA"
 
 BOOL QUESO = TRUE
 
-STRING foo() {
-    PRINT "FOO"
-}
 
 FOR i = 2 TO 5 {
-    PRINT stringI
+    PRINT s
 }
 
-IF boolQUESO {
-
+IF QUESO {
 
     PRINT "QUESO"
 
     RETURN
 }
-IF (intA < 1 + 2) {
+IF (I < 1 + 2) {
     PRINT "JUNIOR"
 }

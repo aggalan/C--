@@ -3,6 +3,7 @@
 
 #include "../../shared/Logger.h"
 #include <stdlib.h>
+#include "../../shared/Type.h"
 
 /** Initialize module's internal state. */
 void initializeAbstractSyntaxTreeModule();
@@ -15,7 +16,6 @@ void shutdownAbstractSyntaxTreeModule();
  */
 
 typedef enum Order Order;
-typedef enum Type Type;
 typedef enum MathExpressionType MathExpressionType;
 typedef enum MathOperatorType MathOperatorType;
 typedef enum FactorType FactorType;
@@ -85,16 +85,6 @@ typedef struct ArrayAssignment ArrayAssignment;
  * Node types for the Abstract Syntax Tree (AST).
  */
 
-
-enum Type {
-	_INT,
-	_STRING,
-	_BOOL,
-	_VOID,
-	_INT_ARRAY,
-	_STRING_ARRAY,
-	_BOOL_ARRAY,
-};
 
 struct ArrayStatement {
 	String identifier;

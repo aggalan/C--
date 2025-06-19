@@ -32,16 +32,17 @@ const int main(const int count, const char ** arguments) {
 	CompilerState compilerState = {
 		.abstractSyntaxtTree = NULL,
 		.succeed = false,
-		.value = 0
+		.value = 0,
+		.symbolTable = createSymbolTable()
 	};
 	const SyntacticAnalysisStatus syntacticAnalysisStatus = parse(&compilerState);
 	CompilationStatus compilationStatus = SUCCEED;
 	if (syntacticAnalysisStatus == ACCEPT) {
 		// ----------------------------------------------------------------------------------------
 		// Beginning of the Backend... ------------------------------------------------------------
-		// logDebugging(logger, "Computing expression value...");
+		logDebugging(logger, "Computing expression value...");
 		 Program * program = compilerState.abstractSyntaxtTree;
-		// ComputationResult computationResult = computeExpression((*program->statements->statements)->mathExpression)  ;
+		// ComputationResult computationResult = computeExpression((*program->unit->e)->mathExpression)  ;
 		// if (computationResult.succeed) {
 		// 	compilerState.value = computationResult.value;
 		// 	generate(&compilerState);
@@ -54,6 +55,7 @@ const int main(const int count, const char ** arguments) {
 		// ----------------------------------------------------------------------------------------
 		 logDebugging(logger, "Releasing AST resources...");
 		 releaseProgram(program);
+		freeSymbolTable(compilerState.symbolTable);
 	}
 	else {
 		logError(logger, "The syntactic-analysis phase rejects the input program.");
