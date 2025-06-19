@@ -278,10 +278,10 @@ statementList: statement statementList                             { $$ = Append
 
 
 functionDefinition:
-      INT GENERIC_ID OPEN_PARENTHESIS argumentDefList CLOSE_PARENTHESIS statementBlock  { $$ = FunctionDefinitionSemanticAction(_INT, $2, $4, $6); }
-    | VOID GENERIC_ID OPEN_PARENTHESIS argumentDefList CLOSE_PARENTHESIS statementBlock  { $$ = FunctionDefinitionSemanticAction(_VOID, $2, $4, $6); }
-    | STRING_TYPE GENERIC_ID OPEN_PARENTHESIS argumentDefList CLOSE_PARENTHESIS statementBlock     { $$ = FunctionDefinitionSemanticAction(_STRING, $2, $4, $6); }
-    | BOOL GENERIC_ID OPEN_PARENTHESIS argumentDefList CLOSE_PARENTHESIS statementBlock  { $$ = FunctionDefinitionSemanticAction(_STRING, $2, $4, $6); }
+      INT GENERIC_ID OPEN_PARENTHESIS {PushScopeBison();} argumentDefList CLOSE_PARENTHESIS statementBlock  { $$ = FunctionDefinitionSemanticAction(_INT, $2, $5, $7); }
+    | VOID GENERIC_ID OPEN_PARENTHESIS {PushScopeBison();} argumentDefList CLOSE_PARENTHESIS statementBlock  { $$ = FunctionDefinitionSemanticAction(_VOID, $2, $5, $7); }
+    | STRING_TYPE GENERIC_ID OPEN_PARENTHESIS {PushScopeBison();} argumentDefList CLOSE_PARENTHESIS statementBlock     { $$ = FunctionDefinitionSemanticAction(_STRING, $2, $5, $7); }
+    | BOOL GENERIC_ID OPEN_PARENTHESIS {PushScopeBison();} argumentDefList CLOSE_PARENTHESIS statementBlock  { $$ = FunctionDefinitionSemanticAction(_STRING, $2, $5, $7); }
     ;
 
 statement:
@@ -357,8 +357,8 @@ statementBlock: OPEN_BRACE statementList CLOSE_BRACE           { $$ = StatementB
 sortStatement: SORT INT_ARRAY_ID ASC  NEW_LINE                      { $$ = SortSemanticAction($2, ORDER_ASC); }
             | SORT INT_ARRAY_ID DESC NEW_LINE                     { $$ = SortSemanticAction($2, ORDER_DESC); }
 
-matchStatement: MATCH GENERIC_ID OPEN_BRACE matchCaseList CLOSE_BRACE   { $$ = MatchSemanticAction($2, $4); }
-    | MATCH GENERIC_ID OPEN_BRACE NEW_LINE matchCaseList CLOSE_BRACE { $$ = MatchSemanticAction($2, $5); }
+matchStatement: MATCH GENERIC_ID OPEN_BRACE {PushScopeBison();} matchCaseList CLOSE_BRACE   { $$ = MatchSemanticAction($2, $5); }
+    | MATCH GENERIC_ID OPEN_BRACE NEW_LINE {PushScopeBison();} matchCaseList CLOSE_BRACE { $$ = MatchSemanticAction($2, $6); }
    ;
 
 matchCaseList:
@@ -378,15 +378,15 @@ forLoop: FOR assignmentForLoopExpression TO constant statementBlock
 	;
 
 whileLoop:
-    WHILE boolExpression statementBlock
-                                                                    { $$ = WhileLoopSemanticAction($2, $3); }
+    WHILE boolExpression {PushScopeBison();} statementBlock
+                                                                    { $$ = WhileLoopSemanticAction($2, $4); }
     ;
 
-ifStatement: IF boolExpression statementBlock elseStatement  { $$ = IfThenSemanticAction($2, $3,$4); }
+ifStatement: IF boolExpression {PushScopeBison();} statementBlock elseStatement  { $$ = IfThenSemanticAction($2, $4,$5); }
   ;
 
 elseStatement:
-    ELSE statementBlock                                            { $$ = ElseStatementSemanticAction($2); }
+    ELSE {PushScopeBison();} statementBlock                                            { $$ = ElseStatementSemanticAction($3); }
   | ELSE ifStatement                                             { $$ = ElseIfStatementSemanticAction($2); }
   | %empty                                                        { $$ = NULL; }
   ;
@@ -499,12 +499,12 @@ arrayAssignment: intArrayAccess ASSIGNMENT mathExpression  NEW_LINE             
     ;
 
 arrayStatement:
-    GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS ASSIGNMENT OPEN_BRACE integerList CLOSE_BRACE       { $$ = ArrayIntStatementSemanticAction($1, $6); }
-    | INT GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS ASSIGNMENT OPEN_BRACE integerList CLOSE_BRACE { $$ = ArrayIntStatementSemanticAction($2, $7); }
+    GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS ASSIGNMENT OPEN_BRACE {PushScopeBison();} integerList CLOSE_BRACE       { $$ = ArrayIntStatementSemanticAction($1, $7); }
+    | INT GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS ASSIGNMENT OPEN_BRACE{PushScopeBison();} integerList CLOSE_BRACE { $$ = ArrayIntStatementSemanticAction($2, $8); }
     | INT GENERIC_ID OPEN_BRACKETS mathExpression CLOSE_BRACKETS                                { $$ = ArrayDeclarationSemanticAction($2, $4, _INT); }
-    | BOOL GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS ASSIGNMENT OPEN_BRACE boolList CLOSE_BRACE { $$ = ArrayBoolStatementSemanticAction($2, $7); }
+    | BOOL GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS ASSIGNMENT OPEN_BRACE{PushScopeBison();} boolList CLOSE_BRACE { $$ = ArrayBoolStatementSemanticAction($2, $8); }
     | BOOL GENERIC_ID OPEN_BRACKETS mathExpression CLOSE_BRACKETS                                { $$ = ArrayDeclarationSemanticAction($2, $4, _BOOL); }
-    | STRING_TYPE GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS ASSIGNMENT OPEN_BRACE strings CLOSE_BRACE { $$ = ArrayStringStatementSemanticAction($2, $7); }
+    | STRING_TYPE GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS ASSIGNMENT OPEN_BRACE{PushScopeBison();} strings CLOSE_BRACE { $$ = ArrayStringStatementSemanticAction($2, $8); }
     | STRING_TYPE GENERIC_ID OPEN_BRACKETS mathExpression CLOSE_BRACKETS                            { $$ = ArrayDeclarationSemanticAction($2, $4, _STRING); }
     ;
 

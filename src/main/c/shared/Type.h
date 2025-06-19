@@ -16,5 +16,6 @@ typedef enum {
 	_BOOL_ARRAY,
 }Type ;
 typedef int Token;
+typedef int Scope;
 
 #endif

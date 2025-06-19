@@ -28,4 +28,4 @@ void sortArray(int *array, int length, Order order) {
     }
 }
 
-intnico = 3;
+int nico = 3;

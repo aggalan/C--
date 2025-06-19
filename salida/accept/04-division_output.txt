@@ -28,27 +28,18 @@ void sortArray(int *array, int length, Order order) {
     }
 }
 
+const char *Tutti[] = {a, b, c, d, e};
 if (3 < 10) {
-sortArray(arr_intTutti, sizeof(arr_intTutti) / sizeof(arr_intTutti[0]), ORDER_ASCENDING);
-}
-func_bool()void foo() {
-while (intvar <= intnar) {
-intnar++;
-printf("%s\n", stringJUAN);
-if (intnar > intvar) {
-printf("1\n", inttito);
-}
-printf("%s\n", "Goodbye");
-printf("%s\n", "Hello");
-}
-if (boolA) {
-printf("%s\n", "A");
-} else if ((intla == 0)) {
-printf("%s\n", "a");
+printf("%s\n", Tutti[4]);
+printf("%s\n", Tutti[3]);
+printf("%s\n", Tutti[2]);
+printf("%s\n", Tutti[1]);
+printf("%s\n", Tutti[0]);
+Tutti[4] = "j";
+Tutti[3] = "i";
+Tutti[2] = "h";
+Tutti[1] = "g";
+Tutti[0] = "f";
 } else {
-printf("%s\n", "brbr patapim");
+printf("%s\n", "No se pudo modificar el array");
 }
-
-printf("%s\n", "FOO");
-}
-

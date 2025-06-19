@@ -1,6 +1,7 @@
 #ifndef COMPILER_STATE_HEADER
 #define COMPILER_STATE_HEADER
 
+#include "ScopeStack.h"
 #include "Type.h"
 #include "SymbolTable.h"
 /**
@@ -22,7 +23,7 @@ typedef struct {
 	// A flag that indicates the current state of the compilation so far.
 	boolean succeed;
 
-	// TODO: Add an stack to handle nested scopes.
+	ScopeStack * scopeStack;
 	SymbolTable * symbolTable;
 	// TODO: Add configuration.
 	// TODO: ...

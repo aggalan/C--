@@ -141,6 +141,9 @@ Token ParenthesisLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, T
 Token BracketLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	lexicalAnalyzerContext->semanticValue->token = token;
+	if (token == CLOSE_BRACE) {
+		popScope(currentCompilerState()->scopeStack);
+	}
     destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return token;
 }
@@ -258,6 +261,9 @@ Token ReturnLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 Token ForLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	lexicalAnalyzerContext->semanticValue->token = FOR;
+	pushScope(currentCompilerState()->scopeStack);
+	logDebugging(_logger, "Size: %d", currentCompilerState()->scopeStack->size);
+	logDebugging(_logger, "Last scope: %d", currentCompilerState()->scopeStack->lastScope);
     destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return FOR;
 }

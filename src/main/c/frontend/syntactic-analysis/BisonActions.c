@@ -36,6 +36,14 @@ Type * createTypeArray(Type type, const ArgumentDefList * parameters);
 
 /* PUBLIC FUNCTIONS */
 
+void PushScopeBison() {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	pushScope(currentCompilerState()->scopeStack);
+	logDebugging(_logger, "Size: %d", currentCompilerState()->scopeStack->size );
+	logDebugging(_logger, "Last scope: %d", currentCompilerState()->scopeStack->lastScope);
+
+}
+
 Constant * IntegerConstantSemanticAction(const int value) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Constant * constant = calloc(1, sizeof(Constant));
@@ -151,7 +159,6 @@ ForLoop* ForLoopSemanticAction(AssignmentMathStatement * assignment, Constant * 
 	loop->body = body;
 	return loop;
 }
-
 
 
 Statement *WhileLoopStatementSemanticAction(WhileLoop *loop) {

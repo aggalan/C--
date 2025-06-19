@@ -129,4 +129,5 @@ ArrayAssignment * AssignmentStringArraySemanticAction(ArrayAccess * arrayAccess,
 ArrayAssignment * AssignmentBoolArraySemanticAction(ArrayAccess * arrayAccess, BoolExpression * boolExpression);
 BoolList * SingleBoolArrayListSemanticAction(Bool boolean);
 BoolList * AppendBoolArrayListSemanticAction(BoolList *list, Bool boolean);
+void PushScopeBison();
 #endif

@@ -11,3 +11,4 @@ INT main() {
     PRINT result
     RETURN 0
 }
+
