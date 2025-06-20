@@ -12,11 +12,15 @@ FOR i = 2 TO 5 {
 }
 
 IF QUESO {
+    STRING I = "QUESO"
+    PRINT I
+
 
     PRINT "QUESO"
 
     RETURN
 }
+
 IF (I < 1 + 2) {
     PRINT "JUNIOR"
 }
