@@ -29,10 +29,10 @@ void sortArray(int *array, int length, Order order) {
 }
 
 int FACTORIAL(int n) {
-return (n * FACTORIAL((n - 1)));
 if (n == 1) {
 return 1;
 }
+return (n * FACTORIAL((n - 1)));
 }
 
 for (I = 2; I <= 10; I++) {

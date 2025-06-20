@@ -274,7 +274,7 @@ externalDeclaration:
     ;
 
 
-statementList: statement statementList                             { $$ = AppendStatementListSemanticAction($2, $1); }
+statementList:  statementList   statement                          { $$ = AppendStatementListSemanticAction($1, $2); }
     | statement                                                                 { $$ = SingleStatementListSemanticAction($1); }
 	;
 

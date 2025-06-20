@@ -34,10 +34,10 @@ int B;
 if ((A)) {
 B = 1;
 } else if ((A)) {
+printf("%s\n", "A");
+B++;
 B = B--;
 ;
-B++;
-printf("%s\n", "A");
 } else {
 printf("%s\n", "brbr patapim");
 }

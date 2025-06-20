@@ -30,9 +30,9 @@ void sortArray(int *array, int length, Order order) {
 
 
 int main() {
-return 1;
-printf("%s\n", "hola");
-int f = 10;
 int e = 5;
+int f = 10;
+printf("%s\n", "hola");
+return 1;
 }
 

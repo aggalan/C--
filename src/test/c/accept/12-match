@@ -1,3 +1,4 @@
+INT X
 MATCH X {
     2 -> PRINT "HOLA"
     3 -> PRINT "HOLA"

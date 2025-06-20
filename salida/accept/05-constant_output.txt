@@ -32,10 +32,10 @@ const char *str = "cebolla";
 int var = 1;
 int nar = 2;
 while (var <= nar) {
-printf("%s\n", "JUAN");
+printf("%s\n", "Hello");
+printf("%s\n", "Goodbye");
 if (nar > var) {
 printf("%s\n", "tito");
 }
-printf("%s\n", "Goodbye");
-printf("%s\n", "Hello");
+printf("%s\n", "JUAN");
 }

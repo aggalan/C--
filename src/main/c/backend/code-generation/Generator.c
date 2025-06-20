@@ -163,9 +163,17 @@ static void _generateStatement(Statement * statement) {
 
 
 static void _generateStatementList(StatementList * list) {
+    if (list == NULL || list->statements == NULL) return;
+
     logDebugging(_logger, "Generating statement list...");
-     _generateStatement(list->statements->statement);
+
+    StatementNode * current = list->statements;
+    while (current != NULL) {
+        _generateStatement(current->statement);
+        current = current->next;
+    }
 }
+
 
 static void _generateForLoop(ForLoop *forLoop) {
     if (forLoop == NULL || forLoop->assignment == NULL || forLoop->assignment->identifier == NULL) return;
@@ -212,15 +220,29 @@ static void _generateMatchStatement(MatchStatement *matchStmt) {
 static void _generateCase(Case *c) {
     if (c == NULL) return;
 
-    char buffer[32];
-    snprintf(buffer, sizeof(buffer), "case %d:", c->matchValue);
-    _output(1, buffer);
-    _output(1, "\n");
+    switch (c->type) {
+    case INTEGER_CASE:
+        _output(1, "case %d:\n", c->matchValue);
+        break;
+
+    case STRING_CASE:
+        _output(1, "case \"%s\":\n", c->string);
+        break;
+
+    case DEFAULT_CASE:
+        _output(1, "default:\n");
+        break;
+
+    default:
+        logError(_logger, "Unknown case type: %d", c->type);
+        return;
+    }
 
     _generateStatement(c->body);
 
     _output(2, "break;\n");
 }
+
 
 static void _generateCaseList(CaseList *caseList) {
     if (caseList == NULL) return;
@@ -358,13 +380,14 @@ static void _generateWhileLoop(WhileLoop *whileLoop) {
 
 
 static void _generatePrintStatement(PrintStatement * printStatement) {
-    if (printStatement == NULL ) return;
-    switch(printStatement->type) {
-        case PRINT_MATH_EXPRESSION:
-            _output(0, "printf(\"%d\\n\", ", printStatement->type);
-            _generateMathExpression(printStatement->mathExpression);
-            _output(0, ");\n");
-            break;
+    if (printStatement == NULL) return;
+
+    switch (printStatement->type) {
+    case PRINT_MATH_EXPRESSION:
+        _output(0, "printf(\"%%d\\n\", ");
+        _generateMathExpression(printStatement->mathExpression);
+        _output(0, ");\n");
+        break;
 
     case PRINT_IDENTIFIER:
         _output(0, "printf(\"%%s\\n\", ");
@@ -372,13 +395,12 @@ static void _generatePrintStatement(PrintStatement * printStatement) {
         _output(0, ");\n");
         break;
 
-
-        default:
-            logError(_logger, "Unknown print statement type: %d", printStatement->type);
-            break;
+    default:
+        logError(_logger, "Unknown print statement type: %d", printStatement->type);
+        break;
     }
-
 }
+
 
 static void _generateSortStatement(SortStatement *sortStatement) {
     logDebugging(_logger, "Generating sort statement for array %s", sortStatement->identifier);

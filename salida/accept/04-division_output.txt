@@ -30,16 +30,16 @@ void sortArray(int *array, int length, Order order) {
 
 const char *Tutti[] = {a, b, c, d, e};
 if (3 < 10) {
-printf("%s\n", Tutti[4]);
-printf("%s\n", Tutti[3]);
-printf("%s\n", Tutti[2]);
-printf("%s\n", Tutti[1]);
-printf("%s\n", Tutti[0]);
-Tutti[4] = "j";
-Tutti[3] = "i";
-Tutti[2] = "h";
-Tutti[1] = "g";
 Tutti[0] = "f";
+Tutti[1] = "g";
+Tutti[2] = "h";
+Tutti[3] = "i";
+Tutti[4] = "j";
+printf("%s\n", Tutti[0]);
+printf("%s\n", Tutti[1]);
+printf("%s\n", Tutti[2]);
+printf("%s\n", Tutti[3]);
+printf("%s\n", Tutti[4]);
 } else {
 printf("%s\n", "No se pudo modificar el array");
 }

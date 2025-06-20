@@ -34,5 +34,5 @@ int numeros2[6];
 numeros[3] = (5 + 2);
 sortArray(numeros, sizeof(numeros) / sizeof(numeros[0]), ORDER_ASCENDING);
 for (i = 0; i <= 6; i++) {
-printf("1\n", numeros[i]);
+printf("%d\n", numeros[i]);
 }
