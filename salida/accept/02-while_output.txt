@@ -28,10 +28,12 @@ void sortArray(int *array, int length, Order order) {
     }
 }
 
+int tito = 0;
 while (1 <= 2) {
+tito = (tito + 1);
 printf("%s\n", "JUAn");
 if (2 > 3) {
-printf("1\n", inttito);
+printf("1\n", tito);
 }
 printf("%s\n", "Goodbye");
 printf("%s\n", "Hello");

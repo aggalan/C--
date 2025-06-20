@@ -7,19 +7,19 @@ STRING msgElse = "This is not 1 or 2"
 // Definir donde arranca el programa
 
 VOID main() {
-    intn = 0
+    n = 0
     MATCH n {
-        1 -> PRINT stringmsgOne
-        2 -> PRINT stringmsgTwo
-        DEFAULT -> PRINT stringmsgElse
+        1 -> PRINT msgOne
+        2 -> PRINT msgTwo
+        DEFAULT -> PRINT msgElse
         }
-    intn++
-    IF intn > 0 AND intn < 2 {
+    n++
+    IF n > 0 AND n < 2 {
        PRINT "Hello"
     }
     RETURN
 }
 //Este caso el programa imprimirá “This is not one or two” y después “Hello”
-IF (intvalue3 == 5 AND intvalue > intvalue2) {
-    RETURN 5
+IF (5 > 2) {
+    PRINT  5
 }

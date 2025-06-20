@@ -1,13 +1,7 @@
-INT hola( INT a, INT b ) {
-    INT c = a + b
-    PRINT c
-    RETURN c
-}
 
 INT main() {
     INT e = 5
     INT f = 10
-    INT result = hola(e, f)
-    PRINT result
-    RETURN 0
+    PRINT "hola"
+    RETURN 1
 }

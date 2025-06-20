@@ -278,10 +278,10 @@ statementList: statement statementList                             { $$ = Append
 
 
 functionDefinition:
-      INT GENERIC_ID OPEN_PARENTHESIS argumentDefList CLOSE_PARENTHESIS statementBlock  { $$ = FunctionDefinitionSemanticAction(_INT, $2, $4, $6); }
+      INT GENERIC_ID OPEN_PARENTHESIS argumentDefList CLOSE_PARENTHESIS statementBlock  {  $$ = FunctionDefinitionSemanticAction(_INT, $2, $4, $6); }
     | VOID GENERIC_ID OPEN_PARENTHESIS argumentDefList CLOSE_PARENTHESIS statementBlock  { $$ = FunctionDefinitionSemanticAction(_VOID, $2, $4, $6); }
     | STRING_TYPE GENERIC_ID OPEN_PARENTHESIS argumentDefList CLOSE_PARENTHESIS statementBlock     { $$ = FunctionDefinitionSemanticAction(_STRING, $2, $4, $6); }
-    | BOOL GENERIC_ID OPEN_PARENTHESIS argumentDefList CLOSE_PARENTHESIS statementBlock  { $$ = FunctionDefinitionSemanticAction(_STRING, $2, $4, $6); }
+    | BOOL GENERIC_ID OPEN_PARENTHESIS argumentDefList CLOSE_PARENTHESIS statementBlock  { $$ = FunctionDefinitionSemanticAction(_BOOL, $2, $4, $6); }
     ;
 
 statement:
@@ -528,7 +528,7 @@ printStatement: PRINT stringExpression  NEW_LINE                                
 
 argumentList:
     argumentValue                                       { $$ = ArgumentValueSemanticAction($1); }
-  | argumentValue COMMA argumentList                            { $$ = AppendArgumentListSemanticAction($3, $1); }
+  | argumentList COMMA  argumentValue                           { $$ = AppendArgumentListSemanticAction($1, $3); }
   | %empty                                                        { $$ = NULL; }
   ;
 
@@ -554,9 +554,9 @@ argumentDef:
     INT GENERIC_ID                                                       { $$ = ArgumentDefSemanticAction($2, _INT); }
     | BOOL GENERIC_ID                                                    { $$ = ArgumentDefSemanticAction($2, _BOOL); }
     | STRING_TYPE GENERIC_ID                                             { $$ = ArgumentDefSemanticAction($2, _STRING); }
-    | INT GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS GENERIC_ID             { $$ = ArgumentDefSemanticAction($2, _INT_ARRAY); }
-    | BOOL GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS GENERIC_ID            { $$ = ArgumentDefSemanticAction($2, _BOOL_ARRAY); }
-    | STRING_TYPE GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS GENERIC_ID     { $$ = ArgumentDefSemanticAction($2, _STRING_ARRAY); }
+    | INT GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS              { $$ = ArgumentDefSemanticAction($2, _INT_ARRAY); }
+    | BOOL GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS             { $$ = ArgumentDefSemanticAction($2, _BOOL_ARRAY); }
+    | STRING_TYPE GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS      { $$ = ArgumentDefSemanticAction($2, _STRING_ARRAY); }
     ;
 
 %%

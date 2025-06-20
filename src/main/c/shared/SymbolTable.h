@@ -8,21 +8,37 @@
 
 #define MAX_SYMBOLS 1024
 
+void initializeTableActionsModule();
 
+void shutdownTableActionsModule();
 typedef struct {
     char *name;          // Nombre del símbolo
     Type *types;        // Arreglo de tipos (ver arriba)
-    int typeCount;       // Cantidad de tipos
+    int typeCount;
+    int isFunction;                     // Cantidad de tipos
 } Symbol;
 
 typedef struct {
     Symbol *symbols[MAX_SYMBOLS];
+    Symbol * currentFunction;
     int count;
 } SymbolTable;
-
+typedef struct ReturnNode {
+    Type type;
+     struct ReturnNode *next;
+} ReturnNode;
+typedef struct {
+    ReturnNode *head; // Puntero al primer nodo de la lista
+    int count;
+} ReturnList;
+ReturnList* createReturnList();
+ReturnNode* createReturnNode(Type type);
+ReturnNode* addReturnNode(ReturnList *list, Type type);
+int isReturnListEmpty(const ReturnList *list);
+void destroyReturnList(ReturnList *list);
 SymbolTable* createSymbolTable();
 Symbol* createSymbol(const char *name, const Type *types, int typeCount);
-void addSymbol(SymbolTable *table, const char *name, const Type *types, int typeCount);
+void addSymbol(SymbolTable *table, const char *name, const Type *types, const int typeCount,int function);
 Symbol* findSymbol(SymbolTable *table, const char *name);
 void freeSymbolTable(SymbolTable *table);
 

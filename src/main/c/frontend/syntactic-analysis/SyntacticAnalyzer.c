@@ -55,6 +55,7 @@ SyntacticAnalysisStatus parse(CompilerState * compilerState) {
 	switch (code) {
 		case 0:
 			if (compilerState->succeed == true) {
+			logDebugging(_logger, "Compiler state  address: %p", compilerState);
 				return ACCEPT;
 			}
 			else {

@@ -18,6 +18,7 @@ const int main(const int count, const char ** arguments) {
 	Logger * logger = createLogger("EntryPoint");
 	initializeFlexActionsModule();
 	initializeBisonActionsModule();
+	initializeTableActionsModule();
 	initializeSyntacticAnalyzerModule();
 	initializeAbstractSyntaxTreeModule();
 	// initializeCalculatorModule();
@@ -27,13 +28,14 @@ const int main(const int count, const char ** arguments) {
 	for (int k = 0; k < count; ++k) {
 		logDebugging(logger, "Argument %d: \"%s\"", k, arguments[k]);
 	}
-
 	// Begin compilation process.
 	CompilerState compilerState = {
 		.abstractSyntaxtTree = NULL,
 		.succeed = false,
 		.value = 0,
-		.symbolTable = createSymbolTable()
+		.symbolTable = createSymbolTable(),
+		.returnList = createReturnList(),
+		.hasError = false
 	};
 	const SyntacticAnalysisStatus syntacticAnalysisStatus = parse(&compilerState);
 	CompilationStatus compilationStatus = SUCCEED;
@@ -45,17 +47,21 @@ const int main(const int count, const char ** arguments) {
 		// ComputationResult computationResult = computeExpression((*program->unit->e)->mathExpression)  ;
 		// if (computationResult.succeed) {
 		// 	compilerState.value = computationResult.value;
+		if(!compilerState.hasError) {
 		 	generate(&compilerState);
-		// }
-		// else {
-		// 	logError(logger, "The computation phase rejects the input program.");
-		// 	compilationStatus = FAILED;
-		// }
+		 }
+		 else {
+		 	logError(logger, "The computation phase rejects the input program.");
+		 	compilationStatus = FAILED;
+		}
 		// ...end of the Backend. -----------------------------------------------------------------
 		// ----------------------------------------------------------------------------------------
 		 logDebugging(logger, "Releasing AST resources...");
 		 releaseProgram(program);
 		freeSymbolTable(compilerState.symbolTable);
+		if(compilerState.returnList != NULL)
+			free(compilerState.returnList);
+
 	}
 	else {
 		logError(logger, "The syntactic-analysis phase rejects the input program.");

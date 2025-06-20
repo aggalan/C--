@@ -28,27 +28,9 @@ void sortArray(int *array, int length, Order order) {
     }
 }
 
-int n;
-const char *msgs = "The operation was successful";
-const char *msgf = "The operation failed";
-bool status;
-
-bool operation(int number) {
-return 1;
-if ((number / 2) == 0) {
-return 1;
-}
-number++;
+char * hola(char * A, int B) {
+return "HOLA";
+printf("%s\n", "Hola");
 }
 
-
-void main(int T) {
-if (status) {
-printf("%s\n", "stringmsgs");
-} else {
-printf("%s\n", "stringmsgf");
-}
-status = 1;
-T = 0;
-}
-
+hola("1", 1)

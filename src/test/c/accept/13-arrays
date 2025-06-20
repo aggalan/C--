@@ -1,7 +1,7 @@
 numeros[]={7,5,2,4,6,4}
-INT numeros[6]
-arr_intnumeros[3] = inta + 2
-SORT arr_intnumeros ASC
+INT numeros2[6]
+numeros[3] = 5 + 2
+SORT numeros ASC
 FOR i=0 TO 6 {
-PRINT arr_intnumeros[inti]
+PRINT numeros[i]
 }

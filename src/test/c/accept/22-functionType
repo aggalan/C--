@@ -1,0 +1,6 @@
+STRING hola (STRING A,INT B){
+    PRINT "Hola"
+    RETURN "HOLA"
+}
+
+hola("1",1)

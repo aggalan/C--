@@ -1,12 +1,12 @@
-INT FACTORIAL(INT N) {
-    IF intN == 1 {
+INT FACTORIAL(INT n) {
+    IF n == 1 {
         RETURN 1
     }
-    RETURN intn * func_intFACTORIAL(intN-1)
+    RETURN n * FACTORIAL(n-1)
 }
 
  FOR I = 2 TO 10 {
-    WHILE intI < 5 {
-        intI++
+    WHILE I < 5 {
+        I++
     }
  }

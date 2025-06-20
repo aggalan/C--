@@ -32,17 +32,13 @@ int I = 0;
 int ARRAY[] = {1, 2, 3, 4, 5};
 const char *s = "COLOMBIA";
 bool QUESO = 1;
-char * foo() {
-printf("%s\n", "FOO");
-}
-
 for (i = 2; i <= 5; i++) {
-printf("%s\n", stringI);
+printf("%s\n", s);
 }
-if (boolQUESO) {
+if (QUESO) {
 return;
 printf("%s\n", "QUESO");
 }
-if ((intA < (1 + 2))) {
+if ((I < (1 + 2))) {
 printf("%s\n", "JUNIOR");
 }

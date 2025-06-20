@@ -6,8 +6,8 @@ BOOL status
 // Definir la función
 
 BOOL operation(INT number) {
-    intnumber++
-    IF intnumber/2 == 0 {
+    number++
+    IF number/2 == 0 {
         RETURN TRUE
     }
 RETURN FALSE
@@ -16,11 +16,11 @@ RETURN FALSE
 // Definir donde arranca el programa
 
 VOID main(INT T) {
-    intn = 0
-    boolstatus = func_booloperation(intn)
-    IF boolstatus {
-       PRINT stringmsgs
+    T = 0
+     status = FALSE
+    IF status {
+       PRINT "stringmsgs"
     } ELSE {
-        PRINT stringmsgf
+        PRINT "stringmsgf"
     }
 }

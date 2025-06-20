@@ -381,6 +381,7 @@ static void _generatePrintStatement(PrintStatement * printStatement) {
 }
 
 static void _generateSortStatement(SortStatement *sortStatement) {
+    logDebugging(_logger, "Generating sort statement for array %s", sortStatement->identifier);
     if (sortStatement == NULL) return;
 
     _output(0, "sortArray(");
@@ -889,12 +890,12 @@ static void _generateArgumentDefList(ArgumentDefList * argumentDefList) {
         ArgumentDef * arg = current->argumentDef;
         const char * typeStr = NULL;
         switch (arg->type) {
-        case ARGUMENT_MATH: typeStr = "int"; break;
-        case ARGUMENT_BOOL: typeStr = "bool"; break;
-        case ARGUMENT_STRING: typeStr = "char *"; break;
-        case ARGUMENT_INT_ARRAY: typeStr = "int *"; break;
-        case ARGUMENT_STRING_ARRAY: typeStr = "char **"; break;
-        case ARGUMENT_BOOL_ARRAY: typeStr = "bool *"; break;
+        case _INT: typeStr = "int"; break;
+        case _BOOL: typeStr = "bool"; break;
+        case _STRING: typeStr = "char *"; break;
+        case _INT_ARRAY: typeStr = "int *"; break;
+        case _STRING_ARRAY: typeStr = "char **"; break;
+        case _BOOL_ARRAY: typeStr = "bool *"; break;
         default: typeStr = "/* unknown */"; break;
         }
 

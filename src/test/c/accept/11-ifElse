@@ -1,23 +1,23 @@
 
-
-IF (boola) {
-    intA = 1
-} ELSE IF (inta == 0) {
-    PRINT inta
-    intB ++
-     intA = arr_int[intI--]
-} ELSE {
-    PRINT "brbr patapim"
-}
-
-IF boolA {
+BOOL A = TRUE
+IF (A) {
+    INT B = 1
+} ELSE IF (A ) {
     PRINT "A"
-} ELSE IF (intla == 0) {
-    PRINT inta
+    B++
+     B = B--
 } ELSE {
     PRINT "brbr patapim"
 }
 
-IF boolNICO {
+IF A {
+    PRINT "A"
+} ELSE IF (A) {
+    PRINT "A"
+} ELSE {
+    PRINT "brbr patapim"
+}
+
+IF A {
     PRINT "NICO"
 }
