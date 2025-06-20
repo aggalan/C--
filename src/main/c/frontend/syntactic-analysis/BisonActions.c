@@ -1042,6 +1042,19 @@ MacroInvocationStatement * MacroInvocationSemanticAction(String identifier, Argu
 	MacroInvocationStatement * macroInvocationStatement = calloc(1, sizeof(MacroInvocationStatement));
 	macroInvocationStatement->identifier = identifier;
 	macroInvocationStatement->arguments = args;
+	ArgumentNode * node = args->arguments;
+	while(node != NULL){
+		if(node->argument->type != ARGUMENT_MATH_EXPRESSION &&
+		   node->argument->type != ARGUMENT_UNARY_CHANGE_OPERATOR  ) {
+		   if(node->argument->type == ARGUMENT_ARRAY_ACCESS && findSymbol(currentCompilerState()->symbolTable, node->argument->arrayAccess->identifier)->types[0] != _INT) {
+		   		currentCompilerState()->hasError = true;
+		   }else if (node->argument->type == ARGUMENT_FUNCTION_EXPRESSION && findSymbol(currentCompilerState()->symbolTable, node->argument->functionExpression->identifier)->types[0] != _INT) {
+		   		currentCompilerState()->hasError = true;
+		   }else{
+			logError(_logger, "Invalid argument type in macro invocation: %d", node->argument->type);
+			currentCompilerState()->hasError = true;
+		}
+	}}
 	return macroInvocationStatement;
 }
 

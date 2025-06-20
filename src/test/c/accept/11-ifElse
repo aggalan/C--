@@ -4,7 +4,7 @@ IF (A) {
     INT B = 1
 } ELSE IF (A ) {
     PRINT "A"
-    B++
+     B++
      B = B--
 } ELSE {
     PRINT "brbr patapim"
