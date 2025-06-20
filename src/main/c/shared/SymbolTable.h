@@ -1,9 +1,6 @@
 #ifndef SYMBOL_TABLE_HEADER
 #define SYMBOL_TABLE_HEADER
 
-#include <stdlib.h>
-#include <string.h>
-
 #include "Type.h"
 
 #define MAX_SYMBOLS 1024
@@ -14,7 +11,8 @@ void shutdownTableActionsModule();
 typedef struct {
     char *name;          // Nombre del símbolo
     Type *types;        // Arreglo de tipos (ver arriba)
-    int typeCount;
+    int typeCount;       // Cantidad de tipos
+    Scope scope;         // Alcance del símbolo (local, global, etc.)
     int isFunction;                     // Cantidad de tipos
 } Symbol;
 

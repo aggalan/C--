@@ -1,5 +1,6 @@
 #include "SymbolTable.h"
 
+#include "ScopeStack.h"
 #include "../frontend/syntactic-analysis/SyntacticAnalyzer.h"
 static Logger * _logger = NULL;
 
@@ -63,6 +64,7 @@ Symbol* createSymbol(const char *name, const Type *types, int typeCount) {
     Symbol *symbol = malloc(sizeof(Symbol));
     symbol->name = strdup(name); // duplica el string
     symbol->types = malloc(sizeof(Type) * typeCount);
+    symbol->scope = peekScope(currentCompilerState()->scopeStack) ; // Asigna el scope actual
     for (int i = 0; i < typeCount; i++) {
         symbol->types[i] = types[i]; // asumimos que los Type* ya están en heap
     }
@@ -78,7 +80,8 @@ void addSymbol(SymbolTable *table, const char *name, const Type *types, const in
     }
     Symbol *existing = NULL;
     for (int i = 0; i < table->count; i++) {
-        if (strcmp(table->symbols[i]->name, name) == 0) {
+        if (strcmp(table->symbols[i]->name, name) == 0
+            && table->symbols[i]->scope == peekScope(currentCompilerState()->scopeStack)) {
             existing = table->symbols[i];
             break;
         }
@@ -99,9 +102,15 @@ void addSymbol(SymbolTable *table, const char *name, const Type *types, const in
 }
 
 Symbol* findSymbol(SymbolTable *table, const char *name) {
-    for (int i = 0; i < table->count; i++) {
-        if (strcmp(table->symbols[i]->name, name) == 0) {
-            return table->symbols[i];
+    for (int i = table->count -1 ; i >= 0; i--) {
+        if ( table->symbols[i]->scope <= peekScope(currentCompilerState()->scopeStack) && // Verifica el scope
+            strcmp(table->symbols[i]->name, name) == 0) {
+            for (int j=currentCompilerState()->scopeStack->size -1 ; j >= 0 ; j--) {
+                if (table->symbols[i]->scope == currentCompilerState()->scopeStack->scopes[j]) {
+                    // Si el scope coincide, devuelve el símbolo
+                    return table->symbols[i];
+                }
+            }
         }
     }
     return NULL;

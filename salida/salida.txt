@@ -28,5 +28,5 @@ void sortArray(int *array, int length, Order order) {
     }
 }
 
-int numeros[] = {7, 5, 2, 4, 6, 4};
-sortArray(numeros, sizeof(numeros) / sizeof(numeros[0]), ORDER_ASCENDING);
+
+int I = 0;

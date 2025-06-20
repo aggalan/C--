@@ -5,8 +5,8 @@
 #include "frontend/syntactic-analysis/BisonActions.h"
 #include "frontend/syntactic-analysis/SyntacticAnalyzer.h"
 #include "shared/CompilerState.h"
-#include "shared/Environment.h"
 #include "shared/Logger.h"
+#include "shared/ScopeStack.h"
 #include "shared/String.h"
 
 /**
@@ -35,7 +35,9 @@ const int main(const int count, const char ** arguments) {
 		.value = 0,
 		.symbolTable = createSymbolTable(),
 		.returnList = createReturnList(),
-		.hasError = false
+		.hasError = false,
+		.scopeStack = createScopeStack()
+
 	};
 	const SyntacticAnalysisStatus syntacticAnalysisStatus = parse(&compilerState);
 	CompilationStatus compilationStatus = SUCCEED;
@@ -59,6 +61,7 @@ const int main(const int count, const char ** arguments) {
 		 logDebugging(logger, "Releasing AST resources...");
 		 releaseProgram(program);
 		freeSymbolTable(compilerState.symbolTable);
+		freeScopeStack(compilerState.scopeStack);
 		if(compilerState.returnList != NULL)
 			free(compilerState.returnList);
 

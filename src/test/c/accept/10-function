@@ -5,3 +5,4 @@ INT main() {
     PRINT "hola"
     RETURN 1
 }
+

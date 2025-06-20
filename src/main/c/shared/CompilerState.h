@@ -1,6 +1,7 @@
 #ifndef COMPILER_STATE_HEADER
 #define COMPILER_STATE_HEADER
 
+#include "ScopeStack.h"
 #include "Type.h"
 #include "SymbolTable.h"
 /**
@@ -23,6 +24,8 @@ typedef struct {
 	boolean succeed;
 	boolean hasError;
 	// TODO: Add an stack to handle nested scopes.
+
+	ScopeStack * scopeStack;
 	SymbolTable * symbolTable;
 	// TODO: Add configuration.
 	// TODO: ...
