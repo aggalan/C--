@@ -18,7 +18,6 @@ const int main(const int count, const char ** arguments) {
 	Logger * logger = createLogger("EntryPoint");
 	initializeFlexActionsModule();
 	initializeBisonActionsModule();
-	initializeTableActionsModule();
 	initializeSyntacticAnalyzerModule();
 	initializeAbstractSyntaxTreeModule();
 	// initializeCalculatorModule();
@@ -36,8 +35,8 @@ const int main(const int count, const char ** arguments) {
 		.symbolTable = createSymbolTable(),
 		.returnList = createReturnList(),
 		.hasError = false,
-		.scopeStack = createScopeStack()
-
+		.scopeStack = createScopeStack(),
+		.declarationMode = false,
 	};
 	const SyntacticAnalysisStatus syntacticAnalysisStatus = parse(&compilerState);
 	CompilationStatus compilationStatus = SUCCEED;

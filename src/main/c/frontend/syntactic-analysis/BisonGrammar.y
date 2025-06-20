@@ -280,10 +280,10 @@ statementList:  statementList   statement                          { $$ = Append
 
 
 functionDefinition:
-      INT GENERIC_ID OPEN_PARENTHESIS {PushScopeBison();} argumentDefList CLOSE_PARENTHESIS {AddFunctionToSymbolTable(_INT, $2,$5);}  statementBlock  { $$ = FunctionDefinitionSemanticAction(_INT, $2, $5, $8); }
-    | VOID GENERIC_ID OPEN_PARENTHESIS {PushScopeBison();} argumentDefList CLOSE_PARENTHESIS {AddFunctionToSymbolTable(_INT, $2,$5);} statementBlock  { $$ = FunctionDefinitionSemanticAction(_VOID, $2, $5, $8); }
-    | STRING_TYPE GENERIC_ID OPEN_PARENTHESIS {PushScopeBison();} argumentDefList CLOSE_PARENTHESIS {AddFunctionToSymbolTable(_INT, $2,$5);} statementBlock     { $$ = FunctionDefinitionSemanticAction(_STRING, $2, $5, $8); }
-    | BOOL GENERIC_ID OPEN_PARENTHESIS {PushScopeBison();} argumentDefList CLOSE_PARENTHESIS {AddFunctionToSymbolTable(_INT, $2,$5);} statementBlock  { $$ = FunctionDefinitionSemanticAction(_STRING, $2, $5, $8); }
+      intDeclaration GENERIC_ID OPEN_PARENTHESIS {PushScopeBison();} argumentDefList CLOSE_PARENTHESIS {AddFunctionToSymbolTable(_INT, $2,$5);}  statementBlock  { $$ = FunctionDefinitionSemanticAction(_INT, $2, $5, $8); }
+    | VOID {DeclarationMode();} GENERIC_ID OPEN_PARENTHESIS {PushScopeBison();} argumentDefList CLOSE_PARENTHESIS {AddFunctionToSymbolTable(_INT, $3,$6);} statementBlock  { $$ = FunctionDefinitionSemanticAction(_VOID, $3, $6, $9); }
+    | stringDeclaration GENERIC_ID OPEN_PARENTHESIS {PushScopeBison();} argumentDefList CLOSE_PARENTHESIS {AddFunctionToSymbolTable(_INT, $2,$5);} statementBlock     { $$ = FunctionDefinitionSemanticAction(_STRING, $2, $5, $8); }
+    | boolDeclaration GENERIC_ID OPEN_PARENTHESIS {PushScopeBison();} argumentDefList CLOSE_PARENTHESIS {AddFunctionToSymbolTable(_INT, $2,$5);} statementBlock  { $$ = FunctionDefinitionSemanticAction(_STRING, $2, $5, $8); }
     ;
 
 statement:
@@ -383,8 +383,8 @@ matchCaseListString:
 matchCaseString: STRING ARROW statement                                 { $$ = MatchCaseStringSemanticAction($1, $3); }
 | DEFAULT ARROW  statement                                            { $$ = MatchDefaultCaseSemanticAction($3); }
     ;
-forLoop: FOR assignmentForLoopExpression TO constant statementBlock
-                                                                    { $$ = ForLoopSemanticAction($2, $4, $5); }
+forLoop: FOR {DeclarationMode();} assignmentForLoopExpression TO constant statementBlock
+                                                                    { $$ = ForLoopSemanticAction($3, $5, $6); }
 	;
 
 whileLoop:
@@ -493,13 +493,20 @@ assignmentBoolStatement: BOOL_ID ASSIGNMENT boolExpression  NEW_LINE            
      ;
 assignmentStringStatement: STRING_ID ASSIGNMENT stringExpression  NEW_LINE            { $$ = AssignmentStringSemanticAction($1,$3);}
 
+  boolDeclaration: BOOL {DeclarationMode();}  // This is a declaration, not a variable statement
+    ;
+
+intDeclaration: INT {DeclarationMode();}
+    ;
+stringDeclaration: STRING_TYPE {DeclarationMode();}
+
     variableStatement:
-          BOOL GENERIC_ID ASSIGNMENT boolExpression   NEW_LINE            { $$ = VariableBoolDeclarationSemanticAction( $2, $4); }
-        | INT GENERIC_ID ASSIGNMENT mathExpression   NEW_LINE                      { $$ = VariableIntDeclarationSemanticAction( $2, $4); }
-        | STRING_TYPE GENERIC_ID ASSIGNMENT stringExpression  NEW_LINE                    { $$ = VariableStringDeclarationSemanticAction( $2, $4); }
-        | BOOL GENERIC_ID NEW_LINE                                      { $$ = VariableDeclarationSemanticAction(_BOOL, $2, NULL); }
-        | INT GENERIC_ID  NEW_LINE                                      { $$ = VariableDeclarationSemanticAction(_INT, $2, NULL); }
-        | STRING_TYPE GENERIC_ID NEW_LINE                                    { $$ = VariableDeclarationSemanticAction(_STRING, $2, NULL); }
+          boolDeclaration GENERIC_ID ASSIGNMENT boolExpression   NEW_LINE            { $$ = VariableBoolDeclarationSemanticAction( $2, $4); }
+        | intDeclaration GENERIC_ID ASSIGNMENT mathExpression   NEW_LINE                      { $$ = VariableIntDeclarationSemanticAction( $2, $4); }
+        | stringDeclaration GENERIC_ID ASSIGNMENT stringExpression  NEW_LINE                    { $$ = VariableStringDeclarationSemanticAction( $2, $4); }
+        | boolDeclaration GENERIC_ID NEW_LINE                                      { $$ = VariableDeclarationSemanticAction(_BOOL, $2, NULL); }
+        | intDeclaration GENERIC_ID  NEW_LINE                                      { $$ = VariableDeclarationSemanticAction(_INT, $2, NULL); }
+        | stringDeclaration GENERIC_ID NEW_LINE                                    { $$ = VariableDeclarationSemanticAction(_STRING, $2, NULL); }
         ;
 
 
@@ -508,14 +515,12 @@ arrayAssignment: intArrayAccess ASSIGNMENT mathExpression  NEW_LINE             
     | stringArrayAccess ASSIGNMENT stringExpression  NEW_LINE            { $$ = AssignmentStringArraySemanticAction($1,$3);}
     ;
 
-arrayStatement:
-    GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS ASSIGNMENT OPEN_BRACE {PushScopeBison();} integerList CLOSE_BRACE       { $$ = ArrayIntStatementSemanticAction($1, $7); }
-    | INT GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS ASSIGNMENT OPEN_BRACE{PushScopeBison();} integerList CLOSE_BRACE { $$ = ArrayIntStatementSemanticAction($2, $8); }
-    | INT GENERIC_ID OPEN_BRACKETS mathExpression CLOSE_BRACKETS                                { $$ = ArrayDeclarationSemanticAction($2, $4, _INT); }
-    | BOOL GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS ASSIGNMENT OPEN_BRACE{PushScopeBison();} boolList CLOSE_BRACE { $$ = ArrayBoolStatementSemanticAction($2, $8); }
-    | BOOL GENERIC_ID OPEN_BRACKETS mathExpression CLOSE_BRACKETS                                { $$ = ArrayDeclarationSemanticAction($2, $4, _BOOL); }
-    | STRING_TYPE GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS ASSIGNMENT OPEN_BRACE{PushScopeBison();} strings CLOSE_BRACE { $$ = ArrayStringStatementSemanticAction($2, $8); }
-    | STRING_TYPE GENERIC_ID OPEN_BRACKETS mathExpression CLOSE_BRACKETS                            { $$ = ArrayDeclarationSemanticAction($2, $4, _STRING); }
+arrayStatement: intDeclaration GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS ASSIGNMENT OPEN_BRACE{PushScopeBison();} integerList CLOSE_BRACE { $$ = ArrayIntStatementSemanticAction($2, $8); }
+    | intDeclaration GENERIC_ID OPEN_BRACKETS mathExpression CLOSE_BRACKETS                                { $$ = ArrayDeclarationSemanticAction($2, $4, _INT); }
+    | boolDeclaration GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS ASSIGNMENT OPEN_BRACE{PushScopeBison();} boolList CLOSE_BRACE { $$ = ArrayBoolStatementSemanticAction($2, $8); }
+    | boolDeclaration GENERIC_ID OPEN_BRACKETS mathExpression CLOSE_BRACKETS                                { $$ = ArrayDeclarationSemanticAction($2, $4, _BOOL); }
+    | stringDeclaration GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS ASSIGNMENT OPEN_BRACE{PushScopeBison();} strings CLOSE_BRACE { $$ = ArrayStringStatementSemanticAction($2, $8); }
+    | stringDeclaration GENERIC_ID OPEN_BRACKETS mathExpression CLOSE_BRACKETS                            { $$ = ArrayDeclarationSemanticAction($2, $4, _STRING); }
     ;
 
 integerList:
@@ -561,12 +566,12 @@ argumentDefList:
   | %empty                                                        { $$ = NULL; }
   ;
 argumentDef:
-    INT GENERIC_ID                                                       { $$ = ArgumentDefSemanticAction($2, _INT); }
-    | BOOL GENERIC_ID                                                    { $$ = ArgumentDefSemanticAction($2, _BOOL); }
-    | STRING_TYPE GENERIC_ID                                             { $$ = ArgumentDefSemanticAction($2, _STRING); }
-    | INT GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS              { $$ = ArgumentDefSemanticAction($2, _INT_ARRAY); }
-    | BOOL GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS             { $$ = ArgumentDefSemanticAction($2, _BOOL_ARRAY); }
-    | STRING_TYPE GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS      { $$ = ArgumentDefSemanticAction($2, _STRING_ARRAY); }
+    intDeclaration GENERIC_ID                                                       { $$ = ArgumentDefSemanticAction($2, _INT); }
+    | boolDeclaration GENERIC_ID                                                    { $$ = ArgumentDefSemanticAction($2, _BOOL); }
+    | stringDeclaration GENERIC_ID                                             { $$ = ArgumentDefSemanticAction($2, _STRING); }
+    | intDeclaration GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS              { $$ = ArgumentDefSemanticAction($2, _INT_ARRAY); }
+    | boolDeclaration GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS             { $$ = ArgumentDefSemanticAction($2, _BOOL_ARRAY); }
+    | stringDeclaration GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS      { $$ = ArgumentDefSemanticAction($2, _STRING_ARRAY); }
     ;
 
 %%

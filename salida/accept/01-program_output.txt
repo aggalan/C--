@@ -36,8 +36,10 @@ for (i = 2; i <= 5; i++) {
 printf("%s\n", s);
 }
 if (QUESO) {
-return;
+const char *I = "QUESO";
+printf("%s\n", I);
 printf("%s\n", "QUESO");
+return;
 }
 if ((I < (1 + 2))) {
 printf("%s\n", "JUNIOR");

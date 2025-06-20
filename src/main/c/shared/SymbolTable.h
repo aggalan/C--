@@ -10,10 +10,10 @@ void initializeTableActionsModule();
 void shutdownTableActionsModule();
 typedef struct {
     char *name;          // Nombre del símbolo
-    Type *types;        // Arreglo de tipos (ver arriba)
+    Type *types;        // Arreglo de tipos (ver arriba)---Si es una variable, array de largo 1, si es una función, el primero es el tipo de retorno y el resto los parámetros
     int typeCount;       // Cantidad de tipos
     Scope scope;         // Alcance del símbolo (local, global, etc.)
-    int isFunction;                     // Cantidad de tipos
+    int isFunction;      // Cantidad de tipos
 } Symbol;
 
 typedef struct {

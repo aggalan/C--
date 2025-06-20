@@ -2,17 +2,6 @@
 
 #include "ScopeStack.h"
 #include "../frontend/syntactic-analysis/SyntacticAnalyzer.h"
-static Logger * _logger = NULL;
-
-void initializeTableActionsModule() {
-    _logger = createLogger("TABLE");
-}
-
-void shutdownTableActionsModule() {
-    if (_logger != NULL) {
-        destroyLogger(_logger);
-    }
-}
 
 SymbolTable* createSymbolTable() {
     SymbolTable *table = malloc(sizeof(SymbolTable));
@@ -60,7 +49,7 @@ void destroyReturnList(ReturnList *list) {
 }
 
 
-Symbol* createSymbol(const char *name, const Type *types, int typeCount) {
+Symbol* createSymbol(const char *name, const Type *types, const int typeCount) {
     Symbol *symbol = malloc(sizeof(Symbol));
     symbol->name = strdup(name); // duplica el string
     symbol->types = malloc(sizeof(Type) * typeCount);

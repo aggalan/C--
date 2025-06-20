@@ -5,7 +5,7 @@
 
 typedef struct {
     Scope * scopes;
-    int size;
+    int size; //puntero al ultimo elemento del stack
     Scope lastScope;
 } ScopeStack;
 
@@ -13,7 +13,6 @@ ScopeStack* createScopeStack();
 void pushScope(ScopeStack *stack);
 Scope popScope(ScopeStack *stack);
 Scope peekScope(ScopeStack *stack);
-void clearScope(ScopeStack *stack);
 void freeScopeStack(ScopeStack *stack);
 
 #endif

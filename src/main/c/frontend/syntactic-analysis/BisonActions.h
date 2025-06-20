@@ -134,4 +134,5 @@ void AddMacroToSymbolTable(String identifier, StringList * parameters);
 Type * createMacroTypeArray(const Type type, const StringList * parameters);
 
 void PushScopeBison();
+void DeclarationMode();
 #endif
