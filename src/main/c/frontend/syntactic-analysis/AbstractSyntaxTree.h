@@ -291,6 +291,7 @@ struct StringNode {
 struct StringList {
 	StringNode *strings;
 	StringNode *last;
+	int count;
 };
 
 struct ArgumentList {

@@ -123,6 +123,7 @@ static void _generateStatement(Statement * statement) {
             break;
 
         case STATEMENT_MACRO:
+            logDebugging(_logger, "Generating macro statement...");
             _generateMacroStatement(statement->macroStatement);
             break;
 

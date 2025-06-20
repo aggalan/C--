@@ -14,6 +14,7 @@ typedef enum {
 	_INT_ARRAY,
 	_STRING_ARRAY,
 	_BOOL_ARRAY,
+	_MACRO
 }Type ;
 typedef int Token;
 typedef int Scope;

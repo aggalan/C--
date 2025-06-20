@@ -130,5 +130,8 @@ ArrayAssignment * AssignmentBoolArraySemanticAction(ArrayAccess * arrayAccess, B
 BoolList * SingleBoolArrayListSemanticAction(Bool boolean);
 BoolList * AppendBoolArrayListSemanticAction(BoolList *list, Bool boolean);
 void AddFunctionToSymbolTable(const Type type, String identifier, ArgumentDefList * parameters);
+void AddMacroToSymbolTable(String identifier, StringList * parameters);
+Type * createMacroTypeArray(const Type type, const StringList * parameters);
+
 void PushScopeBison();
 #endif

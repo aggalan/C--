@@ -430,12 +430,40 @@ Type * createTypeArray(const Type type, const ArgumentDefList * parameters) {
 	}
 	return typeArray;
 }
+
+Type * createMacroTypeArray(const Type type, const StringList * parameters) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Type * typeArray;
+	if (parameters == NULL) {
+		typeArray = calloc(1, sizeof(Type));
+		typeArray[0] = type;
+		return typeArray;
+	}
+	typeArray = calloc(parameters->count + 1, sizeof(Type));
+	typeArray[0] = type;
+	StringNode * parametersNode = parameters->strings;
+	int i=1;
+	while (parametersNode != NULL) {
+		typeArray[i]= _INT;
+		parametersNode = parametersNode->next;
+		i++;
+	}
+	return typeArray;
+}
 void AddFunctionToSymbolTable(const Type type, String identifier, ArgumentDefList * parameters) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Type * typeArray = createTypeArray(type, parameters);
 	addSymbol(currentCompilerState()->symbolTable, identifier, typeArray, parameters == NULL ? 1 : parameters->count + 1,1);
 	free(typeArray);
 }
+
+void AddMacroToSymbolTable(String identifier, StringList * parameters) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Type * typeArray = createMacroTypeArray(_MACRO, parameters);
+	addSymbol(currentCompilerState()->symbolTable, identifier, typeArray,parameters == NULL ? 1 : parameters->count + 1,2);
+	free(typeArray);
+}
+
 
 FunctionDefinition  * FunctionDefinitionSemanticAction(const Type type, String identifier, ArgumentDefList * parameters, StatementBlock * body){
 	_logSyntacticAnalyzerAction(__FUNCTION__);
@@ -634,6 +662,7 @@ StringList * SingleStringListSemanticAction(String str) {
     list->strings = calloc(1, sizeof(StringNode));
     list->strings->string = str;
     list->last = list->strings;
+	list->count = 0;
     return list;
 }
 StringList * AppendStringListSemanticAction(StringList *list, String str) {
@@ -642,6 +671,7 @@ StringList * AppendStringListSemanticAction(StringList *list, String str) {
     node->string = str;
     list->last->next = node;
     list->last = node;
+	list->count++;
     return list;
 }
 

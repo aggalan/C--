@@ -94,9 +94,12 @@ void addSymbol(SymbolTable *table, const char *name, const Type *types, const in
     }
 
     Symbol *newSymbol = createSymbol(name, types, typeCount);
-    if (function) {
+    if (function == 1) {
         table->currentFunction = newSymbol;
         newSymbol->isFunction = 1;
+    }
+    if (function == 2) {
+        newSymbol->isFunction = 2; // Macro
     }
     table->symbols[table->count++] = newSymbol;
 }

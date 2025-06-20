@@ -28,15 +28,3 @@ void sortArray(int *array, int length, Order order) {
     }
 }
 
-int X;
-switch(X) {
-    case 2:    
-printf("%s\n", "HOLA");
-        break;
-    case 3:    
-printf("%s\n", "HOLA");
-        break;
-    case 4:    
-printf("%s\n", "CHAU");
-        break;
-}
