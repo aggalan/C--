@@ -2,12 +2,63 @@
 
 #include "ScopeStack.h"
 #include "../frontend/syntactic-analysis/SyntacticAnalyzer.h"
+static Logger * _logger = NULL;
+
+void initializeTableActionsModule() {
+    _logger = createLogger("TABLE");
+}
+
+void shutdownTableActionsModule() {
+    if (_logger != NULL) {
+        destroyLogger(_logger);
+    }
+}
 
 SymbolTable* createSymbolTable() {
     SymbolTable *table = malloc(sizeof(SymbolTable));
     table->count = 0;
     return table;
 }
+
+ReturnList* createReturnList() {
+    ReturnList *list = malloc(sizeof(ReturnList));
+    list->head = NULL;
+    list->count = 0;
+    return list;
+}
+ReturnNode* createReturnNode(Type type) {
+    ReturnNode *node = malloc(sizeof(ReturnNode));
+    node->type = type;
+    return node;
+}
+ReturnNode* addReturnNode(ReturnList *list, Type type) {
+    if (list->count >= MAX_SYMBOLS) {
+        currentCompilerState()->succeed = false;
+        return NULL;
+    }
+
+    ReturnNode *newNode = createReturnNode(type);
+    newNode->next = list->head; // Inserta al principio
+    list->head = newNode;
+    list->count++;
+    return newNode;
+}
+int isReturnListEmpty(const ReturnList *list) {
+    return list->count == 0;
+}
+void destroyReturnList(ReturnList *list) {
+    if (!list) return;
+
+    ReturnNode *current = list->head;
+    while (current) {
+        ReturnNode *next = current->next;
+        free(current);
+        current = next;
+    }
+
+    list->head = NULL;
+}
+
 
 Symbol* createSymbol(const char *name, const Type *types, int typeCount) {
     Symbol *symbol = malloc(sizeof(Symbol));
@@ -21,13 +72,12 @@ Symbol* createSymbol(const char *name, const Type *types, int typeCount) {
     return symbol;
 }
 
-void addSymbol(SymbolTable *table, const char *name, const Type *types, const int typeCount) {
+void addSymbol(SymbolTable *table, const char *name, const Type *types, const int typeCount,int function) {
     if (table->count >= MAX_SYMBOLS) {
         // Manejo simple de error
         currentCompilerState()->succeed= false;
         return;
     }
-
     Symbol *existing = NULL;
     for (int i = 0; i < table->count; i++) {
         if (strcmp(table->symbols[i]->name, name) == 0
@@ -36,7 +86,6 @@ void addSymbol(SymbolTable *table, const char *name, const Type *types, const in
             break;
         }
     }
-
     if (existing != NULL) {
         // Ya existe, podrías actualizar o emitir error
         fprintf(stderr, "Symbol %s already defined\n", name);
@@ -45,6 +94,10 @@ void addSymbol(SymbolTable *table, const char *name, const Type *types, const in
     }
 
     Symbol *newSymbol = createSymbol(name, types, typeCount);
+    if (function) {
+        table->currentFunction = newSymbol;
+        newSymbol->isFunction = 1;
+    }
     table->symbols[table->count++] = newSymbol;
 }
 

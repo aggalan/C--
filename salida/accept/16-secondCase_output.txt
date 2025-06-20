@@ -30,9 +30,9 @@ void sortArray(int *array, int length, Order order) {
 
 int numeros[] = {7, 5, 2, 4, 6, 4};
 void main() {
-sortArray(arr_intnumeros, sizeof(arr_intnumeros) / sizeof(arr_intnumeros[0]), ORDER_ASCENDING);
+sortArray(numeros, sizeof(numeros) / sizeof(numeros[0]), ORDER_ASCENDING);
 for (i = 0; i <= 5; i++) {
-arr_intnumeros[inti]++;
+numeros[1]++;
 }
 }
 

@@ -36,24 +36,13 @@ const char *msgElse = "This is not 1 or 2";
 
 void main() {
 return;
-if ((intn > 0 && intn < 2)) {
+if ((n > 0 && n < 2)) {
 printf("%s\n", "Hello");
 }
-intn++;
-switch(n) {
-    case 1:    
-printf("%s\n", stringmsgOne);
-        break;
-    case 2:    
-printf("%s\n", stringmsgTwo);
-        break;
-    case 0:    
-printf("%s\n", stringmsgElse);
-        break;
-}
-intn = 0;
+n++;
+n = 0;
 }
 
-if (((intvalue3 == 5 && intvalue > intvalue2))) {
+if ((5 > 2)) {
 return 5;
 }

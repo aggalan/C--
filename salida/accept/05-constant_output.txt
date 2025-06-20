@@ -28,17 +28,14 @@ void sortArray(int *array, int length, Order order) {
     }
 }
 
-const char *var = "cebolla";
-int nar = intjinto;
+const char *str = "cebolla";
 int var = 1;
 int nar = 2;
-while (intvar <= intnar) {
+while (var <= nar) {
 printf("%s\n", "JUAN");
-if (intnar > intvar) {
+if (nar > var) {
 printf("%s\n", "tito");
 }
 printf("%s\n", "Goodbye");
 printf("%s\n", "Hello");
 }
-int var = 1;
-int nar = 2;

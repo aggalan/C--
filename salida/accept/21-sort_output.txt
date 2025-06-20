@@ -28,27 +28,5 @@ void sortArray(int *array, int length, Order order) {
     }
 }
 
-int n;
-const char *msgs = "The operation was successful";
-const char *msgf = "The operation failed";
-bool status;
-
-bool operation(int number) {
-return 1;
-if ((number / 2) == 0) {
-return 1;
-}
-number++;
-}
-
-
-void main(int T) {
-if (status) {
-printf("%s\n", "stringmsgs");
-} else {
-printf("%s\n", "stringmsgf");
-}
-status = 1;
-T = 0;
-}
-
+int numeros[] = {7, 5, 2, 4, 6, 4};
+sortArray(numeros, sizeof(numeros) / sizeof(numeros[0]), ORDER_ASCENDING);

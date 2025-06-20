@@ -1,3 +1,3 @@
 INT myRecursiveFunction(INT value) {
-    RETURN func_intmyRecursiveFunction( intvalue3 )
+    RETURN myRecursiveFunction( value )
 }

@@ -528,7 +528,7 @@ printStatement: PRINT stringExpression  NEW_LINE                                
 
 argumentList:
     argumentValue                                       { $$ = ArgumentValueSemanticAction($1); }
-  | argumentValue COMMA argumentList                            { $$ = AppendArgumentListSemanticAction($3, $1); }
+  | argumentList COMMA  argumentValue                           { $$ = AppendArgumentListSemanticAction($1, $3); }
   | %empty                                                        { $$ = NULL; }
   ;
 
@@ -554,9 +554,9 @@ argumentDef:
     INT GENERIC_ID                                                       { $$ = ArgumentDefSemanticAction($2, _INT); }
     | BOOL GENERIC_ID                                                    { $$ = ArgumentDefSemanticAction($2, _BOOL); }
     | STRING_TYPE GENERIC_ID                                             { $$ = ArgumentDefSemanticAction($2, _STRING); }
-    | INT GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS GENERIC_ID             { $$ = ArgumentDefSemanticAction($2, _INT_ARRAY); }
-    | BOOL GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS GENERIC_ID            { $$ = ArgumentDefSemanticAction($2, _BOOL_ARRAY); }
-    | STRING_TYPE GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS GENERIC_ID     { $$ = ArgumentDefSemanticAction($2, _STRING_ARRAY); }
+    | INT GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS              { $$ = ArgumentDefSemanticAction($2, _INT_ARRAY); }
+    | BOOL GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS             { $$ = ArgumentDefSemanticAction($2, _BOOL_ARRAY); }
+    | STRING_TYPE GENERIC_ID OPEN_BRACKETS CLOSE_BRACKETS      { $$ = ArgumentDefSemanticAction($2, _STRING_ARRAY); }
     ;
 
 %%

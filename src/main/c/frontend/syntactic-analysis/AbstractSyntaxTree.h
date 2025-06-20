@@ -269,14 +269,7 @@ struct StatementNode {
 
 struct ArgumentDef {
 	String identifier;
-	enum {
-		ARGUMENT_MATH,
-		ARGUMENT_BOOL,
-		ARGUMENT_STRING,
-		ARGUMENT_INT_ARRAY,
-		ARGUMENT_STRING_ARRAY,
-		ARGUMENT_BOOL_ARRAY,
-	} type;
+	Type type;
 };
 
 struct ArgumentDefNode {

@@ -1,14 +1,11 @@
-STRING var = "cebolla"
-INT nar = intjinto
+STRING str = "cebolla"
 INT var = 1
 INT nar = 2
-WHILE intvar <= intnar {
+WHILE var <= nar {
     PRINT "Hello"
     PRINT "Goodbye"
-    IF intnar > intvar {
+    IF nar > var {
         PRINT "tito"
     }
     PRINT "JUAN"
 }
-INT var = 1
-INT nar = 2

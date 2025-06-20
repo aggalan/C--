@@ -22,12 +22,14 @@ typedef struct {
 
 	// A flag that indicates the current state of the compilation so far.
 	boolean succeed;
+	boolean hasError;
+	// TODO: Add an stack to handle nested scopes.
 
 	ScopeStack * scopeStack;
 	SymbolTable * symbolTable;
 	// TODO: Add configuration.
 	// TODO: ...
-
+	ReturnList * returnList;
 	// The computed value of the entire program (only for the calculator).
 	int value;
 } CompilerState;
