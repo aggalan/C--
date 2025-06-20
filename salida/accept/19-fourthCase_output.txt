@@ -28,15 +28,15 @@ void sortArray(int *array, int length, Order order) {
     }
 }
 
-int FACTORIAL(int N) {
-return (intn * func_intFACTORIAL((intN - 1)));
-if (intN == 1) {
+int FACTORIAL(int n) {
+return (n * FACTORIAL((n - 1)));
+if (n == 1) {
 return 1;
 }
 }
 
 for (I = 2; I <= 10; I++) {
-while (intI < 5) {
-intI++;
+while (I < 5) {
+I++;
 }
 }

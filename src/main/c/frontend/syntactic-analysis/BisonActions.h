@@ -129,5 +129,6 @@ ArrayAssignment * AssignmentStringArraySemanticAction(ArrayAccess * arrayAccess,
 ArrayAssignment * AssignmentBoolArraySemanticAction(ArrayAccess * arrayAccess, BoolExpression * boolExpression);
 BoolList * SingleBoolArrayListSemanticAction(Bool boolean);
 BoolList * AppendBoolArrayListSemanticAction(BoolList *list, Bool boolean);
+void AddFunctionToSymbolTable(const Type type, String identifier, ArgumentDefList * parameters);
 void PushScopeBison();
 #endif

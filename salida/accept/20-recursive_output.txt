@@ -29,6 +29,6 @@ void sortArray(int *array, int length, Order order) {
 }
 
 int myRecursiveFunction(int value) {
-return func_intmyRecursiveFunction(intvalue3);
+return myRecursiveFunction(value);
 }
 

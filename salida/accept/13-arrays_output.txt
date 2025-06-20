@@ -29,10 +29,10 @@ void sortArray(int *array, int length, Order order) {
 }
 
 int numeros[] = {7, 5, 2, 4, 6, 4};
-int numeros[6];
+int numeros2[6];
 
-arr_intnumeros[3] = (inta + 2);
-sortArray(arr_intnumeros, sizeof(arr_intnumeros) / sizeof(arr_intnumeros[0]), ORDER_ASCENDING);
+numeros[3] = (5 + 2);
+sortArray(numeros, sizeof(numeros) / sizeof(numeros[0]), ORDER_ASCENDING);
 for (i = 0; i <= 6; i++) {
-printf("1\n", arr_intnumeros[inti]);
+printf("1\n", numeros[i]);
 }

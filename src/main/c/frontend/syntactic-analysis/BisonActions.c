@@ -429,6 +429,12 @@ Type * createTypeArray(const Type type, const ArgumentDefList * parameters) {
 	}
 	return typeArray;
 }
+void AddFunctionToSymbolTable(const Type type, String identifier, ArgumentDefList * parameters) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Type * typeArray = createTypeArray(type, parameters);
+	addSymbol(currentCompilerState()->symbolTable, identifier, typeArray, parameters == NULL ? 1 : parameters->count + 1,1);
+	free(typeArray);
+}
 
 FunctionDefinition  * FunctionDefinitionSemanticAction(const Type type, String identifier, ArgumentDefList * parameters, StatementBlock * body){
 	_logSyntacticAnalyzerAction(__FUNCTION__);
@@ -450,7 +456,6 @@ FunctionDefinition  * FunctionDefinitionSemanticAction(const Type type, String i
 	}
 	}
 	destroyReturnList(returnList);
-	addSymbol(currentCompilerState()->symbolTable, identifier, typeArray, parameters == NULL ? 1 : parameters->count + 1,1);
 	free(typeArray);
 	return functionDefinition;
 }
@@ -783,7 +788,7 @@ AssignmentMathStatement * AssignmentIntSemanticAction(String id, MathExpression 
 	AssignmentMathStatement * assignmentStatement = calloc(1, sizeof(AssignmentMathStatement));
 	assignmentStatement->identifier = id;
 	assignmentStatement->mathExpression = mathExpression;
-	addSymbol(currentCompilerState()->symbolTable, id, (Type[]){_INT}, 1); // TODO: Checkear tema de memoria
+	addSymbol(currentCompilerState()->symbolTable, id, (Type[]){_INT}, 1,0); // TODO: Checkear tema de memoria
 	return assignmentStatement;
 }
 AssignmentStatement * AssignmentStringExpressionSemanticAction(AssignmentStringStatement * assignmentStatement) {

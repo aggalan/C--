@@ -33,7 +33,7 @@ const char *msgs = "The operation was successful";
 const char *msgf = "The operation failed";
 bool status;
 
-bool operation(int number) {
+char * operation(int number) {
 return 1;
 if ((number / 2) == 0) {
 return 1;

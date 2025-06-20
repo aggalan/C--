@@ -28,16 +28,11 @@ void sortArray(int *array, int length, Order order) {
     }
 }
 
-int hola() {
-printf("%s\n", "HOLA");
+
+int main() {
+return 1;
+printf("%s\n", "hola");
+int f = 10;
+int e = 5;
 }
 
-char * nico(int nico, bool tutti) {
-if (1) {
-printf("%s\n", "tutti");
-}
-printf("%s\n", "HOLA");
-}
-
-func_boolnico(arr_int[0]++;
-, "HOLA")
