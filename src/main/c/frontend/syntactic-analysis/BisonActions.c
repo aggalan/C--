@@ -1106,7 +1106,9 @@ ExternalDeclaration * MacroExternalDeclarationSemanticAction(MacroStatement * ma
 	externalDeclaration->type = MACRO_STATEMENT;
 	return externalDeclaration;
 }
-
+void DeclarationMode() {
+	currentCompilerState()->declarationMode = true;
+}
 
 // ConditionalExpression *MathConditionalExpressionSemanticAction(MathExpression *math_expression) {
 // 	_logSyntacticAnalyzerAction(__FUNCTION__);

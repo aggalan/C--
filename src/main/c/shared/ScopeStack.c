@@ -42,12 +42,6 @@ Scope peekScope(ScopeStack *stack) {
 
 }
 
-void clearScope(ScopeStack *stack) {
-    stack->size = 0;
-    stack->lastScope = -1;
-    memset(stack->scopes, 0, MAX_STACK_SIZE);
-}
-
 void freeScopeStack(ScopeStack *stack) {
     if (stack) {
         free(stack->scopes);

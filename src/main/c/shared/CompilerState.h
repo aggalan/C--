@@ -30,6 +30,7 @@ typedef struct {
 	// TODO: Add configuration.
 	// TODO: ...
 	ReturnList * returnList;
+	boolean declarationMode;
 	// The computed value of the entire program (only for the calculator).
 	int value;
 } CompilerState;

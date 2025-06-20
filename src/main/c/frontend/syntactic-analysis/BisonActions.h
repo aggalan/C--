@@ -131,4 +131,5 @@ BoolList * SingleBoolArrayListSemanticAction(Bool boolean);
 BoolList * AppendBoolArrayListSemanticAction(BoolList *list, Bool boolean);
 void AddFunctionToSymbolTable(const Type type, String identifier, ArgumentDefList * parameters);
 void PushScopeBison();
+void DeclarationMode();
 #endif

@@ -155,6 +155,12 @@ Token IdentifierLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	Symbol * symbol = findSymbol( currentCompilerState()->symbolTable, lexicalAnalyzerContext->semanticValue->string);
 	Token id = GENERIC_ID;
 	if (symbol != NULL) {
+		if (currentCompilerState()->declarationMode && symbol->scope != peekScope(currentCompilerState()->scopeStack)) {
+			currentCompilerState()->declarationMode = false;
+			destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+			return id;
+		}
+
 		if ( symbol->typeCount > 1) {
 			switch (symbol->types[0]) {
 				case _INT:
@@ -193,6 +199,7 @@ Token IdentifierLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 			}
 		}
 	}
+	currentCompilerState()->declarationMode=0;
 	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return id;
 }
