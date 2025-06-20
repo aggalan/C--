@@ -342,6 +342,7 @@ struct CaseList {
 struct MatchStatement {
 	String identifier;
 	CaseList *caseList;
+	Type type;
 };
 
 enum StatementType {

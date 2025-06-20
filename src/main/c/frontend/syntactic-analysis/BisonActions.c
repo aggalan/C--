@@ -198,11 +198,12 @@ IfStatement *IfElseSemanticAction(BoolExpression *condition, StatementBlock *the
 	stmt->elseBranch = elseBranch;
 	return stmt;
 }
-MatchStatement *MatchSemanticAction(String id, CaseList *cases) {
+MatchStatement *MatchSemanticAction(String id, CaseList *cases, Type type) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	MatchStatement *match = calloc(1, sizeof(MatchStatement));
 	match->identifier = id;
 	match->caseList = cases;
+	match->type = type;
 	return match;
 }
 PrintStatement * PrintIdentifierSemanticAction(StringExpression * semanticAction) {

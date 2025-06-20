@@ -193,8 +193,10 @@
 %type <arrayAccess> stringArrayAccess
 %type <program> program
 %type <matchStatement> matchStatement
-%type <matchCase> matchCase
-%type <caseList> matchCaseList
+%type <matchCase> matchCaseInt
+%type <matchCase> matchCaseString
+%type <caseList> matchCaseListInt
+%type <caseList> matchCaseListString
 %type <statement> statement
 %type <statementList> statementList
 %type <forLoop> forLoop
@@ -357,22 +359,30 @@ statementBlock: OPEN_BRACE statementList CLOSE_BRACE           { $$ = StatementB
 sortStatement: SORT INT_ARRAY_ID ASC  NEW_LINE                      { $$ = SortSemanticAction($2, ORDER_ASC); }
             | SORT INT_ARRAY_ID DESC NEW_LINE                     { $$ = SortSemanticAction($2, ORDER_DESC); }
 
-matchStatement: MATCH GENERIC_ID OPEN_BRACE {PushScopeBison();} matchCaseList CLOSE_BRACE   { $$ = MatchSemanticAction($2, $5); }
-    | MATCH GENERIC_ID OPEN_BRACE NEW_LINE {PushScopeBison();} matchCaseList CLOSE_BRACE { $$ = MatchSemanticAction($2, $6); }
+matchStatement: MATCH INT_ID OPEN_BRACE {PushScopeBison();} matchCaseListInt CLOSE_BRACE   { $$ = MatchSemanticAction($2, $5, _INT); }
+    | MATCH INT_ID OPEN_BRACE NEW_LINE {PushScopeBison();} matchCaseListInt CLOSE_BRACE { $$ = MatchSemanticAction($2, $6, _INT); }
+    | MATCH STRING_ID OPEN_BRACE NEW_LINE {PushScopeBison();} matchCaseListString CLOSE_BRACE { $$ = MatchSemanticAction($2, $6, _STRING); }
+    | MATCH STRING_ID OPEN_BRACE {PushScopeBison();} matchCaseListString CLOSE_BRACE   { $$ = MatchSemanticAction($2, $5, _STRING); }
+
    ;
 
-matchCaseList:
-    matchCase                                   { $$ = SingleCaseListSemanticAction($1); }
-  | matchCaseList matchCase                     { $$ = AppendCaseListSemanticAction($2, $1); }
+matchCaseListInt:
+    matchCaseInt                                   { $$ = SingleCaseListSemanticAction($1); }
+  | matchCaseListInt matchCaseInt                     { $$ = AppendCaseListSemanticAction($2, $1); }
 
   ;
 
-matchCase: INTEGER ARROW statement                                 { $$ = MatchCaseSemanticAction($1, $3); }
-| STRING ARROW statement                                           { $$ = MatchCaseStringSemanticAction($1, $3); }
-| DEFAULT ARROW  statement
-                                                                    { $$ = MatchDefaultCaseSemanticAction($3); }
+matchCaseInt: INTEGER ARROW statement                                 { $$ = MatchCaseSemanticAction($1, $3); }
+| DEFAULT ARROW  statement                                            { $$ = MatchDefaultCaseSemanticAction($3); }
     ;
+matchCaseListString:
+    matchCaseString                                   { $$ = SingleCaseListSemanticAction($1); }
+  | matchCaseListString matchCaseString                     { $$ = AppendCaseListSemanticAction($2, $1); }
 
+  ;
+matchCaseString: STRING ARROW statement                                 { $$ = MatchCaseStringSemanticAction($1, $3); }
+| DEFAULT ARROW  statement                                            { $$ = MatchDefaultCaseSemanticAction($3); }
+    ;
 forLoop: FOR assignmentForLoopExpression TO constant statementBlock
                                                                     { $$ = ForLoopSemanticAction($2, $4, $5); }
 	;

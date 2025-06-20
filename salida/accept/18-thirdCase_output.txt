@@ -40,9 +40,20 @@ if ((n > 0 && n < 2)) {
 printf("%s\n", "Hello");
 }
 n++;
+switch(n) {
+    case 1:    
+printf("%s\n", msgOne);
+        break;
+    case 2:    
+printf("%s\n", msgTwo);
+        break;
+    case 0:    
+printf("%s\n", msgElse);
+        break;
+}
 n = 0;
 }
 
 if ((5 > 2)) {
-return 5;
+printf("1\n", 5);
 }
