@@ -783,6 +783,7 @@ AssignmentMathStatement * AssignmentIntSemanticAction(String id, MathExpression 
 	AssignmentMathStatement * assignmentStatement = calloc(1, sizeof(AssignmentMathStatement));
 	assignmentStatement->identifier = id;
 	assignmentStatement->mathExpression = mathExpression;
+	addSymbol(currentCompilerState()->symbolTable, id, (Type[]){_INT}, 1); // TODO: Checkear tema de memoria
 	return assignmentStatement;
 }
 AssignmentStatement * AssignmentStringExpressionSemanticAction(AssignmentStringStatement * assignmentStatement) {
