@@ -1,1 +1,14 @@
-INT a = macro_max(1, 2)
+INT multi (INT a, INT b) {
+    INT result = 0
+    FOR I=a TO 2 {
+        result = result + b
+    }
+    RETURN result
+}
+INT MAIN () {
+    INT a = 3
+    INT b = 4
+    INT c = multi(a,b)
+    PRINT c
+    RETURN 0
+}

@@ -283,7 +283,7 @@ functionDefinition:
       intDeclaration GENERIC_ID OPEN_PARENTHESIS {PushScopeBison();} argumentDefList CLOSE_PARENTHESIS {AddFunctionToSymbolTable(_INT, $2,$5);}  statementBlock  { $$ = FunctionDefinitionSemanticAction(_INT, $2, $5, $8); }
     | VOID {DeclarationMode();} GENERIC_ID OPEN_PARENTHESIS {PushScopeBison();} argumentDefList CLOSE_PARENTHESIS {AddFunctionToSymbolTable(_INT, $3,$6);} statementBlock  { $$ = FunctionDefinitionSemanticAction(_VOID, $3, $6, $9); }
     | stringDeclaration GENERIC_ID OPEN_PARENTHESIS {PushScopeBison();} argumentDefList CLOSE_PARENTHESIS {AddFunctionToSymbolTable(_INT, $2,$5);} statementBlock     { $$ = FunctionDefinitionSemanticAction(_STRING, $2, $5, $8); }
-    | boolDeclaration GENERIC_ID OPEN_PARENTHESIS {PushScopeBison();} argumentDefList CLOSE_PARENTHESIS {AddFunctionToSymbolTable(_INT, $2,$5);} statementBlock  { $$ = FunctionDefinitionSemanticAction(_STRING, $2, $5, $8); }
+    | boolDeclaration GENERIC_ID OPEN_PARENTHESIS {PushScopeBison();} argumentDefList CLOSE_PARENTHESIS {AddFunctionToSymbolTable(_INT, $2,$5);} statementBlock  { $$ = FunctionDefinitionSemanticAction(_BOOL, $2, $5, $8); }
     ;
 
 statement:
@@ -348,8 +348,8 @@ functionStatement: boolFunctionStatement                                { $$ = $
                                                                             { $$ = FunctionSemanticAction($1, $3); }
 
 
-macroStatement: MACRO GENERIC_ID OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS {AddMacroToSymbolTable($2,$4);}  ARROW  mathExpression NEW_LINE
-                                                                        { $$ = MacroSemanticAction($2, $4, $8); }
+macroStatement: MACRO GENERIC_ID  OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS {AddMacroToSymbolTable($2,$4);}  ARROW  mathExpression  NEW_LINE {PushScopeBison();}
+                                                                        {  $$ = MacroSemanticAction($2, $4, $8);  }
  ;
 
 statementBlock: OPEN_BRACE statementList CLOSE_BRACE           { $$ = StatementBlockSemanticAction($2); }

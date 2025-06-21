@@ -1,4 +1,4 @@
-numeros[]={7,5,2,4,6,4}
+INT numeros[]={7,5,2,4,6,4}
 INT numeros2[6]
 numeros[3] = 5 + 2
 SORT numeros ASC

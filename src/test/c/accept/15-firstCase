@@ -23,4 +23,5 @@ VOID main(INT T) {
     } ELSE {
         PRINT "stringmsgf"
     }
+    RETURN
 }

@@ -28,10 +28,14 @@ void sortArray(int *array, int length, Order order) {
     }
 }
 
-#define HOLA(A, B) (intA * intB)
-if (((intA == 5 && intB > intA))) {
-return macro_HOLA(intA, intB);
-;
+#define HOLA(A, B, E) (A * E)
+int A;
+int D;
+int E;
+bool C;
+if (((E == 5 && D > E))) {
+printf("%d\n", HOLA(E, D, A);
+);
 } else {
-return 0;
+printf("%d\n", 0);
 }

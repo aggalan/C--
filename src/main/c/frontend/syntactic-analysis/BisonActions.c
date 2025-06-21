@@ -46,6 +46,7 @@ void PushScopeBison() {
 void PopScopeBison() {
     _logSyntacticAnalyzerAction(__FUNCTION__);
     popScope(currentCompilerState()->scopeStack);
+    logDebugging(_logger,"pop scope");
     logDebugging(_logger, "Size: %d", currentCompilerState()->scopeStack->size );
     logDebugging(_logger, "Last scope: %d", currentCompilerState()->scopeStack->lastScope);
 }
@@ -468,6 +469,11 @@ void AddMacroToSymbolTable(String identifier, StringList * parameters) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
     Type * typeArray = createMacroTypeArray(_MACRO, parameters);
     addSymbol(currentCompilerState()->symbolTable, identifier, typeArray,parameters == NULL ? 1 : parameters->count + 1,2);
+    StringNode * parametersNode = parameters->strings;
+    while (parametersNode != NULL) {
+        addSymbol(currentCompilerState()->symbolTable, parametersNode->string, (Type[]){_INT}, 1,0);
+        parametersNode = parametersNode->next;
+    }
 	free(typeArray);
 
 }
@@ -1088,6 +1094,8 @@ MacroInvocationStatement * MacroInvocationSemanticAction(String identifier, Argu
 	macroInvocationStatement->identifier = identifier;
 	macroInvocationStatement->arguments = args;
 	ArgumentNode * node = args->arguments;
+    Symbol * symbol = findSymbol(currentCompilerState()->symbolTable, identifier);
+    int size=symbol->typeCount-1;
 	while(node != NULL){
 		if(node->argument->type != ARGUMENT_MATH_EXPRESSION &&
 		   node->argument->type != ARGUMENT_UNARY_CHANGE_OPERATOR  ) {
@@ -1104,7 +1112,12 @@ MacroInvocationStatement * MacroInvocationSemanticAction(String identifier, Argu
                logError(_logger,"error invocation macro");
            }
 	}
+        size--;
     node = node->next;
+    }
+    if (size!= 0) {
+        currentCompilerState()->hasError = true;
+        logError(_logger, "Macro %s wrong amount of parameters", identifier);
     }
 	return macroInvocationStatement;
 }

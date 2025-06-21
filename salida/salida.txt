@@ -28,13 +28,11 @@ void sortArray(int *array, int length, Order order) {
     }
 }
 
-#define HOLA(A, B) (2 * 2)
-int A;
-int B;
-bool C;
-if (((A == 5 && B > A))) {
-printf("%d\n", HOLA(A, B);
-);
-} else {
-printf("%d\n", 0);
+int numeros[] = {7, 5, 2, 4, 6, 4};
+void main() {
+for (i = 0; i <= 5; i++) {
+numeros[i]++;
 }
+sortArray(numeros, sizeof(numeros) / sizeof(numeros[0]), ORDER_ASCENDING);
+}
+

@@ -33,22 +33,23 @@ const char *msgs = "The operation was successful";
 const char *msgf = "The operation failed";
 bool status;
 
-char * operation(int number) {
-return 1;
+bool operation(int number) {
+number++;
 if ((number / 2) == 0) {
 return 1;
 }
-number++;
+return 1;
 }
 
 
 void main(int T) {
+T = 0;
+status = 1;
 if (status) {
 printf("%s\n", "stringmsgs");
 } else {
 printf("%s\n", "stringmsgf");
 }
-status = 1;
-T = 0;
+return;
 }
 

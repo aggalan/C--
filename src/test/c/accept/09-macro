@@ -1,10 +1,12 @@
-MACRO HOLA (A,B) -> 2 * 2
+MACRO HOLA (A,B,E) -> A * E
+
 
 INT A
-INT B
+INT D
+INT E
 BOOL C
-IF (A == 5 AND B > A) {
-    PRINT HOLA(A,B)
+IF (E == 5 AND D > E) {
+    PRINT HOLA(E,D,A)
 } ELSE {
     PRINT 0
 }
