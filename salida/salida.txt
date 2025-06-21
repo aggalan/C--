@@ -28,11 +28,19 @@ void sortArray(int *array, int length, Order order) {
     }
 }
 
-int numeros[] = {7, 5, 2, 4, 6, 4};
-void main() {
-for (i = 0; i <= 5; i++) {
-numeros[i]++;
+int multi(int a, int b) {
+int result = 0;
+for (I = a; I <= 2; I++) {
+result = (result + b);
 }
-sortArray(numeros, sizeof(numeros) / sizeof(numeros[0]), ORDER_ASCENDING);
+return result;
+}
+
+int MAIN() {
+int a = 3;
+int b = 4;
+int c = multi(a, b);
+printf("%d\n", c);
+return 0;
 }
 

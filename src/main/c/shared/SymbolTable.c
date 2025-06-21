@@ -2,6 +2,17 @@
 
 #include "ScopeStack.h"
 #include "../frontend/syntactic-analysis/SyntacticAnalyzer.h"
+static Logger * _logger = NULL;
+
+void initializeTableActionsModule() {
+    _logger = createLogger("Table");
+}
+
+void shutdownTableActionsModule() {
+    if (_logger != NULL) {
+        destroyLogger(_logger);
+    }
+}
 
 SymbolTable* createSymbolTable() {
     SymbolTable *table = malloc(sizeof(SymbolTable));
@@ -86,9 +97,11 @@ void addSymbol(SymbolTable *table, const char *name, const Type *types, const in
     if (function == 1) {
         table->currentFunction = newSymbol;
         newSymbol->isFunction = 1;
+        newSymbol->scope = 0; // Asigna el scope global para funciones
     }
     if (function == 2) {
         newSymbol->isFunction = 2; // Macro
+        newSymbol->scope = 0; // Asigna el scope global para macros
     }
     table->symbols[table->count++] = newSymbol;
 }

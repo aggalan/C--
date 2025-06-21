@@ -163,7 +163,7 @@ Token IdentifierLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 
         if(symbol->isFunction == 2) {
             id = MACRO_ID;
-            currentCompilerState()->declarationMode=0;
+            currentCompilerState()->declarationMode= false;
             destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
             return id;
         }
@@ -206,7 +206,7 @@ Token IdentifierLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 			}
 		}
 	}
-	currentCompilerState()->declarationMode=0;
+	currentCompilerState()->declarationMode= false;
 	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return id;
 }
@@ -276,8 +276,6 @@ Token ForLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	lexicalAnalyzerContext->semanticValue->token = FOR;
 	pushScope(currentCompilerState()->scopeStack);
-	logDebugging(_logger, "Size: %d", currentCompilerState()->scopeStack->size);
-	logDebugging(_logger, "Last scope: %d", currentCompilerState()->scopeStack->lastScope);
     destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return FOR;
 }

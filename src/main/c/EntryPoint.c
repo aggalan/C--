@@ -20,6 +20,7 @@ const int main(const int count, const char ** arguments) {
 	initializeBisonActionsModule();
 	initializeSyntacticAnalyzerModule();
 	initializeAbstractSyntaxTreeModule();
+	initializeTableActionsModule();
 	// initializeCalculatorModule();
 	 initializeGeneratorModule();
 
@@ -77,6 +78,7 @@ const int main(const int count, const char ** arguments) {
 	shutdownSyntacticAnalyzerModule();
 	shutdownBisonActionsModule();
 	shutdownFlexActionsModule();
+	shutdownTableActionsModule();
 	logDebugging(logger, "Compilation is done.");
 	destroyLogger(logger);
 	return compilationStatus;
