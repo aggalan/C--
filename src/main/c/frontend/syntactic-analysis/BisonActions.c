@@ -325,6 +325,9 @@ MacroStatement * MacroSemanticAction(String identifier, StringList *args, MathEx
     macro->identifier = identifier;
     macro->parameters = args;
     macro->statement = body;
+	Type * typeArray = createMacroTypeArray(_MACRO, args);
+	addSymbol(currentCompilerState()->symbolTable, identifier, typeArray, args == NULL ? 1 : args->count + 1, 2);
+	free(typeArray);
     return macro;
 }
 
