@@ -348,8 +348,8 @@ functionStatement: boolFunctionStatement                                { $$ = $
                                                                             { $$ = FunctionSemanticAction($1, $3); }
 
 
-macroStatement: MACRO GENERIC_ID OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS {AddMacroToSymbolTable($2,$5);}  ARROW  mathExpression NEW_LINE
-                                                                        { $$ = MacroSemanticAction($2, $4, $7); }
+macroStatement: MACRO GENERIC_ID OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS {AddMacroToSymbolTable($2,$4);}  ARROW  mathExpression NEW_LINE
+                                                                        { $$ = MacroSemanticAction($2, $4, $8); }
  ;
 
 statementBlock: OPEN_BRACE statementList CLOSE_BRACE           { $$ = StatementBlockSemanticAction($2); }

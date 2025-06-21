@@ -43,6 +43,12 @@ void PushScopeBison() {
 	logDebugging(_logger, "Last scope: %d", currentCompilerState()->scopeStack->lastScope);
 
 }
+void PopScopeBison() {
+    _logSyntacticAnalyzerAction(__FUNCTION__);
+    popScope(currentCompilerState()->scopeStack);
+    logDebugging(_logger, "Size: %d", currentCompilerState()->scopeStack->size );
+    logDebugging(_logger, "Last scope: %d", currentCompilerState()->scopeStack->lastScope);
+}
 
 Constant * IntegerConstantSemanticAction(const int value) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
@@ -442,9 +448,10 @@ Type * createMacroTypeArray(const Type type, const StringList * parameters) {
 	typeArray = calloc(parameters->count + 1, sizeof(Type));
 	typeArray[0] = type;
 	StringNode * parametersNode = parameters->strings;
+    logError(_logger, "parameterscount: %d", parameters->count);
 	int i=1;
 	while (parametersNode != NULL) {
-		typeArray[i]= _INT;
+        typeArray[i]= _INT;
 		parametersNode = parametersNode->next;
 		i++;
 	}
@@ -459,9 +466,10 @@ void AddFunctionToSymbolTable(const Type type, String identifier, ArgumentDefLis
 
 void AddMacroToSymbolTable(String identifier, StringList * parameters) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Type * typeArray = createMacroTypeArray(_MACRO, parameters);
-	addSymbol(currentCompilerState()->symbolTable, identifier, typeArray,parameters == NULL ? 1 : parameters->count + 1,2);
+    Type * typeArray = createMacroTypeArray(_MACRO, parameters);
+    addSymbol(currentCompilerState()->symbolTable, identifier, typeArray,parameters == NULL ? 1 : parameters->count + 1,2);
 	free(typeArray);
+
 }
 
 
@@ -662,7 +670,7 @@ StringList * SingleStringListSemanticAction(String str) {
     list->strings = calloc(1, sizeof(StringNode));
     list->strings->string = str;
     list->last = list->strings;
-	list->count = 0;
+	list->count = 1;
     return list;
 }
 StringList * AppendStringListSemanticAction(StringList *list, String str) {
@@ -1085,13 +1093,19 @@ MacroInvocationStatement * MacroInvocationSemanticAction(String identifier, Argu
 		   node->argument->type != ARGUMENT_UNARY_CHANGE_OPERATOR  ) {
 		   if(node->argument->type == ARGUMENT_ARRAY_ACCESS && findSymbol(currentCompilerState()->symbolTable, node->argument->arrayAccess->identifier)->types[0] != _INT) {
 		   		currentCompilerState()->hasError = true;
+               logError(_logger,"error invocation macro");
 		   }else if (node->argument->type == ARGUMENT_FUNCTION_EXPRESSION && findSymbol(currentCompilerState()->symbolTable, node->argument->functionExpression->identifier)->types[0] != _INT) {
 		   		currentCompilerState()->hasError = true;
-		   }else{
+               logError(_logger,"error invocation macro");
+
+           }else{
 			logError(_logger, "Invalid argument type in macro invocation: %d", node->argument->type);
 			currentCompilerState()->hasError = true;
-		}
-	}}
+               logError(_logger,"error invocation macro");
+           }
+	}
+    node = node->next;
+    }
 	return macroInvocationStatement;
 }
 

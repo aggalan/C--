@@ -161,6 +161,13 @@ Token IdentifierLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 			return id;
 		}
 
+        if(symbol->isFunction == 2) {
+            id = MACRO_ID;
+            currentCompilerState()->declarationMode=0;
+            destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+            return id;
+        }
+
 		if ( symbol->typeCount > 1) {
 			switch (symbol->types[0]) {
 				case _INT:

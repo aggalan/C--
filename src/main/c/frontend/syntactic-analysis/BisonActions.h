@@ -17,6 +17,7 @@ void shutdownBisonActionsModule();
 /**
  * Bison semantic actions.
  */
+void PopScopeBison();
 Constant * IntegerConstantSemanticAction(const int value);
 MathExpression * ArithmeticExpressionSemanticAction( MathExpression * leftExpression, MathExpression * rightExpression, MathExpressionType type);
 MathExpression * FactorExpressionSemanticAction(Factor * factor);
