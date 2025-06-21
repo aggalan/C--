@@ -60,19 +60,21 @@ void destroyReturnList(ReturnList *list) {
 }
 
 
-Symbol* createSymbol(const char *name, const Type *types, const int typeCount) {
+Symbol* createSymbol(const char *name, const Type *types, const int typeCount, SymbolType symbolType) {
     Symbol *symbol = malloc(sizeof(Symbol));
     symbol->name = strdup(name); // duplica el string
     symbol->types = malloc(sizeof(Type) * typeCount);
-    symbol->scope = peekScope(currentCompilerState()->scopeStack) ; // Asigna el scope actual
+    symbol->scope = symbolType == VARIABLE_SYMBOL ? peekScope(currentCompilerState()->scopeStack) : 0;
     for (int i = 0; i < typeCount; i++) {
         symbol->types[i] = types[i]; // asumimos que los Type* ya están en heap
     }
     symbol->typeCount = typeCount;
+    symbol->isFunction = symbolType;
+
     return symbol;
 }
 
-void addSymbol(SymbolTable *table, const char *name, const Type *types, const int typeCount,int function) {
+void addSymbol(SymbolTable *table, const char *name, const Type *types, const int typeCount,SymbolType symbolType) {
     if (table->count >= MAX_SYMBOLS) {
         // Manejo simple de error
         currentCompilerState()->succeed= false;
@@ -93,15 +95,9 @@ void addSymbol(SymbolTable *table, const char *name, const Type *types, const in
         return;
     }
 
-    Symbol *newSymbol = createSymbol(name, types, typeCount);
-    if (function == 1) {
+    Symbol *newSymbol = createSymbol(name, types, typeCount, symbolType);
+    if (symbolType == FUNCTION_SYMBOL) {
         table->currentFunction = newSymbol;
-        newSymbol->isFunction = 1;
-        newSymbol->scope = 0; // Asigna el scope global para funciones
-    }
-    if (function == 2) {
-        newSymbol->isFunction = 2; // Macro
-        newSymbol->scope = 0; // Asigna el scope global para macros
     }
     table->symbols[table->count++] = newSymbol;
 }

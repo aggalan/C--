@@ -16,6 +16,13 @@ typedef enum {
 	_BOOL_ARRAY,
 	_MACRO
 }Type ;
+
+typedef enum {
+	VARIABLE_SYMBOL,
+	FUNCTION_SYMBOL,
+	MACRO_SYMBOL,
+} SymbolType;
+
 typedef int Token;
 typedef int Scope;
 

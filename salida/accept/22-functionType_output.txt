@@ -29,8 +29,8 @@ void sortArray(int *array, int length, Order order) {
 }
 
 char * hola(char * A, int B) {
-return "HOLA";
 printf("%s\n", "Hola");
+return "HOLA";
 }
 
 hola("1", 1)

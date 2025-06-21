@@ -28,5 +28,19 @@ void sortArray(int *array, int length, Order order) {
     }
 }
 
-int a = macro_max(1, 2);
-;
+int multi(int a, int b) {
+int result = 0;
+for (I = a; I <= 2; I++) {
+result = (result + b);
+}
+return result;
+}
+
+int MAIN() {
+int a = 3;
+int b = 4;
+int c = multi(a, b);
+printf("%d\n", c);
+return 0;
+}
+

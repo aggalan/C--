@@ -327,7 +327,7 @@ MacroStatement * MacroSemanticAction(String identifier, StringList *args, MathEx
     macro->parameters = args;
     macro->statement = body;
 	Type * typeArray = createMacroTypeArray(_MACRO, args);
-	addSymbol(currentCompilerState()->symbolTable, identifier, typeArray, args == NULL ? 1 : args->count + 1, 2);
+	addSymbol(currentCompilerState()->symbolTable, identifier, typeArray, args == NULL ? 1 : args->count + 1,MACRO_SYMBOL);
 	free(typeArray);
     return macro;
 }
@@ -464,17 +464,17 @@ Type * createMacroTypeArray(const Type type, const StringList * parameters) {
 void AddFunctionToSymbolTable(const Type type, String identifier, ArgumentDefList * parameters) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Type * typeArray = createTypeArray(type, parameters);
-	addSymbol(currentCompilerState()->symbolTable, identifier, typeArray, parameters == NULL ? 1 : parameters->count + 1,1);
+	addSymbol(currentCompilerState()->symbolTable, identifier, typeArray, parameters == NULL ? 1 : parameters->count + 1,FUNCTION_SYMBOL);
 	free(typeArray);
 }
 
 void AddMacroToSymbolTable(String identifier, StringList * parameters) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
     Type * typeArray = createMacroTypeArray(_MACRO, parameters);
-    addSymbol(currentCompilerState()->symbolTable, identifier, typeArray,parameters == NULL ? 1 : parameters->count + 1,2);
+    addSymbol(currentCompilerState()->symbolTable, identifier, typeArray,parameters == NULL ? 1 : parameters->count + 1,MACRO_SYMBOL);
     StringNode * parametersNode = parameters->strings;
     while (parametersNode != NULL) {
-        addSymbol(currentCompilerState()->symbolTable, parametersNode->string, (Type[]){_INT}, 1,0);
+        addSymbol(currentCompilerState()->symbolTable, parametersNode->string, (Type[]){_INT}, 1,VARIABLE_SYMBOL);
         parametersNode = parametersNode->next;
     }
 	free(typeArray);
@@ -669,7 +669,7 @@ VariableStatement * VariableDeclarationSemanticAction(Type type, String identifi
 	variable->identifier = identifier;
 	variable->type = type;
 	variable->expression = expression;
-	addSymbol(currentCompilerState()->symbolTable, identifier, &type, 1,0);
+	addSymbol(currentCompilerState()->symbolTable, identifier, &type, 1,VARIABLE_SYMBOL);
 	return variable;
 }
 
@@ -717,7 +717,7 @@ ArrayStatement * ArrayIntStatementSemanticAction(String identifier, IntList * el
 	array->identifier = identifier;
 	array->elements = elements;
 	array->type = INT_LIST;
-	addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){_INT_ARRAY}, 1,0); //TODO: checkear lo del _int_array
+	addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){_INT_ARRAY}, 1,VARIABLE_SYMBOL); //TODO: checkear lo del _int_array
 	return array;
 }
 ArrayStatement * ArrayStringStatementSemanticAction(String identifier, StringList * elements) {
@@ -726,7 +726,7 @@ ArrayStatement * ArrayStringStatementSemanticAction(String identifier, StringLis
 	array->identifier = identifier;
 	array->stringElements = elements;
 	array->type = STRING_LIST;
-	addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){_STRING_ARRAY}, 1,0); //TODO: checkear lo del _string_array
+	addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){_STRING_ARRAY}, 1,VARIABLE_SYMBOL); //TODO: checkear lo del _string_array
 	return array;
 }
 ArrayStatement * ArrayBoolStatementSemanticAction(String identifier, BoolList * elements) {
@@ -735,7 +735,7 @@ ArrayStatement * ArrayBoolStatementSemanticAction(String identifier, BoolList * 
 	array->identifier = identifier;
 	array->boolElements = elements;
 	array->type = BOOL_LIST;
-	addSymbol(currentCompilerState()->symbolTable, identifier,(Type[]){_BOOL_ARRAY}, 1,0); //TODO: checkear lo del _bool_array
+	addSymbol(currentCompilerState()->symbolTable, identifier,(Type[]){_BOOL_ARRAY}, 1,VARIABLE_SYMBOL); //TODO: checkear lo del _bool_array
 	return array;
 }
 ArrayStatement * ArrayDeclarationSemanticAction(String identifier, MathExpression * size, const Type type) {
@@ -745,13 +745,13 @@ ArrayStatement * ArrayDeclarationSemanticAction(String identifier, MathExpressio
 	array->mathExpression = size;
 	if (type == _INT) {
 		array->type = INT_SIZE;
-		addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){_INT_ARRAY}, 1,0);
+		addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){_INT_ARRAY}, 1,VARIABLE_SYMBOL);
 	} else if (type == _STRING) {
 		array->type = STRING_SIZE;
-		addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){_STRING_ARRAY}, 1,0);
+		addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){_STRING_ARRAY}, 1,VARIABLE_SYMBOL);
 	} else if (type == _BOOL) {
 		array->type = BOOL_SIZE;
-		addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){_BOOL_ARRAY}, 1,0);
+		addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){_BOOL_ARRAY}, 1,VARIABLE_SYMBOL);
 	}
 	return array;
 }
@@ -836,7 +836,7 @@ AssignmentMathStatement * AssignmentIntSemanticAction(String id, MathExpression 
 	AssignmentMathStatement * assignmentStatement = calloc(1, sizeof(AssignmentMathStatement));
 	assignmentStatement->identifier = id;
 	assignmentStatement->mathExpression = mathExpression;
-	addSymbol(currentCompilerState()->symbolTable, id, (Type[]){_INT}, 1,0); // TODO: Checkear tema de memoria
+	addSymbol(currentCompilerState()->symbolTable, id, (Type[]){_INT}, 1,VARIABLE_SYMBOL); // TODO: Checkear tema de memoria
 	return assignmentStatement;
 }
 AssignmentStatement * AssignmentStringExpressionSemanticAction(AssignmentStringStatement * assignmentStatement) {
@@ -882,7 +882,7 @@ VariableStatement * VariableBoolDeclarationSemanticAction(String identifier, Boo
 	variable->expression = calloc(1, sizeof(Expression));
 	variable->expression->boolExpression = value;
 	variable->expression->type = BOOLEAN_EXPRESSION;
-	addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){_BOOL}, 1,0); // TODO: Checkear tema de memoria
+	addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){_BOOL}, 1,VARIABLE_SYMBOL); // TODO: Checkear tema de memoria
 
 	return variable;
 }
@@ -894,7 +894,7 @@ VariableStatement * VariableIntDeclarationSemanticAction(String identifier, Math
 	variable->expression = calloc(1, sizeof(Expression));
 	variable->expression->mathExpression = value;
 	variable->expression->type = MATH_EXPRESSION;
-	addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){_INT}, 1,0); // TODO: Checkear tema de memoria
+	addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){_INT}, 1,VARIABLE_SYMBOL); // TODO: Checkear tema de memoria
 	return variable;
 }
 VariableStatement * VariableStringDeclarationSemanticAction(String identifier, StringExpression * value) {
@@ -905,7 +905,7 @@ VariableStatement * VariableStringDeclarationSemanticAction(String identifier, S
 	variable->expression = calloc(1, sizeof(Expression));
 	variable->expression->stringExpression = value;
 	variable->expression->type = STRING_EXPRESSION;
-	addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){_STRING}, 1,0); // TODO: Checkear tema de memoria
+	addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){_STRING}, 1,VARIABLE_SYMBOL); // TODO: Checkear tema de memoria
 	return variable;
 }
 BoolFactor * FunctionCallBoolFactorSemanticAction(FunctionStatement * functionStatement) {
@@ -1063,7 +1063,7 @@ ArgumentDef * ArgumentDefSemanticAction(String identifier, Type type) {
 	ArgumentDef * argumentValue = calloc(1, sizeof(ArgumentDef));
 	argumentValue->identifier = identifier;
 	argumentValue->type = type;
-	addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){type}, 1,0);
+	addSymbol(currentCompilerState()->symbolTable, identifier, (Type[]){type}, 1,VARIABLE_SYMBOL);
 	return argumentValue;
 }
 Expression * StringExpressionSemanticAction(StringExpression * stringExpression) {
