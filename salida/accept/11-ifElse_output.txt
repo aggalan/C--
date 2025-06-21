@@ -28,7 +28,6 @@ void sortArray(int *array, int length, Order order) {
     }
 }
 
-
 bool A = 1;
 int B;
 if ((A)) {

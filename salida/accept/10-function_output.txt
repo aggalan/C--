@@ -28,7 +28,6 @@ void sortArray(int *array, int length, Order order) {
     }
 }
 
-
 int main() {
 int e = 5;
 int f = 10;

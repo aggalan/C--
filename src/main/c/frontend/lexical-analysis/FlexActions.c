@@ -83,11 +83,11 @@ void BeginSingleLineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzer
 	}
 }
 
-void EndSingleLineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-	if (_logIgnoredLexemes) {
+Token EndSingleLineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-        destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
-	}
+	lexicalAnalyzerContext->semanticValue->token = NEW_LINE;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return NEW_LINE;
 }
 
 Token BeginStringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {

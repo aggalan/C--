@@ -198,6 +198,7 @@
 %type <caseList> matchCaseListInt
 %type <caseList> matchCaseListString
 %type <statement> statement
+%type <statement> optionalNewLinesStatement
 %type <statementList> statementList
 %type <forLoop> forLoop
 %type <whileLoop> whileLoop
@@ -228,6 +229,7 @@
 %type <argumentValue> argumentValue
 %type <unit> unit
 %type <externalDeclaration> externalDeclaration
+%type <externalDeclaration> externalDeclarationWithNewLines
 %type <elseStatement> elseStatement
 %type <variableStatement> variableStatement
 %type <unaryChangeOperatorStatement> unaryChangeOperatorStatement
@@ -259,24 +261,33 @@
 
 program: unit                                                       { $$ = ProgramSemanticAction(currentCompilerState(), $1); }
     | %empty                                                        { $$ = EmptyProgramSemanticAction(currentCompilerState()); }
-
     ;
 unit:
-     NEW_LINE unit                                                          { $$ = NewLineUnitSemanticAction($2); }
-    | externalDeclaration                                                 { $$ = SingleExternalDeclarationSemanticAction($1); }
-    | externalDeclaration  unit                                      { $$ = AppendExternalDeclarationSemanticAction($2, $1); }
+     externalDeclarationWithNewLines                                                 { $$ = SingleExternalDeclarationSemanticAction($1); }
+    | externalDeclarationWithNewLines  unit                                      { $$ = AppendExternalDeclarationSemanticAction($2, $1); }
     ;
+externalDeclarationWithNewLines:
+        optionalNewLines  externalDeclaration                               { $$ = $2; }
+        ;
+
 externalDeclaration:
       functionDefinition                                            { $$ = FunctionDefinitionExternalDeclarationSemanticAction($1); }
     | statement                                                     { $$ = StatementExternalDeclarationSemanticAction($1); }
     | macroStatement                                                 { $$ = MacroExternalDeclarationSemanticAction($1); }
 
     ;
+optionalNewLines:
+     optionalNewLines NEW_LINE
+    | %empty
+    ;
 
-
-statementList:  statementList   statement                          { $$ = AppendStatementListSemanticAction($1, $2); }
-    | statement                                                                 { $$ = SingleStatementListSemanticAction($1); }
+statementList:  statementList   optionalNewLinesStatement                          { $$ = AppendStatementListSemanticAction($1, $2); }
+    | optionalNewLinesStatement                                                                 { $$ = SingleStatementListSemanticAction($1); }
 	;
+
+optionalNewLinesStatement:
+    optionalNewLines statement                     { $$ = $2; }
+    ;
 
 
 functionDefinition:
@@ -352,17 +363,15 @@ macroStatement: MACRO GENERIC_ID  OPEN_PARENTHESIS stringList CLOSE_PARENTHESIS 
                                                                         {  $$ = MacroSemanticAction($2, $4, $8);  }
  ;
 
-statementBlock: OPEN_BRACE statementList CLOSE_BRACE           { $$ = StatementBlockSemanticAction($2); }
-            | OPEN_BRACE NEW_LINE statementList CLOSE_BRACE     { $$ =  StatementBlockSemanticAction($3); }
+statementBlock: OPEN_BRACE statementList CLOSE_BRACE            { $$ = StatementBlockSemanticAction($2); }
   ;
 
 sortStatement: SORT INT_ARRAY_ID ASC  NEW_LINE                      { $$ = SortSemanticAction($2, ORDER_ASC); }
             | SORT INT_ARRAY_ID DESC NEW_LINE                     { $$ = SortSemanticAction($2, ORDER_DESC); }
 
-matchStatement: MATCH INT_ID OPEN_BRACE {PushScopeBison();} matchCaseListInt CLOSE_BRACE   { $$ = MatchSemanticAction($2, $5, _INT); }
-    | MATCH INT_ID OPEN_BRACE NEW_LINE {PushScopeBison();} matchCaseListInt CLOSE_BRACE { $$ = MatchSemanticAction($2, $6, _INT); }
-    | MATCH STRING_ID OPEN_BRACE NEW_LINE {PushScopeBison();} matchCaseListString CLOSE_BRACE { $$ = MatchSemanticAction($2, $6, _STRING); }
-    | MATCH STRING_ID OPEN_BRACE {PushScopeBison();} matchCaseListString CLOSE_BRACE   { $$ = MatchSemanticAction($2, $5, _STRING); }
+matchStatement:
+     MATCH INT_ID OPEN_BRACE optionalNewLines {PushScopeBison();} matchCaseListInt CLOSE_BRACE { $$ = MatchSemanticAction($2, $6, _INT); }
+    | MATCH STRING_ID OPEN_BRACE optionalNewLines {PushScopeBison();} matchCaseListString CLOSE_BRACE { $$ = MatchSemanticAction($2, $6, _STRING); }
 
    ;
 

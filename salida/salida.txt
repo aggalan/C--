@@ -28,19 +28,19 @@ void sortArray(int *array, int length, Order order) {
     }
 }
 
-int multi(int a, int b) {
-int result = 0;
-for (I = a; I <= 2; I++) {
-result = (result + b);
+int I = 0;
+int ARRAY[] = {1, 2, 3, 4, 5};
+const char *s = "COLOMBIA";
+bool QUESO = 1;
+for (i = 2; i <= 5; i++) {
+printf("%s\n", s);
 }
-return result;
+if (QUESO) {
+const char *I = "QUESO";
+printf("%s\n", I);
+printf("%s\n", "QUESO");
+return;
 }
-
-int MAIN() {
-int a = 3;
-int b = 4;
-int c = multi(a, b);
-printf("%d\n", c);
-return 0;
+if ((I < (1 + 2))) {
+printf("%s\n", "JUNIOR");
 }
-

@@ -28,12 +28,10 @@ void sortArray(int *array, int length, Order order) {
     }
 }
 
-
 int n;
 const char *msgOne = "This is number 1";
 const char *msgTwo = "This is number 2";
 const char *msgElse = "This is not 1 or 2";
-
 void main() {
 n = 0;
 switch(n) {

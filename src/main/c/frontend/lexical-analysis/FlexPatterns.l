@@ -39,9 +39,12 @@
 "//"                                { BEGIN(SINGLE_LINE_COMMENT); BeginSingleLineCommentLexemeAction(createLexicalAnalyzerContext()); }
 "#"                                 { BEGIN(SINGLE_LINE_COMMENT); BeginSingleLineCommentLexemeAction(createLexicalAnalyzerContext());}
 <SINGLE_LINE_COMMENT>[^\n]*       { IgnoredLexemeAction(createLexicalAnalyzerContext()); }
-<SINGLE_LINE_COMMENT>\n           { EndSingleLineCommentLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL);}
+<SINGLE_LINE_COMMENT>\n           { Token token = EndSingleLineCommentLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); return token;}
 
+\n([[:space:]]*"//".*\n)+           { return NewLineLexemeAction(createLexicalAnalyzerContext()); }
 \n[[:space:]]*			            { return NewLineLexemeAction(createLexicalAnalyzerContext()); }
+"}"([[:space:]]*"//".*\n)+\n           { return BracketLexemeAction(createLexicalAnalyzerContext(), CLOSE_BRACE); }
+"}"([[:space:]]*"//".*\n)+           { return BracketLexemeAction(createLexicalAnalyzerContext(), CLOSE_BRACE); }
 "}"[[:space:]]*\n                  { return BracketLexemeAction(createLexicalAnalyzerContext(), CLOSE_BRACE); }
 
 "++"                                { return AddOneLexemeAction(createLexicalAnalyzerContext()); }
