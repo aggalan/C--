@@ -10,3 +10,4 @@ INT FACTORIAL(INT n) {
         I++
     }
  }
+ PRINT FACTORIAL(5)

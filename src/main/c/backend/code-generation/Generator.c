@@ -868,46 +868,55 @@ static void _generateUnit(Unit * unit) {
      logDebugging(_logger, "Generating program...");
      if (program->type != NOT_EMPTY) return;
 
+     int definesMain = 0;
+     int hasStatements = 0;
+
      Unit *current = program->unit;
 
-     while (current != NULL) {
-         if (current->externalDeclaration != NULL) {
-             if (current->externalDeclaration->type == FUNCTION_DEFINITION) {
-                 _generateFunctionDefinition(current->externalDeclaration->functionDefinition);
-             } else if (current->externalDeclaration->type == MACRO_STATEMENT) {
-                 _generateMacroStatement(current->externalDeclaration->macroStatement);
-             }
-         }
-         current = current->units;
-     }
-
-     current = program->unit;
-     int hasStatements = 0;
      Unit *tmp = current;
      while (tmp != NULL) {
-         if (tmp->externalDeclaration != NULL &&
-             tmp->externalDeclaration->type == STATEMENT) {
-             hasStatements = 1;
-             break;
+         if (tmp->externalDeclaration != NULL) {
+             if (tmp->externalDeclaration->type == FUNCTION_DEFINITION &&
+                 strcmp(tmp->externalDeclaration->functionDefinition->identifier, "main") == 0) {
+                 definesMain = 1;
+             }
+             if (tmp->externalDeclaration->type == STATEMENT) {
+                 hasStatements = 1;
+             }
+         }
+         tmp = tmp->units;
+     }
+
+     tmp = current;
+     while (tmp != NULL) {
+         if (tmp->externalDeclaration != NULL) {
+             if (tmp->externalDeclaration->type == FUNCTION_DEFINITION) {
+                 _generateFunctionDefinition(tmp->externalDeclaration->functionDefinition);
+             } else if (tmp->externalDeclaration->type == MACRO_STATEMENT) {
+                 _generateMacroStatement(tmp->externalDeclaration->macroStatement);
+             }
          }
          tmp = tmp->units;
      }
 
      if (hasStatements) {
-         _output(0, "\nint main() {\n");
+         _output(0, "\nint %s() {\n", definesMain ? "main2" : "main");
 
-         while (current != NULL) {
-             if (current->externalDeclaration != NULL &&
-                 current->externalDeclaration->type == STATEMENT) {
-                 _generateStatement(current->externalDeclaration->statement);
+         tmp = current;
+         while (tmp != NULL) {
+             if (tmp->externalDeclaration != NULL &&
+                 tmp->externalDeclaration->type == STATEMENT) {
+                 _generateStatement(tmp->externalDeclaration->statement);
              }
-             current = current->units;
+             tmp = tmp->units;
          }
 
          _output(0, "return 0;\n");
          _output(0, "}\n");
      }
  }
+
+
 
 static void _generateExternalDeclaration(ExternalDeclaration * externalDeclaration) {
     logDebugging(_logger, "Generating external declaration...");

@@ -48,5 +48,6 @@ while (I < 5) {
 I++;
 }
 }
+return FACTORIAL(5);
 return 0;
 }
