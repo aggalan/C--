@@ -18,7 +18,7 @@ echo ""
 
 for test in src/test/c/accept/*; do
     testname=$(basename "$test")
-    export OUTPUT_PATH="salida/accept/${testname%.*}_output.txt"
+    export OUTPUT_PATH="salida/accept/${testname%.*}_output.c"
 
     cat "$test" | build/Compiler >/dev/null 2>&1
     RESULT="$?"

@@ -188,7 +188,7 @@ static void _generateForLoop(ForLoop *forLoop) {
     const char *varName = forLoop->assignment->identifier;
 
     // for (
-    _output(0, "for (");
+    _output(0, "for ( int ");
     _output(0, varName);
     _output(0, " = ");
     _generateMathExpression(forLoop->assignment->mathExpression); // valor inicial
@@ -646,7 +646,7 @@ static void _generateVariableStatement(VariableStatement *stmt) {
         break;
 
     case _STRING:
-        _output(0, "const char %s", _renameMainIfNeeded(stmt->identifier));
+        _output(0, "const char * %s", _renameMainIfNeeded(stmt->identifier));
         if (stmt->expression != NULL) {
             _output(0, " = ");
             _generateExpression(stmt->expression);
@@ -874,7 +874,19 @@ static void _generateUnit(Unit * unit) {
      logDebugging(_logger, "Generating program...");
      if (program->type != NOT_EMPTY) return;
 
-     Unit *current = program->unit;
+
+     Unit * current = program->unit;
+     while (current) {
+         if (current->externalDeclaration != NULL &&
+             current->externalDeclaration->type == STATEMENT &&
+             current->externalDeclaration->statement->type == STATEMENT_VARIABLE) {
+             _generateVariableStatement(current->externalDeclaration->statement->variableStatement);
+             }
+         current = current->units;
+     }
+
+     current = program->unit;
+
 
      while (current != NULL) {
          if (current->externalDeclaration != NULL) {
@@ -895,26 +907,26 @@ static void _generateUnit(Unit * unit) {
      current = program->unit;
      int hasStatements = 0;
 
-     Unit *tmp = current;
-     while (tmp != NULL) {
-         if (tmp->externalDeclaration != NULL &&
-             tmp->externalDeclaration->type == STATEMENT) {
+     while (current != NULL) {
+         if (current->externalDeclaration != NULL &&
+             current->externalDeclaration->type == STATEMENT) {
              hasStatements = 1;
              break;
          }
-         tmp = tmp->units;
+         current = current->units;
      }
 
      if (hasStatements) {
          _output(0, "\nint main() {\n");
 
-         tmp = program->unit;
-         while (tmp != NULL) {
-             if (tmp->externalDeclaration != NULL &&
-                 tmp->externalDeclaration->type == STATEMENT) {
-                 _generateStatement(tmp->externalDeclaration->statement);
+         current = program->unit;
+         while (current != NULL) {
+             if (current->externalDeclaration != NULL &&
+                 current->externalDeclaration->type == STATEMENT &&
+                 current->externalDeclaration->statement->type != STATEMENT_VARIABLE) {
+                 _generateStatement(current->externalDeclaration->statement);
              }
-             tmp = tmp->units;
+             current = current->units;
          }
 
          _output(0, "return 0;\n");
@@ -1117,6 +1129,8 @@ static void _generatePrologue(){
     _output(1, "ORDER_ASCENDING,\n");
     _output(1, "ORDER_DESCENDING\n");
     _output(0, "} Order;\n\n");
+
+     _output(0, "typedef int bool;\n\n");
 
     _output(0, "int compareAsc(const void *a, const void *b) {\n");
     _output(1, "int intA = *(const int*)a;\n");

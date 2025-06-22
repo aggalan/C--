@@ -9,6 +9,8 @@ typedef enum {
     ORDER_DESCENDING
 } Order;
 
+typedef int bool;
+
 int compareAsc(const void *a, const void *b) {
     int intA = *(const int*)a;
     int intB = *(const int*)b;
@@ -34,6 +36,7 @@ int stringEquals(const char *a, const char *b) {
     return strcmp(a, b) == 0;
 }
 
+int A;
 int FUNC() {
 return 0;
 }
@@ -42,6 +45,5 @@ return 0;
 int main() {
 int numeros[] = {7, 5, 2, 4, 6, 4};
 sortArray(numeros, sizeof(numeros) / sizeof(numeros[0]), ORDER_ASCENDING);
-int A;
 return 0;
 }

@@ -9,6 +9,8 @@ typedef enum {
     ORDER_DESCENDING
 } Order;
 
+typedef int bool;
+
 int compareAsc(const void *a, const void *b) {
     int intA = *(const int*)a;
     int intB = *(const int*)b;

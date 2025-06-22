@@ -9,6 +9,8 @@ typedef enum {
     ORDER_DESCENDING
 } Order;
 
+typedef int bool;
+
 int compareAsc(const void *a, const void *b) {
     int intA = *(const int*)a;
     int intB = *(const int*)b;
@@ -43,7 +45,7 @@ return (n * FACTORIAL((n - 1)));
 
 
 int main() {
-for (I = 2; I <= 10; I++) {
+for ( int I = 2; I <= 10; I++) {
 while (I < 5) {
 I++;
 }

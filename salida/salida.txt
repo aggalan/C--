@@ -34,7 +34,7 @@ int stringEquals(const char *a, const char *b) {
     return strcmp(a, b) == 0;
 }
 
-int main2(int d) {
+void main() {
 n = 0;
 switch(n) {
     case 1:
@@ -51,18 +51,18 @@ n++;
 if ((n > 0 && n < 2)) {
 printf("%s\n", "Hello");
 }
-return 0;
+return;
 }
 
 
-int main() {
+int main2() {
 int n;
-const char msgOne = "This is number 1";
-const char msgTwo = "This is number 2";
-const char msgElse = "This is not 1 or 2";
+const char *msgOne = "This is number 1";
+const char *msgTwo = "This is number 2";
+const char *msgElse = "This is not 1 or 2";
 if ((5 > 2)) {
 printf("%d\n", 5);
-main2(10);
+main();
 }
 return 0;
 }

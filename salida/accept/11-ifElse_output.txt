@@ -9,6 +9,8 @@ typedef enum {
     ORDER_DESCENDING
 } Order;
 
+typedef int bool;
+
 int compareAsc(const void *a, const void *b) {
     int intA = *(const int*)a;
     int intB = *(const int*)b;
@@ -34,10 +36,10 @@ int stringEquals(const char *a, const char *b) {
     return strcmp(a, b) == 0;
 }
 
-
-int main() {
 bool A = 1;
 int B;
+
+int main() {
 if ((A)) {
 B = 1;
 } else if ((A)) {
