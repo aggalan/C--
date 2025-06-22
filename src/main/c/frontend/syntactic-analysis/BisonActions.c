@@ -347,55 +347,63 @@ FunctionStatement * FunctionSemanticAction(String identifier, ArgumentList * par
     	currentCompilerState()->hasError = true;
 		return NULL;
 	}
-	if (symbol->isFunction == 0) {
+	if (symbol->symbolType == VARIABLE_SYMBOL) {
 		logError(_logger, "Identifier %s is not a function", identifier);
 		currentCompilerState()->hasError = true;
 		return NULL;
 	}
-    if (symbol->typeCount-1 != parameters->count) {
-        logError(_logger, "Function %s has a parameter count mismatch: expected %d, got %d", identifier, symbol->typeCount - 1, parameters->count);
-        currentCompilerState()->hasError = true;
-    }
-	ArgumentNode *argNode = parameters->arguments;
-	for (int i = 1; i < symbol->typeCount && argNode != NULL; i++, argNode = argNode->next) {
-		Type expected = symbol->types[i];
-		Type actual = _VOID;
-
-		switch (argNode->argument->type) {
-			case ARGUMENT_MATH_EXPRESSION:
-				actual = _INT;
-				break;
-			case ARGUMENT_STRING_EXPRESSION:
-				actual = _STRING;
-				break;
-			case ARGUMENT_BOOL_EXPRESSION:
-				actual = _BOOL;
-				break;
-			case ARGUMENT_INT_ARRAY_ID:
-				actual = _INT_ARRAY;
-				break;
-			case ARGUMENT_STRING_ARRAY_ID:
-				actual = _STRING_ARRAY;
-				break;
-			case ARGUMENT_BOOL_ARRAY_ID:
-				actual = _BOOL_ARRAY;
-				break;
-			case ARGUMENT_UNARY_CHANGE_OPERATOR:
-			     actual = _INT;
-			     break;
-			case ARGUMENT_ARRAY_ACCESS:
-			actual = findSymbol(currentCompilerState()->symbolTable, argNode->argument->arrayAccess->identifier)->types[0];
-				break;
-			case ARGUMENT_FUNCTION_EXPRESSION:
-			actual = findSymbol(currentCompilerState()->symbolTable, argNode->argument->functionExpression->identifier)->types[0];
-			break;
-
-}
-		if (actual != expected) {
+	if ( parameters == NULL) {
+		if ( symbol->typeCount != 1) {
+			logError(_logger, "Function %s has no parameters but expects %d", identifier, symbol->typeCount - 1);
 			currentCompilerState()->hasError = true;
-			logError(_logger, "Function %s has a parameter type mismatch at position %d: expected %d, got %d WITH IDENTIFIER %s", identifier, i, expected, actual,argNode->argument->identifier);
+		}
+	} else {
+		if (symbol->typeCount-1 != parameters->count) {
+			logError(_logger, "Function %s has a parameter count mismatch: expected %d, got %d", identifier, symbol->typeCount - 1, parameters->count);
+			currentCompilerState()->hasError = true;
+		}
+		ArgumentNode *argNode = parameters->arguments;
+		for (int i = 1; i < symbol->typeCount && argNode != NULL; i++, argNode = argNode->next) {
+			Type expected = symbol->types[i];
+			Type actual = _VOID;
+
+			switch (argNode->argument->type) {
+				case ARGUMENT_MATH_EXPRESSION:
+					actual = _INT;
+				break;
+				case ARGUMENT_STRING_EXPRESSION:
+					actual = _STRING;
+				break;
+				case ARGUMENT_BOOL_EXPRESSION:
+					actual = _BOOL;
+				break;
+				case ARGUMENT_INT_ARRAY_ID:
+					actual = _INT_ARRAY;
+				break;
+				case ARGUMENT_STRING_ARRAY_ID:
+					actual = _STRING_ARRAY;
+				break;
+				case ARGUMENT_BOOL_ARRAY_ID:
+					actual = _BOOL_ARRAY;
+				break;
+				case ARGUMENT_UNARY_CHANGE_OPERATOR:
+					actual = _INT;
+				break;
+				case ARGUMENT_ARRAY_ACCESS:
+					actual = findSymbol(currentCompilerState()->symbolTable, argNode->argument->arrayAccess->identifier)->types[0];
+				break;
+				case ARGUMENT_FUNCTION_EXPRESSION:
+					actual = findSymbol(currentCompilerState()->symbolTable, argNode->argument->functionExpression->identifier)->types[0];
+				break;
+
+			}
+			if (actual != expected) {
+				currentCompilerState()->hasError = true;
+				logError(_logger, "Function %s has a parameter type mismatch at position %d: expected %d, got %d WITH IDENTIFIER %s", identifier, i, expected, actual,argNode->argument->identifier);
+			}
 		}
 	}
+
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	FunctionStatement * function = calloc(1, sizeof(FunctionStatement));
 	function->identifier = identifier;
@@ -459,7 +467,6 @@ Type * createMacroTypeArray(const Type type, const StringList * parameters) {
 	typeArray = calloc(parameters->count + 1, sizeof(Type));
 	typeArray[0] = type;
 	StringNode * parametersNode = parameters->strings;
-    logError(_logger, "parameterscount: %d", parameters->count);
 	int i=1;
 	while (parametersNode != NULL) {
         typeArray[i]= _INT;
@@ -496,12 +503,6 @@ FunctionDefinition  * FunctionDefinitionSemanticAction(const Type type, String i
 	functionDefinition->parameters = parameters;
 	functionDefinition->type = type;
 	functionDefinition->body = body;
-	Type * typeArray = createTypeArray(type, parameters);
-	if(parameters != NULL && type != _VOID) {
-	ArgumentDefNode * arg =  parameters->arguments;
-	logDebugging(_logger, "Function %s has return type %d", identifier, type);
-	}
-	free(typeArray);
 	return functionDefinition;
 }
 Statement * ReturnStatementSemanticAction(ReturnStatement * stmt){

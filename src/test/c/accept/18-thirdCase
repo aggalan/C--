@@ -6,7 +6,7 @@ STRING msgTwo = "This is number 2"
 STRING msgElse = "This is not 1 or 2"
 // Definir donde arranca el programa
 
-VOID main(INT d) {
+VOID main() {
     n = 0
     MATCH n {
         1 -> PRINT msgOne
@@ -22,5 +22,5 @@ VOID main(INT d) {
 //Este caso el programa imprimirá “This is not one or two” y después “Hello”
 IF (5 > 2) {
     PRINT 5
-    main(10)
+    main()
 }

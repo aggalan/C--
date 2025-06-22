@@ -30,7 +30,7 @@ Symbol* createSymbol(const char *name, const Type *types, const int typeCount, S
         symbol->types[i] = types[i]; // asumimos que los Type* ya están en heap
     }
     symbol->typeCount = typeCount;
-    symbol->isFunction = symbolType;
+    symbol->symbolType = symbolType;
 
     return symbol;
 }
