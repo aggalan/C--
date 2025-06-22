@@ -1,9 +1,9 @@
 MACRO HOLA (A,B,E) -> A * E
 
 
-INT A
-INT D
-INT E
+INT A = 7
+INT D = 10
+INT E = 5
 BOOL C
 IF (E == 5 AND D > E) {
     PRINT HOLA(E,D,A)

@@ -617,17 +617,18 @@ static void _generateUnaryChangeOperatorStatement(UnaryChangeOperatorStatement *
             _output(0, "%s%s", stmt->identifier, op);     // x++;
     }
     else if (stmt->type == ARRAY) {
-         if (stmt->operator_type == PRE_INCREMENT || stmt->operator_type == PRE_DECREMENT) {
+        if (stmt->operator_type == PRE_INCREMENT || stmt->operator_type == PRE_DECREMENT) {
             _output(0, "%s", op);                            // ++
             _generateArrayAccess(stmt->arrayAccess);        // array[i]
         } else {
             _generateArrayAccess(stmt->arrayAccess);        // array[i]
             _output(0, "%s", op);                         // ++;
         }
+
+        if (isStatement ) {
+            _output(0, ";\n");
+        }
     }
-     if (isStatement ) {
-         _output(0, ";\n");
-     }
     else {
         logError(_logger, "Unknown unary change statement type: %d", stmt->type);
     }
@@ -894,9 +895,14 @@ static void _generateUnit(Unit * unit) {
      Unit * current = program->unit;
      while (current) {
          if (current->externalDeclaration != NULL &&
-             current->externalDeclaration->type == STATEMENT &&
-             current->externalDeclaration->statement->type == STATEMENT_VARIABLE) {
-             _generateVariableStatement(current->externalDeclaration->statement->variableStatement);
+             current->externalDeclaration->type == STATEMENT) {
+             if (current->externalDeclaration->statement->type == STATEMENT_VARIABLE) {
+                 _generateVariableStatement(current->externalDeclaration->statement->variableStatement);
+             } else if (current->externalDeclaration->statement->type == STATEMENT_ASSIGNMENT &&
+                 current->externalDeclaration->statement->assignmentStatement->type == ARRAY_STATEMENT
+                 ) {
+                 _generateAssignmentStatement(current->externalDeclaration->statement->assignmentStatement);
+             }
              }
          current = current->units;
      }
@@ -939,7 +945,10 @@ static void _generateUnit(Unit * unit) {
          while (current != NULL) {
              if (current->externalDeclaration != NULL &&
                  current->externalDeclaration->type == STATEMENT &&
-                 current->externalDeclaration->statement->type != STATEMENT_VARIABLE) {
+                  current->externalDeclaration->statement->type != STATEMENT_VARIABLE &&
+                   ( current->externalDeclaration->statement->type != STATEMENT_ASSIGNMENT ||
+                       current->externalDeclaration->statement->assignmentStatement->type != ARRAY_STATEMENT)
+                 ) {
                  _generateStatement(current->externalDeclaration->statement);
              }
              current = current->units;
