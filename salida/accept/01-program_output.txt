@@ -38,13 +38,13 @@ int stringEquals(const char *a, const char *b) {
 int main() {
 int I = 0;
 int ARRAY[] = {1, 2, 3, 4, 5};
-const char *s = "COLOMBIA";
+const char s = "COLOMBIA";
 bool QUESO = 1;
 for (i = 2; i <= 5; i++) {
 printf("%s\n", s);
 }
 if (QUESO) {
-const char *I = "QUESO";
+const char I = "QUESO";
 printf("%s\n", I);
 printf("%s\n", "QUESO");
 return;

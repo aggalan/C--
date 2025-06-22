@@ -34,7 +34,7 @@ int stringEquals(const char *a, const char *b) {
     return strcmp(a, b) == 0;
 }
 
-int main() {
+int main2() {
 int e = 5;
 int f = 10;
 printf("%s\n", "hola");

@@ -63,6 +63,11 @@ static void _generatePrologue();
 static void _output(const unsigned int indentationLevel, const char * const format, ...);
 static void _generateArgumentValue(ArgumentValue * argumentValue);
 
+ static const char * _renameMainIfNeeded(const char *identifier) {
+     if (identifier != NULL && strcmp(identifier, "main") == 0)
+         return "main2";
+     return identifier;
+ }
 
 static void _generateConstant( Constant * constant){
     if (constant == NULL) return;
@@ -295,11 +300,12 @@ static void _generateFactor(Factor *factor) {
         _output(0, buffer);
         break;
 
-    case FACTOR_IDENTIFIER:
-        _output(0, factor->identifier);
-        break;
+        case FACTOR_IDENTIFIER:
+            _output(0, "%s", _renameMainIfNeeded(factor->identifier));
+            break;
 
-    case EXPRESSION:
+
+        case EXPRESSION:
         _output(0, "(");
         _generateMathExpression(factor->expression);
         _output(0, ")");
@@ -483,7 +489,7 @@ static void _generateMacroStatement(MacroStatement * macroStatement) {
 static void _generateFunctionStatement(FunctionStatement * functionStatement) {
     if (functionStatement == NULL) return;
 
-    _output(0, "%s(", functionStatement->identifier);
+    _output(0, "%s(", _renameMainIfNeeded(functionStatement->identifier));
 
     if (functionStatement->parameters != NULL) {
         _generateArgumentList(functionStatement->parameters);
@@ -559,21 +565,21 @@ static void _generateAssignmentStatement(AssignmentStatement *stmt) {
 
 static void _generateAssignmentMathStatement(AssignmentMathStatement *assign) {
     if (assign == NULL) return;
-    _output(0, "%s = ", assign->identifier);
+    _output(0, "%s = ", _renameMainIfNeeded(assign->identifier));
     _generateMathExpression(assign->mathExpression);
     _output(0, ";\n");
 }
 
 static void _generateAssignmentBoolStatement(AssignmentBoolStatement *assign) {
     if (assign == NULL) return;
-    _output(0, "%s = ", assign->identifier);
+    _output(0, "%s = ", _renameMainIfNeeded(assign->identifier));
     _generateBoolExpression(assign->expression);
     _output(0, ";\n");
 }
 
 static void _generateAssignmentStringStatement(AssignmentStringStatement *assign) {
     if (assign == NULL) return;
-    _output(0, "%s = ", assign->identifier);
+    _output(0, "%s = ", _renameMainIfNeeded(assign->identifier));
     _generateStringExpression(assign->expression);
     _output(0, ";\n");
 }
@@ -621,7 +627,7 @@ static void _generateVariableStatement(VariableStatement *stmt) {
 
     switch (stmt->type) {
     case _BOOL:
-        _output(0, "bool %s", stmt->identifier);
+        _output(0, "bool %s", _renameMainIfNeeded(stmt->identifier));
         if (stmt->expression != NULL) {
             _output(0, " = ");
             _generateExpression(stmt->expression);
@@ -630,7 +636,7 @@ static void _generateVariableStatement(VariableStatement *stmt) {
         break;
 
     case _INT:
-        _output(0, "int %s", stmt->identifier);
+        _output(0, "int %s", _renameMainIfNeeded(stmt->identifier));
         if (stmt->expression != NULL) {
             _output(0, " = ");
             logDebugging(_logger, "Generating math expression for variable %s", stmt->identifier);
@@ -640,7 +646,7 @@ static void _generateVariableStatement(VariableStatement *stmt) {
         break;
 
     case _STRING:
-        _output(0, "const char *%s", stmt->identifier);
+        _output(0, "const char %s", _renameMainIfNeeded(stmt->identifier));
         if (stmt->expression != NULL) {
             _output(0, " = ");
             _generateExpression(stmt->expression);
@@ -751,11 +757,12 @@ static void _generateBoolFactor(BoolFactor * f) {
         _output(0, ")");
         break;
 
-    case BOOLEAN_ID:
-        _output(0, f->identifier);
-        break;
+        case BOOLEAN_ID:
+            _output(0, "%s", _renameMainIfNeeded(f->identifier));
+            break;
 
-    case BOOL_CONSTANT:
+
+        case BOOL_CONSTANT:
         _output(0, f->boolean ? "1" : "0");
         break;
 
@@ -799,9 +806,8 @@ static void _generateFunctionDefinition(FunctionDefinition * functionDefinition)
     case _BOOL_ARRAY: returnType = "bool *"; break;
     default: returnType = "/* unknown */"; break;
     }
-
-    _output(0, "%s %s(", returnType, functionDefinition->identifier);
-
+    const char *funcName = _renameMainIfNeeded(functionDefinition->identifier);
+    _output(0, "%s %s(", returnType, funcName);
     if (functionDefinition->parameters != NULL) {
         _generateArgumentDefList(functionDefinition->parameters);
     }
@@ -868,41 +874,41 @@ static void _generateUnit(Unit * unit) {
      logDebugging(_logger, "Generating program...");
      if (program->type != NOT_EMPTY) return;
 
-     int definesMain = 0;
-     int hasStatements = 0;
-
      Unit *current = program->unit;
+
+     while (current != NULL) {
+         if (current->externalDeclaration != NULL) {
+             switch (current->externalDeclaration->type) {
+                 case FUNCTION_DEFINITION:
+                     _generateFunctionDefinition(current->externalDeclaration->functionDefinition);
+                     break;
+                 case MACRO_STATEMENT:
+                     _generateMacroStatement(current->externalDeclaration->macroStatement);
+                     break;
+                 default:
+                     break;
+             }
+         }
+         current = current->units;
+     }
+
+     current = program->unit;
+     int hasStatements = 0;
 
      Unit *tmp = current;
      while (tmp != NULL) {
-         if (tmp->externalDeclaration != NULL) {
-             if (tmp->externalDeclaration->type == FUNCTION_DEFINITION &&
-                 strcmp(tmp->externalDeclaration->functionDefinition->identifier, "main") == 0) {
-                 definesMain = 1;
-             }
-             if (tmp->externalDeclaration->type == STATEMENT) {
-                 hasStatements = 1;
-             }
-         }
-         tmp = tmp->units;
-     }
-
-     tmp = current;
-     while (tmp != NULL) {
-         if (tmp->externalDeclaration != NULL) {
-             if (tmp->externalDeclaration->type == FUNCTION_DEFINITION) {
-                 _generateFunctionDefinition(tmp->externalDeclaration->functionDefinition);
-             } else if (tmp->externalDeclaration->type == MACRO_STATEMENT) {
-                 _generateMacroStatement(tmp->externalDeclaration->macroStatement);
-             }
+         if (tmp->externalDeclaration != NULL &&
+             tmp->externalDeclaration->type == STATEMENT) {
+             hasStatements = 1;
+             break;
          }
          tmp = tmp->units;
      }
 
      if (hasStatements) {
-         _output(0, "\nint %s() {\n", definesMain ? "main2" : "main");
+         _output(0, "\nint main() {\n");
 
-         tmp = current;
+         tmp = program->unit;
          while (tmp != NULL) {
              if (tmp->externalDeclaration != NULL &&
                  tmp->externalDeclaration->type == STATEMENT) {
@@ -918,7 +924,8 @@ static void _generateUnit(Unit * unit) {
 
 
 
-static void _generateExternalDeclaration(ExternalDeclaration * externalDeclaration) {
+
+ static void _generateExternalDeclaration(ExternalDeclaration * externalDeclaration) {
     logDebugging(_logger, "Generating external declaration...");
     if (externalDeclaration->type == FUNCTION_DEFINITION) {
         _generateFunctionDefinition(externalDeclaration->functionDefinition);
@@ -949,13 +956,14 @@ static void _generateArgumentValue(ArgumentValue * argumentValue) {
         _generateFunctionStatement(argumentValue->functionExpression);
         break;
 
-    case ARGUMENT_BOOL_ARRAY_ID:
-    case ARGUMENT_STRING_ARRAY_ID:
-    case ARGUMENT_INT_ARRAY_ID:
-        _output(0, "%s", argumentValue->identifier);
-        break;
+        case ARGUMENT_BOOL_ARRAY_ID:
+        case ARGUMENT_STRING_ARRAY_ID:
+        case ARGUMENT_INT_ARRAY_ID:
+            _output(0, "%s", _renameMainIfNeeded(argumentValue->identifier));
+            break;
 
-    case ARGUMENT_ARRAY_ACCESS:
+
+        case ARGUMENT_ARRAY_ACCESS:
         _generateArrayAccess(argumentValue->arrayAccess);
         break;
 
@@ -1012,12 +1020,12 @@ static void _generateStringExpression(StringExpression *expr) {
     if (expr == NULL) return;
 
     switch (expr->type) {
-    case STRING_IDENTIFIER_EXPRESSION:
-        // Una variable string
-            _output(0, expr->identifier);
-        break;
+        case STRING_IDENTIFIER_EXPRESSION:
+            _output(0, "%s", _renameMainIfNeeded(expr->identifier));
+            break;
 
-    case STRING_VALUE_EXPRESSION:
+
+        case STRING_VALUE_EXPRESSION:
             _output(0, "\"");
         _output(0, expr->string);
         _output(0, "\"");

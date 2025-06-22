@@ -56,8 +56,8 @@ return;
 
 int main() {
 int n;
-const char *msgs = "The operation was successful";
-const char *msgf = "The operation failed";
+const char msgs = "The operation was successful";
+const char msgf = "The operation failed";
 bool status;
 return 0;
 }

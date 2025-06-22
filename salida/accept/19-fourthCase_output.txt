@@ -48,6 +48,6 @@ while (I < 5) {
 I++;
 }
 }
-return FACTORIAL(5);
+printf("%d\n", FACTORIAL(5));
 return 0;
 }

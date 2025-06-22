@@ -42,11 +42,13 @@ result = (result + b);
 return result;
 }
 
-int MAIN() {
+int main2(int A) {
 int a = 3;
 int b = 4;
-int c = multi(a, b);
+int c;
+multi(a, b);
 printf("%d\n", c);
+main2(A);
 return 0;
 }
 

@@ -5,10 +5,12 @@ INT multi (INT a, INT b) {
     }
     RETURN result
 }
-INT MAIN () {
+INT main (INT A) {
     INT a = 3
     INT b = 4
-    INT c = multi(a,b)
+    INT c
+    multi(a,b)
     PRINT c
+    main(A)
     RETURN 0
 }

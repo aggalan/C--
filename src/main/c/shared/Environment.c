@@ -29,5 +29,5 @@ const char * getStringOrDefault(const char * name, const char * defaultValue) {
 
 
 const char* getOutputPath(void) {
-	return getStringOrDefault("OUTPUT_PATH", "./salida/salida.txt");
+	return getStringOrDefault("OUTPUT_PATH", "./salida/salida.c");
 }

@@ -48,7 +48,7 @@ printf("%s\n", "HOLA");
 printf("%s\n", "CHAU");
         break;
 }
-const char *str;
+const char str;
 if (strcmp(str, "HOLA") == 0) {
 printf("%s\n", "HOLA");
 } else if (strcmp(str, "CHAU") == 0) {
