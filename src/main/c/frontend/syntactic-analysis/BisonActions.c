@@ -352,6 +352,10 @@ FunctionStatement * FunctionSemanticAction(String identifier, ArgumentList * par
 		currentCompilerState()->hasError = true;
 		return NULL;
 	}
+    if (symbol->typeCount-1 != parameters->count) {
+        logError(_logger, "Function %s has a parameter count mismatch: expected %d, got %d", identifier, symbol->typeCount - 1, parameters->count);
+        currentCompilerState()->hasError = true;
+    }
 	ArgumentNode *argNode = parameters->arguments;
 	for (int i = 1; i < symbol->typeCount && argNode != NULL; i++, argNode = argNode->next) {
 		Type expected = symbol->types[i];
@@ -975,6 +979,7 @@ ArgumentList * ArgumentValueSemanticAction(ArgumentValue * argumentValue) {
 	ArgumentList * list = calloc(1, sizeof(ArgumentList));
 	list->arguments = calloc(1, sizeof(ArgumentNode));
 	list->arguments->argument = argumentValue;
+    list->count = 1;
 	list->last = list->arguments;
 	return list;
 }
@@ -984,6 +989,7 @@ ArgumentList * AppendArgumentListSemanticAction(ArgumentList * list, ArgumentVal
 	node->argument = argumentValue;
 	list->last->next = node;
 	list->last = node;
+    list->count++;
 	return list;
 }
 

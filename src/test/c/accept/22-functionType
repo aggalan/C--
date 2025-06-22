@@ -3,4 +3,4 @@ STRING hola (STRING A,INT B){
     RETURN "HOLA"
 }
 
-hola("1",1)
+hola("1",2)
