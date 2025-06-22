@@ -1,9 +1,10 @@
 INT numeros[]={7,5,2,4,6,4}
 VOID numerosF() {
     FOR i = 0 TO 5 {
-        numeros[i]++
+        PRINT ++numeros[i]
     }
     // add ASC
     SORT numeros ASC
 //    PRINT "numeros"
 }
+numerosF()
