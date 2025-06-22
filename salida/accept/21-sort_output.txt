@@ -34,9 +34,14 @@ int stringEquals(const char *a, const char *b) {
     return strcmp(a, b) == 0;
 }
 
+int FUNC() {
+return 0;
+}
+
 
 int main() {
 int numeros[] = {7, 5, 2, 4, 6, 4};
 sortArray(numeros, sizeof(numeros) / sizeof(numeros[0]), ORDER_ASCENDING);
+int A;
 return 0;
 }

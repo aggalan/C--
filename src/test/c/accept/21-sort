@@ -1,3 +1,8 @@
 INT numeros[] = {7, 5, 2, 4, 6, 4}
 
 SORT numeros ASC
+
+INT FUNC (){
+    RETURN 0
+}
+INT A

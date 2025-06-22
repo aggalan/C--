@@ -34,7 +34,7 @@ int stringEquals(const char *a, const char *b) {
     return strcmp(a, b) == 0;
 }
 
-void main() {
+void test() {
 n = 0;
 switch(n) {
     case 1:
