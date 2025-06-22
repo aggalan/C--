@@ -161,14 +161,14 @@ Token IdentifierLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 			return id;
 		}
 
-        if(symbol->isFunction == 2) {
+        if(symbol->symbolType == MACRO_SYMBOL) {
             id = MACRO_ID;
             currentCompilerState()->declarationMode= false;
             destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
             return id;
         }
 
-		if ( symbol->typeCount > 1) {
+		if ( symbol->symbolType == MACRO_SYMBOL || symbol->symbolType == FUNCTION_SYMBOL) {
 			switch (symbol->types[0]) {
 				case _INT:
 					id = INT_FUNCTION_ID;

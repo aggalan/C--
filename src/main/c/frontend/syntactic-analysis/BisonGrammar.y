@@ -217,6 +217,7 @@
 %type <returnStatement> returnStatement
 %type <functionStatement> intFunctionStatement
 %type <functionStatement> boolFunctionStatement
+%type <functionStatement> voidFunctionStatement
 %type <functionStatement> stringFunctionStatement
 %type <functionStatement> functionStatement
 %type <functionDefinition> functionDefinition
@@ -343,10 +344,14 @@ intFunctionStatement: INT_FUNCTION_ID OPEN_PARENTHESIS argumentList CLOSE_PARENT
 stringFunctionStatement: STRING_FUNCTION_ID OPEN_PARENTHESIS argumentList CLOSE_PARENTHESIS NEW_LINE
                                                                         { $$ = FunctionSemanticAction($1, $3); }
                      ;
+voidFunctionStatement: VOID_FUNCTION_ID OPEN_PARENTHESIS argumentList CLOSE_PARENTHESIS NEW_LINE
+                                                                        { $$ = FunctionSemanticAction($1, $3); }
+                     ;
 
 functionStatement: boolFunctionStatement                                { $$ = $1 ;}
     | intFunctionStatement                                              { $$ = $1 ;}
     | stringFunctionStatement                                           { $$ = $1 ;}
+    | voidFunctionStatement                                             { $$ = $1 ;}
     ;
 
     boolFunctionExpression: BOOL_FUNCTION_ID OPEN_PARENTHESIS argumentList CLOSE_PARENTHESIS

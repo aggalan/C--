@@ -62,6 +62,7 @@ const char *msgTwo = "This is number 2";
 const char *msgElse = "This is not 1 or 2";
 if ((5 > 2)) {
 printf("%d\n", 5);
+main();
 }
 return 0;
 }

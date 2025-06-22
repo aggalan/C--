@@ -22,4 +22,5 @@ VOID main() {
 //Este caso el programa imprimirá “This is not one or two” y después “Hello”
 IF (5 > 2) {
     PRINT 5
+    main()
 }
