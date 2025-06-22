@@ -129,6 +129,7 @@ static void _generateStatement(Statement * statement) {
 
         case STATEMENT_FUNCTION:
             _generateFunctionStatement(statement->functionStatement);
+            _output(0, ";\n");
             break;
 
         case STATEMENT_RETURN:
