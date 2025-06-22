@@ -34,7 +34,6 @@ const int main(const int count, const char ** arguments) {
 		.succeed = false,
 		.value = 0,
 		.symbolTable = createSymbolTable(),
-		.returnList = createReturnList(),
 		.hasError = false,
 		.scopeStack = createScopeStack(),
 		.declarationMode = false,
@@ -62,8 +61,7 @@ const int main(const int count, const char ** arguments) {
 		 releaseProgram(program);
 		freeSymbolTable(compilerState.symbolTable);
 		freeScopeStack(compilerState.scopeStack);
-		if(compilerState.returnList != NULL)
-			free(compilerState.returnList);
+
 
 	}
 	else {

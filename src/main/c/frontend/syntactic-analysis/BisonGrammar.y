@@ -292,9 +292,9 @@ optionalNewLinesStatement:
 
 functionDefinition:
       intDeclaration GENERIC_ID OPEN_PARENTHESIS {PushScopeBison();} argumentDefList CLOSE_PARENTHESIS {AddFunctionToSymbolTable(_INT, $2,$5);}  statementBlock  { $$ = FunctionDefinitionSemanticAction(_INT, $2, $5, $8); }
-    | VOID {DeclarationMode();} GENERIC_ID OPEN_PARENTHESIS {PushScopeBison();} argumentDefList CLOSE_PARENTHESIS {AddFunctionToSymbolTable(_INT, $3,$6);} statementBlock  { $$ = FunctionDefinitionSemanticAction(_VOID, $3, $6, $9); }
-    | stringDeclaration GENERIC_ID OPEN_PARENTHESIS {PushScopeBison();} argumentDefList CLOSE_PARENTHESIS {AddFunctionToSymbolTable(_INT, $2,$5);} statementBlock     { $$ = FunctionDefinitionSemanticAction(_STRING, $2, $5, $8); }
-    | boolDeclaration GENERIC_ID OPEN_PARENTHESIS {PushScopeBison();} argumentDefList CLOSE_PARENTHESIS {AddFunctionToSymbolTable(_INT, $2,$5);} statementBlock  { $$ = FunctionDefinitionSemanticAction(_BOOL, $2, $5, $8); }
+    | VOID {DeclarationMode();} GENERIC_ID OPEN_PARENTHESIS {PushScopeBison();} argumentDefList CLOSE_PARENTHESIS {AddFunctionToSymbolTable(_VOID, $3,$6);} statementBlock  { $$ = FunctionDefinitionSemanticAction(_VOID, $3, $6, $9); }
+    | stringDeclaration GENERIC_ID OPEN_PARENTHESIS {PushScopeBison();} argumentDefList CLOSE_PARENTHESIS {AddFunctionToSymbolTable(_STRING, $2,$5);} statementBlock     { $$ = FunctionDefinitionSemanticAction(_STRING, $2, $5, $8); }
+    | boolDeclaration GENERIC_ID OPEN_PARENTHESIS {PushScopeBison();} argumentDefList CLOSE_PARENTHESIS {AddFunctionToSymbolTable(_BOOL, $2,$5);} statementBlock  { $$ = FunctionDefinitionSemanticAction(_BOOL, $2, $5, $8); }
     ;
 
 statement:

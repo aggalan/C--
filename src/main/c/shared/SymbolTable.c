@@ -20,45 +20,6 @@ SymbolTable* createSymbolTable() {
     return table;
 }
 
-ReturnList* createReturnList() {
-    ReturnList *list = malloc(sizeof(ReturnList));
-    list->head = NULL;
-    list->count = 0;
-    return list;
-}
-ReturnNode* createReturnNode(Type type) {
-    ReturnNode *node = malloc(sizeof(ReturnNode));
-    node->type = type;
-    return node;
-}
-ReturnNode* addReturnNode(ReturnList *list, Type type) {
-    if (list->count >= MAX_SYMBOLS) {
-        currentCompilerState()->succeed = false;
-        return NULL;
-    }
-
-    ReturnNode *newNode = createReturnNode(type);
-    newNode->next = list->head; // Inserta al principio
-    list->head = newNode;
-    list->count++;
-    return newNode;
-}
-int isReturnListEmpty(const ReturnList *list) {
-    return list->count == 0;
-}
-void destroyReturnList(ReturnList *list) {
-    if (!list) return;
-
-    ReturnNode *current = list->head;
-    while (current) {
-        ReturnNode *next = current->next;
-        free(current);
-        current = next;
-    }
-
-    list->head = NULL;
-}
-
 
 Symbol* createSymbol(const char *name, const Type *types, const int typeCount, SymbolType symbolType) {
     Symbol *symbol = malloc(sizeof(Symbol));

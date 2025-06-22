@@ -21,19 +21,7 @@ typedef struct {
     Symbol * currentFunction;
     int count;
 } SymbolTable;
-typedef struct ReturnNode {
-    Type type;
-     struct ReturnNode *next;
-} ReturnNode;
-typedef struct {
-    ReturnNode *head; // Puntero al primer nodo de la lista
-    int count;
-} ReturnList;
-ReturnList* createReturnList();
-ReturnNode* createReturnNode(Type type);
-ReturnNode* addReturnNode(ReturnList *list, Type type);
-int isReturnListEmpty(const ReturnList *list);
-void destroyReturnList(ReturnList *list);
+
 SymbolTable* createSymbolTable();
 Symbol* createSymbol(const char *name, const Type *types, int typeCount, SymbolType symbolType);
 void addSymbol(SymbolTable *table, const char *name, const Type *types, const int typeCount,SymbolType symbolType);

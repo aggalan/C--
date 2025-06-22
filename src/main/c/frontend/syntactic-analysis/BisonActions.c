@@ -417,7 +417,10 @@ ReturnStatement * ReturnSemanticAction(Expression * expression){
 	ReturnStatement * returnStatement = calloc(1, sizeof(ReturnStatement));
 	returnStatement->expression = expression;
 	returnStatement->type = RETURN_EXPRESSION;
-	addReturnNode(currentCompilerState()->returnList, actual);
+    if (currentCompilerState()->symbolTable->currentFunction != NULL && currentCompilerState()->symbolTable->currentFunction->types[0] != actual) {
+        logError(_logger, "Function %s has a return type mismatch: expected %d, got %d", currentCompilerState()->symbolTable->currentFunction->name, currentCompilerState()->symbolTable->currentFunction->types[0], actual);
+        currentCompilerState()->hasError = true;
+    }
 	return returnStatement;
 }
 
@@ -490,18 +493,10 @@ FunctionDefinition  * FunctionDefinitionSemanticAction(const Type type, String i
 	functionDefinition->type = type;
 	functionDefinition->body = body;
 	Type * typeArray = createTypeArray(type, parameters);
-	ReturnList * returnList = currentCompilerState()->returnList;
 	if(parameters != NULL && type != _VOID) {
 	ArgumentDefNode * arg =  parameters->arguments;
 	logDebugging(_logger, "Function %s has return type %d", identifier, type);
-	for (ReturnNode * node = returnList->head; node != NULL; node = node->next) {
-		if (node->type != type) {
-		logError(_logger, "Function %s has a return type mismatch: expected %d, got %d", identifier, type, node->type);
-			currentCompilerState()->hasError = true;
-		}
 	}
-	}
-	destroyReturnList(returnList);
 	free(typeArray);
 	return functionDefinition;
 }
@@ -631,6 +626,10 @@ ReturnStatement * ReturnEmptySemanticAction() {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	ReturnStatement * returnStatement = calloc(1, sizeof(ReturnStatement));
 	returnStatement->type = RETURN_EMPTY;
+    if (currentCompilerState()->symbolTable->currentFunction!=NULL &&  currentCompilerState()->symbolTable->currentFunction->types[0]!= _VOID){
+        logError(_logger, "Function %s has a return type mismatch: expected %d, got %d", currentCompilerState()->symbolTable->currentFunction->name, currentCompilerState()->symbolTable->currentFunction->types[0], _VOID);
+        currentCompilerState()->hasError = true;
+    }
 	return returnStatement;
 }
 Factor * FunctionCallFactorSemanticAction(FunctionStatement * functionStatement) {
