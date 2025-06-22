@@ -20,6 +20,8 @@
 
 # Application specific.
 /program
+/salida
 BisonParser.c
 BisonParser.h
 FlexScanner.c
+*.exe

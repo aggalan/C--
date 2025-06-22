@@ -40,7 +40,7 @@ static void _generateAssignmentStatement(AssignmentStatement * assignmentStateme
 static void _generateAssignmentMathStatement(AssignmentMathStatement * assignmentMathStatement);
 static void _generateAssignmentStringStatement(AssignmentStringStatement * assignmentStringStatement);
 static void _generateAssignmentBoolStatement(AssignmentBoolStatement * assignmentBoolStatement);
-static void _generateUnaryChangeOperatorStatement(UnaryChangeOperatorStatement * unaryChangeOperatorStatement);
+static void _generateUnaryChangeOperatorStatement(UnaryChangeOperatorStatement * unaryChangeOperatorStatement, boolean isStatement);
 static void _generateVariableStatement(VariableStatement * variableStatement);
 static void _generateArrayStatement(ArrayStatement * arrayStatement);
 static void _generateBoolExpression(BoolExpression * boolExpression);
@@ -56,6 +56,7 @@ static void _generateArgumentList(ArgumentList * argumentList);
 static void _generateArgumentDefList(ArgumentDefList * argumentDefList);
 static void _generateStringExpression(StringExpression * stringExpression);
 static void _generateMacroInvocationStatement(MacroInvocationStatement * macroInvocationStatement);
+static void _generateMacroInvocationExpression(MacroInvocationStatement * macroInvocationStatement);
 static void _generateArrayAssignment(ArrayAssignment * arrayAssignment);
 static void _generateBoolList(BoolList * list);
 static void _generateEpilogue(const int value);
@@ -147,7 +148,7 @@ static void _generateStatement(Statement * statement) {
             break;
 
         case STATEMENT_UNARY_CHANGE_OPERATOR:
-            _generateUnaryChangeOperatorStatement(statement->unaryChangeOperatorStatement);
+            _generateUnaryChangeOperatorStatement(statement->unaryChangeOperatorStatement, true);
             break;
 
         case STATEMENT_VARIABLE:
@@ -324,11 +325,11 @@ static void _generateFactor(Factor *factor) {
         break;
 
     case UNARY_CHANGE_FACTOR:
-        _generateUnaryChangeOperatorStatement(factor->unaryChangeOperatorStatement);
+        _generateUnaryChangeOperatorStatement(factor->unaryChangeOperatorStatement, false);
         break;
 
     case MACRO_INVOCATION:
-        _generateMacroInvocationStatement(factor->macroInvocationStatement);
+        _generateMacroInvocationExpression(factor->macroInvocationStatement);
         break;
 
     default:
@@ -337,6 +338,15 @@ static void _generateFactor(Factor *factor) {
     }
 }
 
+static void _generateMacroInvocationExpression(MacroInvocationStatement * macroInvocationStatement) {
+     if (macroInvocationStatement == NULL) return;
+
+     _output(0, "%s(", macroInvocationStatement->identifier);
+
+     _generateArgumentList(macroInvocationStatement->arguments);
+
+     _output(0, ")");
+ }
 
 
 static void _generateMathExpression(MathExpression *expr) {
@@ -584,7 +594,7 @@ static void _generateAssignmentStringStatement(AssignmentStringStatement *assign
     _output(0, ";\n");
 }
 
-static void _generateUnaryChangeOperatorStatement(UnaryChangeOperatorStatement * stmt) {
+static void _generateUnaryChangeOperatorStatement(UnaryChangeOperatorStatement * stmt, boolean isStatement) {
     if (stmt == NULL) return;
 
     const char * op = NULL;
@@ -602,20 +612,22 @@ static void _generateUnaryChangeOperatorStatement(UnaryChangeOperatorStatement *
 
     if (stmt->type == VARIABLE) {
         if (stmt->operator_type == PRE_INCREMENT || stmt->operator_type == PRE_DECREMENT)
-            _output(0, "%s%s;\n", op, stmt->identifier);     // ++x;
+            _output(0, "%s%s", op, stmt->identifier);     // ++x;
         else
-            _output(0, "%s%s;\n", stmt->identifier, op);     // x++;
+            _output(0, "%s%s", stmt->identifier, op);     // x++;
     }
     else if (stmt->type == ARRAY) {
          if (stmt->operator_type == PRE_INCREMENT || stmt->operator_type == PRE_DECREMENT) {
             _output(0, "%s", op);                            // ++
             _generateArrayAccess(stmt->arrayAccess);        // array[i]
-            _output(0, ";\n");
         } else {
             _generateArrayAccess(stmt->arrayAccess);        // array[i]
-            _output(0, "%s;\n", op);                         // ++;
+            _output(0, "%s", op);                         // ++;
         }
     }
+     if (isStatement ) {
+         _output(0, ";\n");
+     }
     else {
         logError(_logger, "Unknown unary change statement type: %d", stmt->type);
     }
@@ -785,7 +797,11 @@ void _generateStringList(StringList *list) {
 
     StringNode *current = list->strings;
     while (current != NULL) {
-        _output(0, "%s", current->string);  // Sin comillas
+        if ( current->type == MACRO_STRING_LIST) {
+            _output(0, "%s", current->string);  // Sin comillas
+        } else {
+            _output(0, "\"%s\"", current->string);
+        }
         if (current->next != NULL) {
             _output(0, ", ");
         }
@@ -980,7 +996,7 @@ static void _generateArgumentValue(ArgumentValue * argumentValue) {
         break;
 
     case ARGUMENT_UNARY_CHANGE_OPERATOR:
-        _generateUnaryChangeOperatorStatement(argumentValue->unaryChangeOperatorStatement);
+        _generateUnaryChangeOperatorStatement(argumentValue->unaryChangeOperatorStatement, false);
         break;
 
     default:

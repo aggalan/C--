@@ -24,6 +24,7 @@ typedef enum ComparatorType ComparatorType;
 typedef enum ConditionalType ConditionalType;
 typedef enum StatementType StatementType;
 typedef enum ElseType ElseType;
+typedef enum StringListType StringListType;
 typedef struct Constant Constant;
 typedef struct Factor Factor;
 typedef struct BoolFactor BoolFactor;
@@ -282,10 +283,15 @@ struct ArgumentDefList {
 	int count;
 };
 
+enum StringListType {
+		MACRO_STRING_LIST,
+		ARRAY_STRING_LIST,
+};
 
 struct StringNode {
 	String string;
 	StringNode *next;
+	StringListType type;
 };
 
 struct StringList {

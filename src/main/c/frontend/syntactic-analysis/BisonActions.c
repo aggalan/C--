@@ -688,19 +688,21 @@ VariableStatement * VariableDeclarationSemanticAction(Type type, String identifi
 	return variable;
 }
 
-StringList * SingleStringListSemanticAction(String str) {
+StringList * SingleStringListSemanticAction(String str, StringListType type) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
     StringList * list = calloc(1, sizeof(StringList));
     list->strings = calloc(1, sizeof(StringNode));
     list->strings->string = str;
+	list->strings->type = type;
     list->last = list->strings;
 	list->count = 1;
     return list;
 }
-StringList * AppendStringListSemanticAction(StringList *list, String str) {
+StringList * AppendStringListSemanticAction(StringList *list, String str, StringListType type ) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
     StringNode * node = calloc(1, sizeof(StringNode));
     node->string = str;
+	node->type = type;
     list->last->next = node;
     list->last = node;
 	list->count++;

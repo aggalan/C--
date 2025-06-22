@@ -548,8 +548,8 @@ boolList:
     | boolList COMMA FALSE                                      { $$ = AppendBoolArrayListSemanticAction($1, $3); }
     ;
 strings:
-      STRING                                                     { $$ = SingleStringListSemanticAction($1); }
-    | strings COMMA STRING                                     { $$ = AppendStringListSemanticAction($1, $3); }
+      STRING                                                     { $$ = SingleStringListSemanticAction($1, ARRAY_STRING_LIST); }
+    | strings COMMA STRING                                     { $$ = AppendStringListSemanticAction($1, $3, ARRAY_STRING_LIST); }
 
 printStatement: PRINT stringExpression  NEW_LINE                                 { $$ = PrintIdentifierSemanticAction($2); }
     | PRINT mathExpression  NEW_LINE                                        { $$ = PrintMathExpressionSemanticAction($2); }
@@ -562,8 +562,8 @@ argumentList:
   ;
 
   stringList:
-      GENERIC_ID                                       { $$ = SingleStringListSemanticAction($1); }
-    | stringList COMMA GENERIC_ID                            { $$ = AppendStringListSemanticAction($1, $3); }
+      GENERIC_ID                                       { $$ = SingleStringListSemanticAction($1, MACRO_STRING_LIST); }
+    | stringList COMMA GENERIC_ID                            { $$ = AppendStringListSemanticAction($1, $3, MACRO_STRING_LIST); }
 
 
   argumentValue: mathExpression                                        { $$ = MathExpressionArgValueSemanticAction($1); }

@@ -53,8 +53,8 @@ BoolFactor * FunctionCallBoolFactorSemanticAction(FunctionStatement * functionSt
 BoolFactor * ArrayBoolFactorSemanticAction(ArrayAccess * arrayAccess);
 Statement  * MacroStatementSemanticAction(MacroStatement * stmt);
 MacroStatement * MacroSemanticAction(String identifier, StringList *args, MathExpression * body);
-StringList * SingleStringListSemanticAction(String str);
-StringList * AppendStringListSemanticAction(StringList *list, String str);
+StringList * SingleStringListSemanticAction(String str, StringListType type);
+StringList * AppendStringListSemanticAction(StringList *list, String str, StringListType type);
 Statement *  AssignmentStatementSemanticAction(AssignmentStatement * assignmentStatement);
 Factor * ParenthesisFactorSemanticAction(MathExpression * expression);
 StringExpression * FactorStringExpressionSemanticAction(String expression);
