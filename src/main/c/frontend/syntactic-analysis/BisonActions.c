@@ -429,6 +429,11 @@ ReturnStatement * ReturnSemanticAction(Expression * expression){
 	ReturnStatement * returnStatement = calloc(1, sizeof(ReturnStatement));
 	returnStatement->expression = expression;
 	returnStatement->type = RETURN_EXPRESSION;
+	if (currentCompilerState()->symbolTable->currentFunction==NULL ) {
+		logError(_logger, "Return without function");
+		currentCompilerState()->hasError = true;
+		return returnStatement;
+	}
     if (currentCompilerState()->symbolTable->currentFunction != NULL && currentCompilerState()->symbolTable->currentFunction->types[0] != actual) {
         logError(_logger, "Function %s has a return type mismatch: expected %d, got %d", currentCompilerState()->symbolTable->currentFunction->name, currentCompilerState()->symbolTable->currentFunction->types[0], actual);
         currentCompilerState()->hasError = true;
@@ -503,6 +508,7 @@ FunctionDefinition  * FunctionDefinitionSemanticAction(const Type type, String i
 	functionDefinition->parameters = parameters;
 	functionDefinition->type = type;
 	functionDefinition->body = body;
+	currentCompilerState()->symbolTable->currentFunction = NULL;
 	return functionDefinition;
 }
 Statement * ReturnStatementSemanticAction(ReturnStatement * stmt){
@@ -630,8 +636,13 @@ Factor * UnitIncrementOperatorFactorSemanticAction(UnaryChangeOperatorStatement 
 ReturnStatement * ReturnEmptySemanticAction() {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	ReturnStatement * returnStatement = calloc(1, sizeof(ReturnStatement));
+	if (currentCompilerState()->symbolTable->currentFunction==NULL ) {
+		logError(_logger, "Return without function");
+		currentCompilerState()->hasError = true;
+		return returnStatement;
+	}
 	returnStatement->type = RETURN_EMPTY;
-    if (currentCompilerState()->symbolTable->currentFunction!=NULL &&  currentCompilerState()->symbolTable->currentFunction->types[0]!= _VOID){
+    if ( currentCompilerState()->symbolTable->currentFunction->types[0]!= _VOID){
         logError(_logger, "Function %s has a return type mismatch: expected %d, got %d", currentCompilerState()->symbolTable->currentFunction->name, currentCompilerState()->symbolTable->currentFunction->types[0], _VOID);
         currentCompilerState()->hasError = true;
     }
