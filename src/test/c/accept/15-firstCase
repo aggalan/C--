@@ -15,7 +15,7 @@ RETURN FALSE
 
 // Definir donde arranca el programa
 
-VOID main(INT T) {
+VOID test(INT T) {
     T = 0
      status = FALSE
     IF status {

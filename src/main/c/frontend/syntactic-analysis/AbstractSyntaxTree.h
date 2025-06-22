@@ -620,8 +620,8 @@ void releaseStatement(Statement *stmt);
 void releaseStatementList(StatementList *list);
 void releaseForLoop(ForLoop *loop);
 void releaseMatchStatement(MatchStatement *match);
-void releaseCase(Case *c);
-void releaseCaseList(CaseList *caseList);
+void releaseCase(Case *c,int isIntList);
+void releaseCaseList(CaseList *caseList,int isIntList);
 /**
  * Additional node recursive destructors.
  */
@@ -653,7 +653,7 @@ void releaseExternalDeclaration(ExternalDeclaration * externalDeclaration);
 void releaseIntNode(IntNode * node);
 void releaseStringNode(StringNode * node);
 void releaseStatementNode(StatementNode * node);
-void releaseCaseNode(CaseNode * node);
+void releaseCaseNode(CaseNode * node,int isIntList);
 void releaseArgumentValue(ArgumentValue * argumentValue);
 void releaseArgumentList(ArgumentList * argumentList);
 void releaseArgumentNode(ArgumentNode * argumentNode);

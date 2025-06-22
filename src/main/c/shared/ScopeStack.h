@@ -5,7 +5,7 @@
 
 typedef struct {
     Scope * scopes;
-    int size; //puntero al ultimo elemento del stack
+    int size;
     Scope lastScope;
 } ScopeStack;
 

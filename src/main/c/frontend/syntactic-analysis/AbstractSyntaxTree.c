@@ -166,36 +166,54 @@ void releaseForLoop(ForLoop *loop){
         free(loop);
     }
 }
-
+void releaseCaseStringList(CaseList *caseList) {
+    logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__, (void*)caseList);
+    if (!caseList) return;
+    CaseNode *node = caseList->cases;
+    CaseNode *next;
+    while (node) {
+        next = node->next;
+        if (node->Case) {
+            if (node->Case->string) free(node->Case->string);
+            free(node->Case);
+        }
+        free(node);
+        node = next;
+    }
+    free(caseList);
+}
 void releaseMatchStatement(MatchStatement *match){
     logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__, (void*)match);
     if (match != NULL) {
         if (match->identifier) free(match->identifier);
-        releaseCaseList(match->caseList);
+            releaseCaseList(match->caseList,match->type == _INT);
         free(match);
     }
 }
 
-void releaseCase(Case *c) {
+void releaseCase(Case *c, int isIntList) {
     logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__, (void*)c);
     if (c) {
+        if (!isIntList){
+            free(c->string);
+        }
         releaseStatement(c->body);
         free(c);
     }
 }
 
-void releaseCaseList(CaseList * caseList) {
+void releaseCaseList(CaseList * caseList,int isIntList) {
     logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__, (void*)caseList);
     if (!caseList) return;
-    releaseCaseNode(caseList->cases);
+    releaseCaseNode(caseList->cases,isIntList);
     free(caseList);
 }
 
-void releaseCaseNode(CaseNode *node) {
+void releaseCaseNode(CaseNode *node,int isIntList) {
     logDebugging(_logger,"Executing destructor: %s ptr: %p", __FUNCTION__, (void*)node);
     while (node) {
         CaseNode *next = node->next;
-        releaseCase(node->Case);
+        releaseCase(node->Case,isIntList);
         free(node);
         node = next;
     }

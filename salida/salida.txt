@@ -28,9 +28,27 @@ void sortArray(int *array, int length, Order order) {
     }
 }
 
-char * hola(char * A, int B) {
-printf("%s\n", "Hola");
-return "HOLA";
+int X;
+switch(X) {
+    case 2:
+printf("%s\n", "HOLA");
+        break;
+    case 3:
+printf("%s\n", "HOLA");
+        break;
+    case 4:
+printf("%s\n", "CHAU");
+        break;
 }
-
-hola("1", 2);
+const char *str;
+switch(str) {
+    case "HOLA":
+printf("%s\n", "HOLA");
+        break;
+    case "CHAU":
+printf("%s\n", "CHAU");
+        break;
+    case "hola":
+printf("%s\n", "NADA");
+        break;
+}

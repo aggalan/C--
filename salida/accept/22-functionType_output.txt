@@ -2,6 +2,8 @@
 
 #include <stdio.h>
 
+#include <string.h>
+
 typedef enum {
     ORDER_ASCENDING,
     ORDER_DESCENDING
@@ -28,9 +30,17 @@ void sortArray(int *array, int length, Order order) {
     }
 }
 
+int stringEquals(const char *a, const char *b) {
+    return strcmp(a, b) == 0;
+}
+
 char * hola(char * A, int B) {
 printf("%s\n", "Hola");
 return "HOLA";
 }
 
+
+int main() {
 hola("1", 2);
+return 0;
+}

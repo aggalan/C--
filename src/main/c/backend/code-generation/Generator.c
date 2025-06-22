@@ -207,17 +207,46 @@ static void _generateForLoop(ForLoop *forLoop) {
 
 
 
-static void _generateMatchStatement(MatchStatement *matchStmt) {
-    if (matchStmt == NULL) return;
+ static void _generateMatchStatement(MatchStatement *matchStmt) {
+     if (matchStmt == NULL) return;
 
-    _output(0, "switch(");
-    _output(0, matchStmt->identifier);
-    _output(0, ") {\n");
+     if (matchStmt->type == _INT) {
+         _output(0, "switch(");
+         _output(0, matchStmt->identifier);
+         _output(0, ") {\n");
 
-    _generateCaseList(matchStmt->caseList);
+         _generateCaseList(matchStmt->caseList);
 
-    _output(0, "}\n");
-}
+         _output(0, "}\n");
+
+     } else if (matchStmt->type == _STRING) {
+         CaseNode *node = matchStmt->caseList->cases;
+
+         int first = 1;
+         while (node != NULL) {
+             Case *c = node->Case;
+
+             if (c->type == STRING_CASE) {
+                 if (first) {
+                     _output(0, "if (strcmp(%s, \"%s\") == 0) {\n", matchStmt->identifier, c->string);
+                     first = 0;
+                 } else {
+                     _output(0, "} else if (strcmp(%s, \"%s\") == 0) {\n", matchStmt->identifier, c->string);
+                 }
+                 _generateStatement(c->body);
+
+             } else if (c->type == DEFAULT_CASE) {
+                 _output(0, "} else {\n");
+                 _generateStatement(c->body);
+             }
+
+             node = node->next;
+         }
+
+         _output(0, "}\n");
+     }
+ }
+
 
 static void _generateCase(Case *c) {
     if (c == NULL) return;
@@ -835,12 +864,51 @@ static void _generateUnit(Unit * unit) {
         _generateUnit(unit->units);
     }
 }
-static void _generateProgram(Program * program) {
-    logDebugging(_logger, "Generating program...");
-    if (program->type == NOT_EMPTY) {
-        _generateUnit(program->unit);
-    }
-}
+ static void _generateProgram(Program * program) {
+     logDebugging(_logger, "Generating program...");
+     if (program->type != NOT_EMPTY) return;
+
+     Unit *current = program->unit;
+
+     while (current != NULL) {
+         if (current->externalDeclaration != NULL) {
+             if (current->externalDeclaration->type == FUNCTION_DEFINITION) {
+                 _generateFunctionDefinition(current->externalDeclaration->functionDefinition);
+             } else if (current->externalDeclaration->type == MACRO_STATEMENT) {
+                 _generateMacroStatement(current->externalDeclaration->macroStatement);
+             }
+         }
+         current = current->units;
+     }
+
+     current = program->unit;
+     int hasStatements = 0;
+     Unit *tmp = current;
+     while (tmp != NULL) {
+         if (tmp->externalDeclaration != NULL &&
+             tmp->externalDeclaration->type == STATEMENT) {
+             hasStatements = 1;
+             break;
+         }
+         tmp = tmp->units;
+     }
+
+     if (hasStatements) {
+         _output(0, "\nint main() {\n");
+
+         while (current != NULL) {
+             if (current->externalDeclaration != NULL &&
+                 current->externalDeclaration->type == STATEMENT) {
+                 _generateStatement(current->externalDeclaration->statement);
+             }
+             current = current->units;
+         }
+
+         _output(0, "return 0;\n");
+         _output(0, "}\n");
+     }
+ }
+
 static void _generateExternalDeclaration(ExternalDeclaration * externalDeclaration) {
     logDebugging(_logger, "Generating external declaration...");
     if (externalDeclaration->type == FUNCTION_DEFINITION) {
@@ -1027,6 +1095,7 @@ void _generateBoolList(BoolList *list) {
 static void _generatePrologue(){
     _output(0, "#include <stdlib.h>\n\n");
     _output(0, "#include <stdio.h>\n\n");
+    _output(0, "#include <string.h>\n\n");
     _output(0, "typedef enum {\n");
     _output(1, "ORDER_ASCENDING,\n");
     _output(1, "ORDER_DESCENDING\n");
@@ -1051,6 +1120,9 @@ static void _generatePrologue(){
     _output(1, "} else {\n");
     _output(2, "qsort(array, length, sizeof(int), compareDesc);\n");
     _output(1, "}\n");
+    _output(0, "}\n\n");
+    _output(0, "int stringEquals(const char *a, const char *b) {\n");
+    _output(1, "return strcmp(a, b) == 0;\n");
     _output(0, "}\n\n");
 }
 

@@ -4,3 +4,9 @@ MATCH X {
     3 -> PRINT "HOLA"
     4 -> PRINT "CHAU"
 }
+STRING str
+MATCH str {
+    "HOLA" -> PRINT "HOLA"
+    "CHAU" -> PRINT "CHAU"
+    "hola"-> PRINT "NADA"
+}
