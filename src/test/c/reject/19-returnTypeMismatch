@@ -1,0 +1,7 @@
+VOID myFunction() {
+    RETURN 1
+}
+
+INT myFunction2() {
+    RETURN "HOLA"
+}
