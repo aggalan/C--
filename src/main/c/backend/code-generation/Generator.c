@@ -625,13 +625,14 @@ static void _generateUnaryChangeOperatorStatement(UnaryChangeOperatorStatement *
             _output(0, "%s", op);                         // ++;
         }
 
-        if (isStatement ) {
-            _output(0, ";\n");
-        }
+
     }
     else {
         logError(_logger, "Unknown unary change statement type: %d", stmt->type);
     }
+     if (isStatement ) {
+         _output(0, ";\n");
+     }
 }
 
 
