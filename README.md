@@ -10,18 +10,8 @@
 - nbellavitisalzate@itba.edu.ar - 64001
 
 **Aclaracion:**
-Salvo en la declaracion, tanto las variables como las funciones deben especificar el tipo de variable / funcion
-Para que lo reconozca como un identificador del tipo adecuado, hay que usar los siguientes prefijos:
-- `int` para variables enteras
-- `bool` para variables boolean
-- `string` para variables de tipo string
-- `arr_int` para arrays de enteros
-- `arr_string` para arrays de strings
-- `arr_bool` para arrays de bool
-- `func_int` para funciones que devuelven enteros
--  `func_string` para funcione sque devuelven strings
-- `func_bool` para funciones que devuelven bool
-- `macro_` para macros
+Existe una variable de entorno  OUTPUT_PATH la cual sirve para elegir el archivo de salida cuando se corre un test con ./start
+si se corren los tests con ./test se crea una carpeta salida/accept donde se imprime cada salida en su archivo correspondiente del test
 
 
 A base compiler example, developed with Flex and Bison.
@@ -42,6 +32,7 @@ Set the following environment variables to control and configure the behaviour o
 |-|:-:|-|
 |`LOG_IGNORED_LEXEMES`|`true`|When `true`, logs all of the ignored lexemes found with Flex at DEBUGGING level. To remove those logs from the console output set it to `false`.|
 |`LOGGING_LEVEL`|`INFORMATION`|The minimum level to log in the console output. From lower to higher, the available levels are: `ALL`, `DEBUGGING`, `INFORMATION`, `WARNING`, `ERROR` and `CRITICAL`.|
+|`OUTPUT_PATH`|Default ./salida/salida.c if not changed, this only affects when you run each test individually|
 
 ## CI/CD
 
