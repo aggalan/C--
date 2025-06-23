@@ -1,5 +1,4 @@
 #include "backend/code-generation/Generator.h"
-#include "backend/domain-specific/Calculator.h"
 #include "frontend/lexical-analysis/FlexActions.h"
 #include "frontend/syntactic-analysis/AbstractSyntaxTree.h"
 #include "frontend/syntactic-analysis/BisonActions.h"
@@ -21,7 +20,6 @@ const int main(const int count, const char ** arguments) {
 	initializeSyntacticAnalyzerModule();
 	initializeAbstractSyntaxTreeModule();
 	initializeTableActionsModule();
-	// initializeCalculatorModule();
 	 initializeGeneratorModule();
 
 	// Logs the arguments of the application.
@@ -45,9 +43,7 @@ const int main(const int count, const char ** arguments) {
 		// Beginning of the Backend... ------------------------------------------------------------
 		logDebugging(logger, "Computing expression value...");
 		 Program * program = compilerState.abstractSyntaxtTree;
-		// ComputationResult computationResult = computeExpression((*program->unit->e)->mathExpression)  ;
-		// if (computationResult.succeed) {
-		// 	compilerState.value = computationResult.value;
+
 		if(!compilerState.hasError) {
 		 	generate(&compilerState);
 		 }
@@ -71,7 +67,6 @@ const int main(const int count, const char ** arguments) {
 
 	logDebugging(logger, "Releasing modules resources...");
 	 shutdownGeneratorModule();
-	// shutdownCalculatorModule();
 	shutdownAbstractSyntaxTreeModule();
 	shutdownSyntacticAnalyzerModule();
 	shutdownBisonActionsModule();

@@ -1,7 +1,6 @@
 #include "BisonActions.h"
 
 #include "BisonParser.h"
-#include "../../backend/domain-specific/Calculator.h"
 
 /* MODULE INTERNAL STATE */
 
