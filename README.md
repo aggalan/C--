@@ -14,6 +14,9 @@ Existe una variable de entorno  OUTPUT_PATH la cual sirve para elegir el archivo
 si se corren los tests con ./test se crea una carpeta salida/accept donde se imprime cada salida en su archivo correspondiente del test
 
 
+EL informe  se ubica en la carpeta doc
+
+
 A base compiler example, developed with Flex and Bison.
 
 * [Environment](#environment)
