@@ -1,0 +1,7 @@
+VOID myFunction() {
+    RETURN
+}
+
+INT myFunction() {
+    RETURN 1
+}

@@ -1,0 +1,17 @@
+VOID myFunction(INT number) {
+
+    IF(number > 0) {
+        PRINT "Number is positive"
+    } ELSE {
+        PRINT "Number is not positive"
+    }
+
+    RETURN
+}
+
+INT MAIN() {
+    myFunction("miguel merentiel")
+    myFunction(4)
+
+    RETURN 0
+}
